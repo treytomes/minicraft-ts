@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
+const api = import('./api/index.mjs');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -30,7 +31,16 @@ const createWindow = () => {
 app.whenReady().then(() => {
   console.log('Hello from Electron 👋');
   
-  ipcMain.handle('ping', () => 'pong');
+  ipcMain.handle('sample/ping', async () => {
+    console.log('Calling sample/ping.');
+    return await (await api).sample.ping();
+    // await api.sample.ping();
+  });
+
+  ipcMain.handle('gfx/getTiles', async () => {
+    console.log('Calling gfx/getTiles.');
+    return await (await api).gfx.getTiles();
+  });
 
   createWindow();
 

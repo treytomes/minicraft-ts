@@ -35,7 +35,7 @@
    * 
    * @param {number} x 
    * @param {number} y 
-   * @param {{number, number, number}} color 
+   * @param {{r: number, g: number, b: number}} color 
    */
   export const setPixel = (x, y, color) => {
     const offset = getOffset(x, y)
