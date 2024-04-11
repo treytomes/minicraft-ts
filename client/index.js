@@ -1,18 +1,17 @@
-import { SCREEN_WIDTH, SCREEN_HEIGHT, createContext, postRender, setPixel } from './system/index.js';
+import { getWidth, getHeight, createContext, postRender, setPixel } from './display/index.js'
+import { Image } from './image.js'
 
-const image = await window.api.gfx.getTiles();
-console.log(image);
+const image = new Image(await window.api.gfx.getTiles())
+console.log(image)
 
 function loadTiles() {
   // const colorKey = [0x00, 0x00, 0x00]
-
   // //let ch = 0;
   // let ptr = memory.MemoryMap.instance.fontMemory
   // for (let row = 0; row < 16; row++) {
   //   for (let column = 0; column < 16; column++) {
   //     const x = column * 8
   //     const y = row * 8
-
   //     for (let yd = 0; yd < 8; yd++) {
   //       let byte = 0
   //       for (let xd = 0; xd < 8; xd++) {
@@ -22,7 +21,6 @@ function loadTiles() {
   //           byte = byte + 1
   //         }
   //       }
-
   //       memory.HEAPU8[ptr] = byte
   //       ptr++
   //     }
@@ -32,45 +30,46 @@ function loadTiles() {
 }
 
 const render = (time) => {
-  for (let y = 0; y < SCREEN_HEIGHT; y++) {
-    for (let x = 0; x < SCREEN_WIDTH; x++) {
+  for (let y = 0; y < getWidth(); y++) {
+    for (let x = 0; x < getHeight(); x++) {
       setPixel(x, y, { r: x ^ y, g: x & y, b: x | y })
     }
   }
-  
+
   setPixel(100, 100, { r: 255, g: 255, b: 0 })
 
-  console.log(image.width, image.height);
+  console.log(image.width, image.height)
   for (let y = 0; y < image.height; y++) {
     for (let x = 0; x < image.width; x++) {
-      const offset = y * image.width * image.components + x * image.components;
-      const r = image.data[offset + 0];
-      const g = image.data[offset + 1];
-      const b = image.data[offset + 2];
-      setPixel(x, y, { r, g, b });
+      // const offset = y * image.width * image.components + x * image.components;
+      // const r = image.data[offset + 0];
+      // const g = image.data[offset + 1];
+      // const b = image.data[offset + 2];
+      // setPixel(x, y, { r, g, b });
+      setPixel(x, y, image.getPixel(x, y))
     }
   }
 }
 
-let lastUpdateTime = 0;
-const UPDATE_INTERVAL = 1000;
+let lastUpdateTime = 0
+const UPDATE_INTERVAL = 1000
 const onRenderFrame = (time) => {
   if (time - lastUpdateTime >= UPDATE_INTERVAL) {
-    console.log('Update!');
-    lastUpdateTime = time;
+    console.log('Update!')
+    lastUpdateTime = time
   }
 
-  render(time);
+  render(time)
 
-  postRender(time);
+  postRender(time)
 
-  requestAnimationFrame(onRenderFrame);
+  requestAnimationFrame(onRenderFrame)
 }
 
-console.log('Here we go.');
-console.log(await window.api.sample.ping());
+console.log('Here we go.')
+console.log(await window.api.sample.ping())
 
-await createContext();
+await createContext(160, 120);
 
 // Begin the render loop.
-requestAnimationFrame(onRenderFrame);
+requestAnimationFrame(onRenderFrame)

@@ -9,7 +9,8 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "format": "prettier --write **/*.js",
+    "lint": "eslint **/*.js,*.cjs,*.mjs --fix"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.3.1",
@@ -27,7 +28,7 @@
   "keywords": [],
   "author": {
     "name": "Trey Tomes",
-    "email": "george.tomes@cityelectricsupply.com"
+    "email": "trey.tomes@gmail.com"
   },
   "license": "MIT",
   "dependencies": {
