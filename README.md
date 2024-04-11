@@ -1,5 +1,8 @@
 # minicraft-ts
-The Minicraft game, rewritten into TypeScript.
+The Minicraft game, re-imagined in Electron.
 
-Look here for instructions on publishing to GitHub:
-https://www.electronforge.io/
+
+## TODO
+
+- [GitHub Publishing](https://www.electronforge.io/)
+
