@@ -8,16 +8,8 @@ const FRAMEBUFFER_POSITIONS = new Float32Array([1, 1, -1, 1, -1, -1, 1, 1, -1, -
  *          height: number,
  *          bpp: number,
  *          stride: number,
- *          pixels: Uint8Array,
- *          gl: WebGL2RenderingContext,
- *          texture: WebGLTexture,
- *          shaderProgram: WebGLProgram,
- *          vertexBuffer: WebGLVertexArrayObject,
- *          shaderParams: {
- *            targetScreenSizeLocation: WebGLUniformLocation,
- *            actualScreenSizeLocation: WebGLUniformLocation,
- *            renderTextureLocation: WebGLUniformLocation
- *          }
+ *          pixels: Uint8ClampedArray,
+ *          ctx2d: CanvasRenderingContext2D,
  *        }}
  */
 export let context;
@@ -37,23 +29,7 @@ export const setPixel = (x, y, color) => {
   context.pixels[offset + 0] = color.r
   context.pixels[offset + 1] = color.g
   context.pixels[offset + 2] = color.b
-}
-
-/**
- * 
- * @param {WebGL2RenderingContext} gl 
- * @returns 
- */
-export const createRenderTexture = (gl) => {
-  const texture = gl.createTexture();
-  gl.bindTexture(gl.TEXTURE_2D, texture);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  
-  if (!texture) throw new Error('Unable to create the render texture.')
-  return texture
+  context.pixels[offset + 3] = 255
 }
 
 /**
@@ -61,19 +37,29 @@ export const createRenderTexture = (gl) => {
  * @param {number} time 
  */
 export const postRender = (time) => {
-  const gl = context.gl
-  // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, context.canvas.width, context.canvas.height, 0, gl.RGB, gl.UNSIGNED_BYTE, context.pixels)
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, context.width, context.height, 0, gl.RGB, gl.UNSIGNED_BYTE, context.pixels)
-  
-  // gl.uniform1f(context.shaderParams.timeLocation, time)
+  // Write the image data in `context.pixels` to the 2d canvas context in context.ctx2d.
+  context.ctx2d.putImageData(new ImageData(context.pixels, context.width, context.height), 0, 0);
+}
 
-  gl.uniform2f(context.shaderParams.actualScreenSizeLocation, context.canvas.clientWidth, context.canvas.clientHeight)
-  // context.canvas.width = context.width;
-  // context.canvas.height = context.height;
-  // gl.uniform2f(context.shaderParams.actualScreenSizeLocation, context.canvas.width, context.canvas.height)
+const onResize = () => {
+  const aspectRatio = context.canvas.width / context.canvas.height;
+  const heightFromWidth = window.innerWidth / aspectRatio;
+  const widthFromHeight = window.innerHeight * aspectRatio;
 
-  // Draw the image data to the frame buffer.
-  gl.drawArrays(gl.TRIANGLES, 0, FRAMEBUFFER_POSITIONS.length / 2)
+  let offsetX = 0;
+  let offsetY = 0;
+  if (window.innerWidth > widthFromHeight) {
+    offsetX = (window.innerWidth - widthFromHeight) / 2;
+  } else if (window.innerHeight > heightFromWidth) {
+    offsetY = (window.innerHeight - heightFromWidth) / 2;
+  }
+
+  context.canvas.style.top = `${offsetY}px`;
+  context.canvas.style.bottom = `${offsetY}px`;
+  context.canvas.style.left = `${offsetX}px`;
+  context.canvas.style.right = `${offsetX}px`;
+  context.canvas.style.width = `calc(100% - ${offsetX * 2}px)`;
+  context.canvas.style.height = `calc(100% - ${offsetY * 2}px)`;
 }
 
 /**
@@ -82,75 +68,20 @@ export const postRender = (time) => {
  * @param {number} height The height of the display canvas in pixels.
  */
 export const createContext = async (width, height) => {
-  const canvas = document.createElement('canvas')
-  document.body.appendChild(canvas)
+  const canvas = document.createElement('canvas');
+  document.body.appendChild(canvas);
+  
   canvas.width = width;
   canvas.height = height;
 
-  window.addEventListener('resize', () => {
-    canvas.width = width;
-    canvas.height = height;
-    gl.uniform2f(actualScreenSizeLocation, canvas.width, canvas.height);
-  });
-
-  const gl = canvas.getContext('webgl2', {
+  const ctx2d = canvas.getContext('2d', {
     antialias: false,
-  })
-  if (!gl) throw new Error('Unable to acquire the webgl2 context.')
+  });
+  if (!ctx2d) throw new Error('Unable to acquire the 2d context.');
 
-  // Create the render texture.
-  const texture = createRenderTexture(gl)
-
-  // Create the shader program.
-  const vertexShader = gl.createShader(gl.VERTEX_SHADER)
-  if (!vertexShader) throw new Error('Unable to create vertex shader.')
-  gl.shaderSource(vertexShader, await fetch('./display/canvas.vs').then((response) => response.text()))
-  gl.compileShader(vertexShader)
-
-  const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER)
-  if (!fragmentShader) throw new Error('Unable to create fragment shader.')
-  gl.shaderSource(fragmentShader, await fetch('./display/canvas.fs').then((response) => response.text()))
-  gl.compileShader(fragmentShader)
-
-  const shaderProgram = gl.createProgram()
-  if (!shaderProgram) throw new Error('Unable to create shader program.')
-  gl.attachShader(shaderProgram, vertexShader)
-  gl.attachShader(shaderProgram, fragmentShader)
-  gl.linkProgram(shaderProgram)
-
-  if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-    console.error('Failed to link shader program: ', gl.getProgramInfoLog(shaderProgram))
-  }
-
-  // Activate the shader.
-  gl.useProgram(shaderProgram)
-
-  // const timeLocation = gl.getUniformLocation(shaderProgram, 'time')
-  // if (!timeLocation) throw new Error('Unable to locate time.')
-  // gl.uniform1f(timeLocation, 0.0);
-
-  const targetScreenSizeLocation = gl.getUniformLocation(shaderProgram, 'target_screen_size')
-  if (!targetScreenSizeLocation) throw new Error('Unable to locate target_screen_size.')
-  gl.uniform2f(targetScreenSizeLocation, width, height);
-
-  const actualScreenSizeLocation = gl.getUniformLocation(shaderProgram, 'actual_screen_size')
-  if (!actualScreenSizeLocation) throw new Error('Unable to locate actual_screen_size.')
-  gl.uniform2f(actualScreenSizeLocation, canvas.width, canvas.height);
-
-  const renderTextureLocation = gl.getUniformLocation(shaderProgram, 'render_texture')
-  if (!renderTextureLocation) throw new Error('Unable to locate render_texture.')
-  gl.uniform1i(renderTextureLocation, 0);
-
-  const vertexBuffer = gl.createBuffer()
-  if (!vertexBuffer) throw new Error('Unable to create vertex buffer.')
-  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
-  gl.bufferData(gl.ARRAY_BUFFER, FRAMEBUFFER_POSITIONS, gl.STATIC_DRAW)
-  gl.enableVertexAttribArray(0)
-  gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0)
-
-  const bpp = 3;
+  const bpp = 4;
   const stride = width * bpp;
-  const pixels = new Uint8Array(stride * height);
+  const pixels = new Uint8ClampedArray(stride * height);
 
   context = {
     canvas,
@@ -159,14 +90,9 @@ export const createContext = async (width, height) => {
     bpp,
     stride,
     pixels,
-    gl,
-    texture,
-    shaderProgram,
-    vertexBuffer,
-    shaderParams: {
-      actualScreenSizeLocation,
-      renderTextureLocation,
-      targetScreenSizeLocation,
-    },
+    ctx2d,
   }
+  
+  onResize();
+  window.addEventListener('resize', onResize);
 }

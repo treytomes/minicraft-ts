@@ -62,9 +62,9 @@ const drawLine = (x1, y1, x2, y2, color) => {
   } else if (x1 !== x2 && y1 === y2) {
     for (let x = Math.min(x1, x2); x <= Math.max(x1, x2); x++) {
       setPixel(x, y1, color);
-      console.log("setPixel: ", x, y1, color);
+      // console.log("setPixel: ", x, y1, color);
     }
-    console.log("Horizonal line!");
+    // console.log("Horizonal line!");
   }
 }
 
