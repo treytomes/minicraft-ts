@@ -47,8 +47,8 @@ export const setPixel = (x, y, color) => {
 export const createRenderTexture = (gl) => {
   const texture = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, texture);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
   
@@ -62,11 +62,15 @@ export const createRenderTexture = (gl) => {
  */
 export const postRender = (time) => {
   const gl = context.gl
+  // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, context.canvas.width, context.canvas.height, 0, gl.RGB, gl.UNSIGNED_BYTE, context.pixels)
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, context.width, context.height, 0, gl.RGB, gl.UNSIGNED_BYTE, context.pixels)
   
   // gl.uniform1f(context.shaderParams.timeLocation, time)
 
   gl.uniform2f(context.shaderParams.actualScreenSizeLocation, context.canvas.clientWidth, context.canvas.clientHeight)
+  // context.canvas.width = context.width;
+  // context.canvas.height = context.height;
+  // gl.uniform2f(context.shaderParams.actualScreenSizeLocation, context.canvas.width, context.canvas.height)
 
   // Draw the image data to the frame buffer.
   gl.drawArrays(gl.TRIANGLES, 0, FRAMEBUFFER_POSITIONS.length / 2)
@@ -80,6 +84,14 @@ export const postRender = (time) => {
 export const createContext = async (width, height) => {
   const canvas = document.createElement('canvas')
   document.body.appendChild(canvas)
+  canvas.width = width;
+  canvas.height = height;
+
+  window.addEventListener('resize', () => {
+    canvas.width = width;
+    canvas.height = height;
+    gl.uniform2f(actualScreenSizeLocation, canvas.width, canvas.height);
+  });
 
   const gl = canvas.getContext('webgl2', {
     antialias: false,
@@ -92,12 +104,12 @@ export const createContext = async (width, height) => {
   // Create the shader program.
   const vertexShader = gl.createShader(gl.VERTEX_SHADER)
   if (!vertexShader) throw new Error('Unable to create vertex shader.')
-  gl.shaderSource(vertexShader, await fetch('./canvas.vs').then((response) => response.text()))
+  gl.shaderSource(vertexShader, await fetch('./display/canvas.vs').then((response) => response.text()))
   gl.compileShader(vertexShader)
 
   const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER)
   if (!fragmentShader) throw new Error('Unable to create fragment shader.')
-  gl.shaderSource(fragmentShader, await fetch('./canvas.fs').then((response) => response.text()))
+  gl.shaderSource(fragmentShader, await fetch('./display/canvas.fs').then((response) => response.text()))
   gl.compileShader(fragmentShader)
 
   const shaderProgram = gl.createProgram()

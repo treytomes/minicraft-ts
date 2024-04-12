@@ -16,22 +16,26 @@ void main() {
 
   // This will maintain the desired aspect ratio, adding black bars to the top/bottom or left/right as needed.
 
-  if(actual_screen_size.x > widthFromHeight) {
-    if(tx > 0.0f) {
-      tx -= (actual_screen_size.x - widthFromHeight) / actual_screen_size.x;
+  if (actual_screen_size.x > widthFromHeight) {
+    if (tx > 0.0f) {
+      tx -= (actual_screen_size.x - floor(widthFromHeight)) / actual_screen_size.x;
     } else {
-      tx += (actual_screen_size.x - widthFromHeight) / actual_screen_size.x;
+      tx += (actual_screen_size.x - floor(widthFromHeight)) / actual_screen_size.x;
     }
-  } else if(actual_screen_size.y > heightFromWidth) {
-    if(ty > 0.0f) {
-      ty -= (actual_screen_size.y - heightFromWidth) / actual_screen_size.y;
+  } else if (actual_screen_size.y > floor(heightFromWidth)) {
+    if (ty > 0.0f) {
+      ty -= (actual_screen_size.y - floor(heightFromWidth)) / actual_screen_size.y;
     } else {
-      ty += (actual_screen_size.y - heightFromWidth) / actual_screen_size.y;
+      ty += (actual_screen_size.y - floor(heightFromWidth)) / actual_screen_size.y;
     }
   }
 
-  //gl_Position = position;
+  // Round to the nearest pixel?
+  tx = float(int(tx * target_screen_size.x)) / target_screen_size.x;
+  ty = float(int(ty * target_screen_size.y)) / target_screen_size.y;
+
   gl_Position = vec4(tx, ty, 0, 1);
+  //gl_Position = position;
 
   // This bit will flip the Y and put (0, 0) in the top-left corner.  Like old-school.
   v_texcoord = position.xy * vec2(0.5f, -0.5f) + 0.5f; 

@@ -16,6 +16,14 @@ uniform vec2 target_screen_size;
 
 vec4 get_color(vec2 pos) {
   //return vec4(1, 0, 0, 1);
+
+  // // This is the size of a half-pixel.
+  // float inc_x = 1.0 / target_screen_size.x / 4.0;
+  // float inc_y = 1.0 / target_screen_size.y / 4.0;
+
+  // pos.x = float(int(pos.x * target_screen_size.x)) / target_screen_size.x - inc_x;
+  // pos.y = float(int(pos.y * target_screen_size.y)) / target_screen_size.y - inc_y;
+
   return texture(render_texture, pos);
 }
 
@@ -27,8 +35,8 @@ vec4 get_color(float x, float y) {
  * Vignette inspired by: https://babylonjs.medium.com/retro-crt-shader-a-post-processing-effect-study-1cb3f783afbc
  */
 vec2 curve_remap_uv(vec2 pos) {
-	#define CURVATURE vec2(16.0, 16.0)
-	// #define CURVATURE vec2(4.0, 4.0)
+	// #define CURVATURE vec2(16.0, 16.0)
+	#define CURVATURE vec2(4.0, 4.0)
 
   // As we near the edge of our screen apply greater distortion using a cubic function.
   pos = pos * 2.0f - 1.0f;
@@ -39,10 +47,10 @@ vec2 curve_remap_uv(vec2 pos) {
 }
 
 vec4 vignette_intensity(vec2 pos) {
-	#define VIGNETTE_OPACITY 0.0
-	#define VIGNETTE_ROUNDNESS 0.0
-	// #define VIGNETTE_OPACITY 0.6
-	// #define VIGNETTE_ROUNDNESS 2.0
+	// #define VIGNETTE_OPACITY 0.0
+	// #define VIGNETTE_ROUNDNESS 0.0
+	#define VIGNETTE_OPACITY 0.6
+	#define VIGNETTE_ROUNDNESS 2.0
 
   float intensity = pos.x * pos.y * (1.0f - pos.x) * (1.0f - pos.y);
   return vec4(vec3(clamp(pow((actual_screen_size.x / VIGNETTE_ROUNDNESS) * intensity, VIGNETTE_OPACITY), 0.0f, 1.0f)), 1.0f);
@@ -72,11 +80,11 @@ vec4 scanlines(vec2 pos, vec4 color) {
 }
 
 vec4 bloom(vec4 color, vec2 pos) {
-	#define GLOW_FACTOR 0.0
-	#define ORIGIN_WEIGHT 1.0
+	// #define GLOW_FACTOR 0.0
+	// #define ORIGIN_WEIGHT 1.0
 
-	// #define GLOW_FACTOR 0.5
-	// #define ORIGIN_WEIGHT 0.1
+	#define GLOW_FACTOR 0.5
+	#define ORIGIN_WEIGHT 0.1
 
   float dx = 1.0f / target_screen_size.x / 2.0f;
   float dy = 1.0f / target_screen_size.y / 2.0f;
@@ -95,14 +103,16 @@ vec4 bloom(vec4 color, vec2 pos) {
 }
 
 void main() {
+  // return texture(render_texture, v_texcoord);
+
   vec2 pos = v_texcoord;
 
   // pos = curve_remap_uv(pos);
 
-  if(pos.x < 0.0f || pos.x > 1.0f || pos.y < 0.0f || pos.y > 1.0f) {
-    outColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
-    return;
-  }
+  // if(pos.x < 0.0f || pos.x > 1.0f || pos.y < 0.0f || pos.y > 1.0f) {
+  //   outColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+  //   return;
+  // }
 
   //pos /= get_scale();
 
