@@ -1,7 +1,8 @@
-// Setup a unit quad composed of 2 triangles for rendering the framebuffer to the canvas.
-const FRAMEBUFFER_POSITIONS = new Float32Array([1, 1, -1, 1, -1, -1, 1, 1, -1, -1, 1, -1])
+import { css } from '../util/index.js';
 
 /**
+ * Container for the details necessary to render to the screen.
+ * 
  * @type {{
  *          canvas: HTMLCanvasElement,
  *          width: number,
@@ -18,29 +19,43 @@ export const getWidth = () => context.width;
 export const getHeight = () => context.height;
 export const getOffset = (x, y) => (y * context.width + x) * context.bpp;
 
+export class Color {
+  constructor(r, g, b) {
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.a = 255;
+  }
+};
+
 /**
+ * Write a single pixel to the pixel buffer.
+ * This change will not be visible until the next `postRender` call.
  * 
  * @param {number} x 
  * @param {number} y 
- * @param {{r: number, g: number, b: number}} color 
+ * @param {Color} color 
  */
 export const setPixel = (x, y, color) => {
-  const offset = getOffset(x, y)
-  context.pixels[offset + 0] = color.r
-  context.pixels[offset + 1] = color.g
-  context.pixels[offset + 2] = color.b
-  context.pixels[offset + 3] = 255
-}
+  const offset = getOffset(x, y);
+  context.pixels[offset + 0] = color.r;
+  context.pixels[offset + 1] = color.g;
+  context.pixels[offset + 2] = color.b;
+  context.pixels[offset + 3] = color.a;
+};
 
 /**
- * 
- * @param {number} time 
+ * At the end of a render frame, write the pixel buffer to the 2d canvas context.
  */
-export const postRender = (time) => {
+export const postRender = () => {
   // Write the image data in `context.pixels` to the 2d canvas context in context.ctx2d.
   context.ctx2d.putImageData(new ImageData(context.pixels, context.width, context.height), 0, 0);
-}
+};
 
+/**
+ * On initial load, and on every resize, recalculate the size and position of the render canvas
+ * to match the requested aspect ratio.
+ */
 const onResize = () => {
   const aspectRatio = context.canvas.width / context.canvas.height;
   const heightFromWidth = window.innerWidth / aspectRatio;
@@ -54,15 +69,16 @@ const onResize = () => {
     offsetY = (window.innerHeight - heightFromWidth) / 2;
   }
 
-  context.canvas.style.top = `${offsetY}px`;
-  context.canvas.style.bottom = `${offsetY}px`;
-  context.canvas.style.left = `${offsetX}px`;
-  context.canvas.style.right = `${offsetX}px`;
-  context.canvas.style.width = `calc(100% - ${offsetX * 2}px)`;
-  context.canvas.style.height = `calc(100% - ${offsetY * 2}px)`;
-}
+  context.canvas.style.top = css.pixels(offsetY);
+  context.canvas.style.bottom = css.pixels(offsetY);
+  context.canvas.style.left = css.pixels(offsetX);
+  context.canvas.style.right = css.pixels(offsetX);
+  context.canvas.style.width = css.subtract(css.percent(1), css.pixels(offsetX * 2));
+  context.canvas.style.height = css.subtract(css.percent(1), css.pixels(offsetY * 2));
+};
 
 /**
+ * Create the canvas and 2D context.  Setup some event handlers.
  * 
  * @param {number} width The width of the display canvas in pixels.
  * @param {number} height The height of the display canvas in pixels.
@@ -95,4 +111,4 @@ export const createContext = async (width, height) => {
   
   onResize();
   window.addEventListener('resize', onResize);
-}
+};

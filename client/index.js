@@ -1,4 +1,4 @@
-import { getWidth, getHeight, createContext, postRender, setPixel } from './display/index.js'
+import { getWidth, getHeight, createContext, postRender, setPixel, Color } from './display/index.js'
 import { Image } from './image.js'
 
 const image = new Image(await window.api.gfx.getTiles())
@@ -32,7 +32,7 @@ function loadTiles() {
 /**
  * Clear the screen to a color.
  * 
- * @param {{r: number, g: number, b: number}} color The color to clear to.
+ * @param {Color}} color The color to clear to.
  */
 const clear = (color) => {
   for (let y = 0; y < getHeight(); y++) {
@@ -52,23 +52,55 @@ const clear = (color) => {
  * @param {{r: number, g: number, b: number}} color The line color.
  */
 const drawLine = (x1, y1, x2, y2, color) => {
+  x1 = Math.floor(x1);
+  x2 = Math.floor(x2);
+  y1 = Math.floor(y1);
+  y2 = Math.floor(y2);
+
   if (x1 === x2 && y1 === y2) {
     setPixel(x1, y1, color);
     return;
-  } else if (x1 === x2 && y1 !== y2) {
-    for (let y = Math.min(y1, y2); y <= Math.max(y1, y2); y++) {
-      setPixel(x1, y, color);
+  }
+  
+  const xMin = Math.min(x1, x2);
+  const xMax = Math.max(x1, x2);
+  const yMin = Math.min(y1, y2);
+  const yMax = Math.max(y1, y2);
+  if (xMin === xMax && yMin !== yMax) {
+    for (let y = yMin; y <= yMax; y++) {
+      setPixel(xMin, y, color);
     }
-  } else if (x1 !== x2 && y1 === y2) {
-    for (let x = Math.min(x1, x2); x <= Math.max(x1, x2); x++) {
-      setPixel(x, y1, color);
-      // console.log("setPixel: ", x, y1, color);
+  } else if (xMin !== xMax && yMin === yMax) {
+    for (let x = xMin; x <= xMax; x++) {
+      setPixel(x, yMin, color);
     }
-    // console.log("Horizonal line!");
+  } else {
+    let dx = Math.abs(x2 - x1);
+    let sx = (x1 < x2) ? 1 : -1;
+    let dy = Math.abs(y2 - y1);
+    dy = -dy;
+    let sy = (y1 < y2) ? 1 : -1;
+    let err = dx + dy;
+  
+    while (true) {
+      setPixel(x1, y1, color);
+      if ((x1 == x2) && (y1 == y2)) break;
+      let e2 = err << 1;
+      if (e2 >= dy) {
+        if (x1 === x2) break
+        err += dy;
+        x1 += sx;
+      }
+      if (e2 <= dx) {
+        if (y1 === y2) break;
+        err += dx;
+        y1 += sy;
+      }
+    }
   }
 }
 
-const render = (time) => {
+const render = (totalTime) => {
   // for (let y = 0; y < getWidth(); y++) {
   //   for (let x = 0; x < getHeight(); x++) {
   //     setPixel(x, y, { r: x ^ y, g: x & y, b: x | y })
@@ -84,31 +116,40 @@ const render = (time) => {
   //   }
   // }
   
-  clear({ r: 0, g: 0, b: 64 });
-
-  // drawLine(50, 50, 203, 174, { r: 255, g: 255, b: 0 });
+  clear({ r: 0, g: 0, b: 64, a: 255 });
 
   // A single pixel.
-  drawLine(100, 100, 100, 100, { r: 255, g: 0, b: 0 });
+  drawLine(100, 100, 100, 100, new Color(255, 0, 0));
   
   // A vertical line.
-  drawLine(120, 110, 120, 150, { r: 255, g: 0, b: 255 });
+  drawLine(120, 110, 120, 150, new Color(255, 0, 255));
   
   // A horizontal line.
-  drawLine(120, 110, 150, 110, { r: 0, g: 255, b: 255 });
+  drawLine(120, 110, 150, 110, new Color(0, 255, 255));
+
+  const centerX = getWidth() / 2;
+  const centerY = getHeight() / 2;
+  const radius = Math.min(getWidth(), getHeight()) / 2;
+
+  // radians = degrees * PI / 180
+
+  const radians = (totalTime / 16) * Math.PI / 180;
+  const x = centerX + Math.cos(radians) * radius;
+  const y = centerY + Math.sin(radians) * radius;
+  drawLine(centerX, centerY, x, y, new Color(255, 255, 0));
 }
 
 let lastUpdateTime = 0
 const UPDATE_INTERVAL = 1000
-const onRenderFrame = (time) => {
-  if (time - lastUpdateTime >= UPDATE_INTERVAL) {
+const onRenderFrame = (totalTime) => {
+  if (totalTime - lastUpdateTime >= UPDATE_INTERVAL) {
     console.log('Update!')
-    lastUpdateTime = time
+    lastUpdateTime = totalTime
   }
 
-  render(time)
+  render(totalTime)
 
-  postRender(time)
+  postRender()
 
   requestAnimationFrame(onRenderFrame)
 }
