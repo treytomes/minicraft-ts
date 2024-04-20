@@ -141,6 +141,14 @@ export const drawCircle = (xc, yc, r, c) => {
   }
 }
 
+export const fillRect = (x, y, w, h, color) => {
+  for (let yd = 0; yd < h; yd++) {
+    for (let xd = 0; xd < w; xd++) {
+      setPixel(x + xd, y + yd, color);
+    }
+  }
+}
+
 /**
  * Write a single pixel to the pixel buffer.
  * This change will not be visible until the next `postRender` call.
