@@ -1,4 +1,4 @@
-import { setPixel } from "./display/index.js";
+import { getHeight, getWidth, setPixel } from "./display/index.js";
 
 export class TileSet {
   /**
@@ -46,10 +46,28 @@ export class TileSet {
     const tile = this.tiles[tileIndex];
     let index = 0;
     for (let yd = 0; yd < this.tileHeight; yd++) {
+      const ys = y + yd;
+      if (ys < 0) {
+        index += this.tileWidth;
+        continue;
+      }
+      if (ys >= getHeight()) break;
+
       for (let xd = 0; xd < this.tileWidth; xd++) {
+        const xs = x + xd;
+        if (xs < 0) {
+          index++;
+          continue;
+        }
+        if (xs >= getWidth()) {
+          const remaining = this.tileWidth - xd;
+          index += remaining;
+          break;
+        }
+
         const v = tile[index++];
         const c = colors[v];
-        if (c) setPixel(x + xd, y + yd, c);
+        if (c) setPixel(xs, ys, c);
       }
     }
   }

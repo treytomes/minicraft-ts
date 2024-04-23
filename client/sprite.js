@@ -1,3 +1,4 @@
+import { Rectangle } from "./math/index.js";
 import { PALETTE } from "./palette.js";
 
 export class Sprite {
@@ -16,6 +17,10 @@ export class Sprite {
     this.dx = 0;
     this.dy = 0;
     this.colors = PALETTE.get4(...colors);
+  }
+
+  get bounds() {
+    return new Rectangle(this.x, this.y, this.tileset.tileWidth * this.size, this.tileset.tileHeight * this.size);
   }
 
   update(deltaTime) {

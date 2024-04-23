@@ -233,3 +233,38 @@ export const createContext = async (width, height) => {
   onResize();
   window.addEventListener('resize', onResize);
 };
+
+/**
+ * Convert canvas coordinates into virtual screen coordinates.
+ * 
+ * @param {number} x 
+ * @param {number} y 
+ * @returns {x: number, y: number} An object with the converted x and y properties.
+ */
+export const convertPosition = (x, y) => {
+    const rect = context.canvas.getBoundingClientRect();
+
+    const displayWidth = context.canvas.clientWidth;
+    const displayHeight = context.canvas.clientHeight;
+    let drawWidth = 0;
+    let drawHeight = 0;
+    if (displayWidth > displayHeight) {
+        // Most of the time the window will be horizontal.
+        drawHeight = displayHeight;
+        drawWidth = context.width * drawHeight / context.height;
+    } else {
+        // Sometimes the window will be vertical.
+        drawWidth = displayWidth;
+        drawHeight = context.height * drawWidth / context.width;
+    }
+
+    rect.x += (displayWidth - drawWidth) / 2;
+    rect.y += (displayHeight - drawHeight) / 2;
+    rect.width = drawWidth;
+    rect.height = drawHeight;
+
+    const newX = Math.floor((x - rect.left) / rect.width * context.width);
+    const newY = Math.floor((y - rect.top) / rect.height * context.height);
+
+    return { x: newX, y: newY };
+}

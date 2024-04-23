@@ -10,19 +10,19 @@ if (require('electron-squirrel-startup')) {
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1280,
+    height: 720,
     icon: path.join(__dirname, '../client/assets/favicon.ico'),
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js')
-    }
-  })
+    },
+  });
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, '../client/index.html'))
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished

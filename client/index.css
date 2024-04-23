@@ -43,4 +43,5 @@ canvas {
     position: absolute;
 		background-color: var(--color-border);
 		image-rendering: pixelated;
+		cursor: none;
 }
