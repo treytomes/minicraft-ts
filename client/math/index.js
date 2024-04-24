@@ -1,5 +1,18 @@
-import Point from "./point.js"
-import Rectangle from "./rectangle.js";
-import { isInRange, lerp } from "./more_math.js";
+import Point from "./Point.js"
+import Rectangle from "./Rectangle.js";
 
-export { isInRange, lerp, Point, Rectangle };
+/**
+ * Check if value is in range [inclusiveMin, exclusiveMax).
+ */
+export const isInRange = (value, inclusiveMin, exclusiveMax) => {
+  return (inclusiveMin <= value) && (value < exclusiveMax);
+}
+
+/**
+ * Linear interpolation by t-% from a to b.
+ */
+export const lerp = (t, a, b) => {
+  return a + t * (b - a);
+}
+
+export { Point, Rectangle };

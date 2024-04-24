@@ -1,4 +1,9 @@
 import { css } from '../util/index.js';
+import Color from './Color.js';
+import Sprite from './Sprite.js';
+import TileSet from './TileSet.js';
+
+export { Color, Sprite, TileSet };
 
 /**
  * Container for the details necessary to render to the screen.
@@ -18,15 +23,6 @@ export let context;
 export const getWidth = () => context.width;
 export const getHeight = () => context.height;
 export const getOffset = (x, y) => (y * context.width + x) * context.bpp;
-
-export class Color {
-  constructor(r, g, b) {
-    this.r = r;
-    this.g = g;
-    this.b = b;
-    this.a = 255;
-  }
-};
 
 /**
  * Clear the screen to a color.

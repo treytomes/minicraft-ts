@@ -1,6 +1,13 @@
-import { getHeight, getWidth, setPixel } from "./display/index.js";
+import { getHeight, getWidth, setPixel } from "./index.js";
 
-export class TileSet {
+/**
+ * @property {number} tileWidth Tile width.
+ * @property {number} tileHeight Tile height.
+ * @property {number} tilesPerRow Number of tiles per row.
+ */
+export default class TileSet {
+  #tiles;
+
   /**
    * @param {Image} image The source image to pull tiles from.
    * @param {number} tileWidth Tile width.
@@ -10,7 +17,7 @@ export class TileSet {
     this.tileWidth = tileWidth;
     this.tileHeight = tileHeight;
     this.tilesPerRow = Math.floor(image.width / tileWidth);
-    this.tiles = [];
+    this.#tiles = [];
 
     const NUM_COLUMNS = Math.floor(image.width / tileWidth);
     const NUM_ROWS = Math.floor(image.height / tileHeight);
@@ -28,7 +35,7 @@ export class TileSet {
           }
         }
 
-        this.tiles.push(tile);
+        this.#tiles.push(tile);
       }
     }
   }
@@ -43,7 +50,7 @@ export class TileSet {
   drawTile(tileIndex, x, y, colors) {
     x = Math.floor(x);
     y = Math.floor(y);
-    const tile = this.tiles[tileIndex];
+    const tile = this.#tiles[tileIndex];
     let index = 0;
     for (let yd = 0; yd < this.tileHeight; yd++) {
       const ys = y + yd;

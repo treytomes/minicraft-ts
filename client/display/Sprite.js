@@ -1,7 +1,19 @@
-import { Rectangle } from "./math/index.js";
-import { PALETTE } from "./palette.js";
+import { Rectangle } from "../math/index.js";
+import { PALETTE } from "../palette.js";
 
-export class Sprite {
+/**
+ * A colored group of tiles that can move around.
+ * 
+ * @property {Tileset} tileset The tileset that contains the tiles.
+ * @property {number} tileIndex The tile index in the tileset.
+ * @property {number} size The size of the sprite.
+ * @property {number} x The X position.
+ * @property {number} y The Y position.
+ * @property {number} dx The X velocity.
+ * @property {number} dy The Y velocity.
+ * @property {number[]} colors The color values.
+ */
+export default class Sprite {
   /**
    * @param {number} x X position.
    * @param {number} y Y position.

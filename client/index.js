@@ -1,8 +1,6 @@
-import { getWidth, getHeight, createContext, postRender, setPixel, fillRect, Color, drawCircle, clear, convertPosition } from './display/index.js'
+import { getWidth, getHeight, createContext, postRender, clear, convertPosition, Sprite, TileSet } from './display/index.js'
 import { Image } from './image.js'
 import { PALETTE } from './palette.js';
-import { Sprite } from './sprite.js';
-import { TileSet } from './tileset.js'
 
 await createContext(160, 120);
 
@@ -28,7 +26,6 @@ let lastUpdateTime = 0
 const UPDATE_INTERVAL = 1000 / 60;
 const onRenderFrame = (totalTime) => {
   if (totalTime - lastUpdateTime >= UPDATE_INTERVAL) {
-    // console.log('Update!')
     player.update(totalTime - lastUpdateTime);
     mouseCursor.update(totalTime - lastUpdateTime);
     
@@ -84,10 +81,8 @@ const onMouseMove = (e) => {
 const onMouseDown = (e) => {
   // Is the left mouse button pressed?
   if (e.button === 0) {
-    // console.log("Click: ", e.clientX, e.clientY, player.bounds, player.bounds.contains(e.clientX, e.clientY));
     // Is the mouse hovering over the player sprite?
     if (player.bounds.contains(e.clientX, e.clientY) && !isPlayerSelected) {
-      console.log("You picked the player!");
       isPlayerSelected = true;
     }
   }
@@ -97,11 +92,8 @@ const onMouseDown = (e) => {
  * @param {MouseEvent} e
  */
 const onMouseUp = (e) => {
-  console.log("Mouse up");
   if (e.button === 0) {
-    console.log("Left mouse button up");
     if (isPlayerSelected) {
-      console.log("Release!");
       isPlayerSelected = false;
     }
   }
@@ -144,16 +136,6 @@ window.addEventListener('mouseup', function (e) {
     buttons: e.buttons,
   });
 });
-
-// document.addEventListener('keydown', function(e) {
-//   //console.log('keydown', e);
-//   _instance.onKeyDown(e);
-// });
-
-// document.addEventListener('keyup', function(e) {
-//   //console.log('keyup', e);
-//   _instance.onKeyUp(e);
-// });
 
 // document.addEventListener('keypress', function(e) {
 //   //console.log('keypress', e);
