@@ -1,22 +1,22 @@
-import { getWidth, getHeight, createContext, postRender, clear, convertPosition, Sprite, TileSet } from './display/index.js'
+import * as system from './system/index.js'
 import { Image } from './image.js'
 import { PALETTE } from './palette.js';
 
-await createContext(160, 120);
+await system.display.createContext(160, 120);
 
 const image = new Image(await window.api.gfx.getTiles())
-const tileset = new TileSet(image, 8, 8);
+const tileset = new system.display.TileSet(image, 8, 8);
 
-let mouseCursor = new Sprite(tileset, 0, 29, [-1, -1, -1, 555], 1);
-mouseCursor.moveTo(getWidth() / 2, getHeight() / 2);
+let mouseCursor = new system.display.Sprite(tileset, 0, 29, [-1, -1, -1, 555], 1);
+mouseCursor.moveTo(system.display.getWidth() / 2, system.display.getHeight() / 2);
 
-let player = new Sprite(tileset, 0, 14, [ -1, 100, 220, 532 ]);
+let player = new system.display.Sprite(tileset, 0, 14, [ -1, 100, 220, 532 ]);
 player.moveTo(50, 50);
 
 let isPlayerSelected = false;
 
 const render = (totalTime) => {
-  clear(PALETTE.get(2));
+  system.display.clear(PALETTE.get(2));
 
   player.render();
   mouseCursor.render();
@@ -34,7 +34,7 @@ const onRenderFrame = (totalTime) => {
 
   render(totalTime)
 
-  postRender()
+  system.display.postRender()
 
   requestAnimationFrame(onRenderFrame)
 }
@@ -108,7 +108,7 @@ window.onkeyup = onKeyUp;
  * @param {MouseEvent} e
  */
 window.addEventListener('mousemove', function(e) {
-  const pos = convertPosition(e.clientX, e.clientY);
+  const pos = system.display.convertPosition(e.clientX, e.clientY);
   onMouseMove({
     clientX: pos.x,
     clientY: pos.y,
@@ -118,7 +118,7 @@ window.addEventListener('mousemove', function(e) {
 
 window.addEventListener('mousedown', function(e) {
   console.log(e);
-  const pos = convertPosition(e.clientX, e.clientY);
+  const pos = system.display.convertPosition(e.clientX, e.clientY);
   onMouseDown({
     clientX: pos.x,
     clientY: pos.y,
@@ -128,7 +128,7 @@ window.addEventListener('mousedown', function(e) {
 });
 
 window.addEventListener('mouseup', function (e) {
-  const pos = convertPosition(e.clientX, e.clientY);
+  const pos = system.display.onvertPosition(e.clientX, e.clientY);
   onMouseUp({
     clientX: pos.x,
     clientY: pos.y,

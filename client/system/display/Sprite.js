@@ -1,5 +1,5 @@
 import { Rectangle } from "../math/index.js";
-import { PALETTE } from "../palette.js";
+import { PALETTE } from "../../palette.js";
 
 /**
  * A colored group of tiles that can move around.

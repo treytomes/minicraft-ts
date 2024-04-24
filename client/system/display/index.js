@@ -1,4 +1,4 @@
-import { css } from '../util/index.js';
+import * as html from '../html/index.js';
 import Color from './Color.js';
 import Sprite from './Sprite.js';
 import TileSet from './TileSet.js';
@@ -186,12 +186,12 @@ const onResize = () => {
     offsetY = (window.innerHeight - heightFromWidth) / 2;
   }
 
-  context.canvas.style.top = css.pixels(offsetY);
-  context.canvas.style.bottom = css.pixels(offsetY);
-  context.canvas.style.left = css.pixels(offsetX);
-  context.canvas.style.right = css.pixels(offsetX);
-  context.canvas.style.width = css.subtract(css.percent(1), css.pixels(offsetX * 2));
-  context.canvas.style.height = css.subtract(css.percent(1), css.pixels(offsetY * 2));
+  context.canvas.style.top = html.css.pixels(offsetY);
+  context.canvas.style.bottom = html.css.pixels(offsetY);
+  context.canvas.style.left = html.css.pixels(offsetX);
+  context.canvas.style.right = html.css.pixels(offsetX);
+  context.canvas.style.width = html.css.subtract(html.css.percent(1), html.css.pixels(offsetX * 2));
+  context.canvas.style.height = html.css.subtract(html.css.percent(1), html.css.pixels(offsetY * 2));
 };
 
 /**
