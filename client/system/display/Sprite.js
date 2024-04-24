@@ -46,11 +46,11 @@ export default class Sprite {
   }
 
   render() {
-    this.tileset.drawTile(this.tileIndex, this.x, this.y, this.colors);
+    this.tileset.render(this.tileIndex, this.x, this.y, this.colors);
     if (this.size == 1) return;
 
-    this.tileset.drawTile(this.tileIndex + 1, this.x + this.tileset.tileWidth, this.y, this.colors);
-    this.tileset.drawTile(this.tileIndex + this.tileset.tilesPerRow, this.x, this.y + this.tileset.tileHeight, this.colors);
-    this.tileset.drawTile(this.tileIndex + this.tileset.tilesPerRow + 1, this.x + this.tileset.tileWidth, this.y + this.tileset.tileHeight, this.colors);
+    this.tileset.render(this.tileIndex + 1, this.x + this.tileset.tileWidth, this.y, this.colors);
+    this.tileset.render(this.tileIndex + this.tileset.tilesPerRow, this.x, this.y + this.tileset.tileHeight, this.colors);
+    this.tileset.render(this.tileIndex + this.tileset.tilesPerRow + 1, this.x + this.tileset.tileWidth, this.y + this.tileset.tileHeight, this.colors);
   }
 }

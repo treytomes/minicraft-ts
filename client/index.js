@@ -1,24 +1,75 @@
 import * as system from './system/index.js'
 import { Image } from './image.js'
 import { PALETTE } from './palette.js';
+import { Font } from './Font.js';
+
+class UIElement {
+  update(deltaTime) {}
+  render() {}
+}
+
+class LabelUIElement extends UIElement {
+  constructor(font, text, x, y) {
+    super();
+    this.font = font;
+    this.text = text;
+    this.x = x;
+    this.y = y;
+    this.colors = PALETTE.get4(-1, -1, -1, 550);
+  }
+
+  update(deltaTime) {}
+
+  render() {
+    let text = this.text;
+    if (typeof this.text === 'function') {
+      text = this.text();
+    }
+    this.font.render(text?.toString() ?? 'null', this.x, this.y, this.colors);
+  }
+}
 
 await system.display.createContext(160, 120);
 
 const image = new Image(await window.api.gfx.getTiles())
 const tileset = new system.display.TileSet(image, 8, 8);
+const font = new Font(tileset);
+
+/**
+ * @type {Sprite[]}
+ */
+const sprites = [];
+
+/**
+ * @type {UIElement[]}
+ */
+const uiElements = [];
 
 let mouseCursor = new system.display.Sprite(tileset, 0, 29, [-1, -1, -1, 555], 1);
 mouseCursor.moveTo(system.display.getWidth() / 2, system.display.getHeight() / 2);
+// sprites.push(mouseCursor);
 
 let player = new system.display.Sprite(tileset, 0, 14, [ -1, 100, 220, 532 ]);
 player.moveTo(50, 50);
+sprites.push(player);
+
+uiElements.push(new LabelUIElement(font, () => `X:${Math.floor(player.x)},Y:${Math.floor(player.y)}`, 0, 0));
 
 let isPlayerSelected = false;
 
 const render = (totalTime) => {
   system.display.clear(PALETTE.get(2));
 
-  player.render();
+  for (let n = 0; n < sprites.length; n++) {
+    const sprite = sprites[n];
+    sprite.render();
+  }
+
+  for (let n = 0; n < uiElements.length; n++) {
+    const uiElement = uiElements[n];
+    uiElement.render();
+  }
+
   mouseCursor.render();
 }
 
@@ -26,8 +77,19 @@ let lastUpdateTime = 0
 const UPDATE_INTERVAL = 1000 / 60;
 const onRenderFrame = (totalTime) => {
   if (totalTime - lastUpdateTime >= UPDATE_INTERVAL) {
-    player.update(totalTime - lastUpdateTime);
-    mouseCursor.update(totalTime - lastUpdateTime);
+    const deltaTime = totalTime - lastUpdateTime;
+
+    for (let n = 0; n < sprites.length; n++) {
+      const sprite = sprites[n];
+      sprite.update(deltaTime);
+    }
+
+    for (let n = 0; n < uiElements.length; n++) {
+      const uiElement = uiElements[n];
+      uiElement.update(deltaTime);
+    }
+
+    mouseCursor.update(deltaTime);
     
     lastUpdateTime = totalTime;
   }
@@ -117,7 +179,7 @@ window.addEventListener('mousemove', function(e) {
 });
 
 window.addEventListener('mousedown', function(e) {
-  console.log(e);
+  // console.log(e);
   const pos = system.display.convertPosition(e.clientX, e.clientY);
   onMouseDown({
     clientX: pos.x,
@@ -128,7 +190,7 @@ window.addEventListener('mousedown', function(e) {
 });
 
 window.addEventListener('mouseup', function (e) {
-  const pos = system.display.onvertPosition(e.clientX, e.clientY);
+  const pos = system.display.convertPosition(e.clientX, e.clientY);
   onMouseUp({
     clientX: pos.x,
     clientY: pos.y,

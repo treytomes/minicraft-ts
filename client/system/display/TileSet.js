@@ -47,7 +47,7 @@ export default class TileSet {
    * @param {number} y Y-position to draw at.
    * @param {number[]} colors An array of 4 numbers that represents the color of the tile.  -1 is transparent.
    */
-  drawTile(tileIndex, x, y, colors) {
+  render(tileIndex, x, y, colors) {
     x = Math.floor(x);
     y = Math.floor(y);
     const tile = this.#tiles[tileIndex];
