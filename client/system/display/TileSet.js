@@ -1,5 +1,8 @@
 import { getHeight, getWidth, setPixel } from "./index.js";
 
+export const BIT_MIRROR_X = 0x01;
+export const BIT_MIRROR_Y = 0x02;
+
 /**
  * @property {number} tileWidth Tile width.
  * @property {number} tileHeight Tile height.
@@ -46,14 +49,19 @@ export default class TileSet {
    * @param {number} x X-position to draw at.
    * @param {number} y Y-position to draw at.
    * @param {number[]} colors An array of 4 numbers that represents the color of the tile.  -1 is transparent.
+   * @param {number} bits Bit flags to apply to the rendering, used to flip on the x or y axis.
    */
-  render(tileIndex, x, y, colors) {
+  render(tileIndex, x, y, colors, bits = 0) {
+		const mirrorX = (bits & BIT_MIRROR_X) > 0;
+		const mirrorY = (bits & BIT_MIRROR_Y) > 0;
+
     x = Math.floor(x);
     y = Math.floor(y);
     const tile = this.#tiles[tileIndex];
     let index = 0;
     for (let yd = 0; yd < this.tileHeight; yd++) {
-      const ys = y + yd;
+      let ys = y + yd;
+      if (mirrorY) ys = y + (this.tileHeight - yd - 1);
       if (ys < 0) {
         index += this.tileWidth;
         continue;
@@ -61,7 +69,8 @@ export default class TileSet {
       if (ys >= getHeight()) break;
 
       for (let xd = 0; xd < this.tileWidth; xd++) {
-        const xs = x + xd;
+        let xs = x + xd;
+        if (mirrorX) xs = x + (this.tileWidth - xd - 1);
         if (xs < 0) {
           index++;
           continue;

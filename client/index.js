@@ -29,7 +29,45 @@ class LabelUIElement extends UIElement {
   }
 }
 
+/**
+ * @property {system.display.TileSet} tileset
+ * @property {Font} font
+ * @property {string} text
+ * @property {number} x
+ * @property {number} y
+ * @property {Color[]} chromeColors
+ * @property {Color[]} textColors
+ */
+class ButtonUIElement extends UIElement {
+  constructor(tileset, font, text, x, y) {
+    super();
+    this.tileset = tileset;
+    this.font = font;
+    this.text = text;
+    this.x = x;
+    this.y = y;
+    this.chromeColors = PALETTE.get4(3, -1, -1, -1);
+    this.textColors = PALETTE.get4(3, -1, -1, 550);
+  }
+
+  update(deltaTime) {}
+
+  render() {
+    let text = this.text;
+    if (typeof this.text === 'function') {
+      text = this.text();
+    }
+    text = text?.toString() ?? 'null';
+
+    this.tileset.render(1 + 29 * 32, this.x, this.y, this.chromeColors);
+
+    this.font.render(text, this.x + this.tileset.tileWidth, this.y, this.textColors);
+    this.tileset.render(1 + 29 * 32, this.x + this.tileset.tileWidth + text.length * this.tileset.tileWidth, this.y, this.chromeColors, system.display.BIT_MIRROR_X);
+  }
+}
+
 await system.display.createContext(160, 120);
+// await system.display.createContext(320, 240);
 
 const image = new Image(await window.api.gfx.getTiles())
 const tileset = new system.display.TileSet(image, 8, 8);
@@ -54,11 +92,12 @@ player.moveTo(50, 50);
 sprites.push(player);
 
 uiElements.push(new LabelUIElement(font, () => `X:${Math.floor(player.x)},Y:${Math.floor(player.y)}`, 0, 0));
+uiElements.push(new ButtonUIElement(tileset, font, 'Click me!', 10, 10));
 
 let isPlayerSelected = false;
 
 const render = (totalTime) => {
-  system.display.clear(PALETTE.get(2));
+  system.display.clear(PALETTE.get(1));
 
   for (let n = 0; n < sprites.length; n++) {
     const sprite = sprites[n];

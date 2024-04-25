@@ -1,9 +1,9 @@
 import * as html from '../html/index.js';
 import Color from './Color.js';
 import Sprite from './Sprite.js';
-import TileSet from './TileSet.js';
+import TileSet, { BIT_MIRROR_X, BIT_MIRROR_Y } from './TileSet.js';
 
-export { Color, Sprite, TileSet };
+export { Color, Sprite, TileSet, BIT_MIRROR_X, BIT_MIRROR_Y };
 
 /**
  * Container for the details necessary to render to the screen.
