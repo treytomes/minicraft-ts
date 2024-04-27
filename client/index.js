@@ -2,13 +2,28 @@ import * as system from './system/index.js'
 import { Image } from './image.js'
 import { PALETTE } from './palette.js';
 import { Font } from './Font.js';
+import TileSet from './system/display/TileSet.js';
 
 class UIElement {
   update(deltaTime) {}
   render() {}
 }
 
+/**
+ * A Label that can be positioned anywhere on the screen.
+ * 
+ * @property {Font} font
+ * @property {any} text The value to render.  If this is a function, the result will be reevaluated at the time of render.
+ * @property {number} x
+ * @property {number} y
+ */
 class LabelUIElement extends UIElement {
+  /**
+   * @param {Font} font 
+   * @param {any} text 
+   * @param {number} x 
+   * @param {number} y 
+   */
   constructor(font, text, x, y) {
     super();
     this.font = font;
@@ -39,6 +54,14 @@ class LabelUIElement extends UIElement {
  * @property {Color[]} textColors
  */
 class ButtonUIElement extends UIElement {
+  /**
+   * 
+   * @param {TileSet} tileset 
+   * @param {Font} font 
+   * @param {any} text 
+   * @param {number} x 
+   * @param {number} y 
+   */
   constructor(tileset, font, text, x, y) {
     super();
     this.tileset = tileset;

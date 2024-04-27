@@ -1,10 +1,11 @@
 import { Rectangle } from "../math/index.js";
 import { PALETTE } from "../../palette.js";
+import TileSet from "./TileSet.js";
 
 /**
  * A colored group of tiles that can move around.
  * 
- * @property {Tileset} tileset The tileset that contains the tiles.
+ * @property {TileSet} tileset The tileset that contains the tiles.
  * @property {number} tileIndex The tile index in the tileset.
  * @property {number} size The size of the sprite.
  * @property {number} x The X position.
@@ -15,6 +16,9 @@ import { PALETTE } from "../../palette.js";
  */
 export default class Sprite {
   /**
+   * @param {TileSet} tileset The tileset that contains the tiles.
+   * @param {number} xt X tile index.
+   * @param {number} yt Y tile index.
    * @param {number} x X position.
    * @param {number} y Y position.
    * @param {colors} colors An array of 4 RGB numbers.  Or -1 for transparent.

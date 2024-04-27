@@ -27,7 +27,7 @@ export const getOffset = (x, y) => (y * context.width + x) * context.bpp;
 /**
  * Clear the screen to a color.
  * 
- * @param {Color}} color The color to clear to.
+ * @param {Color} color The color to clear to.
  */
 export const clear = (color) => {
   for (let y = 0; y < getHeight(); y++) {
@@ -186,12 +186,9 @@ const onResize = () => {
     offsetY = (window.innerHeight - heightFromWidth) / 2;
   }
 
-  context.canvas.style.top = html.css.pixels(offsetY);
-  context.canvas.style.bottom = html.css.pixels(offsetY);
-  context.canvas.style.left = html.css.pixels(offsetX);
-  context.canvas.style.right = html.css.pixels(offsetX);
-  context.canvas.style.width = html.css.subtract(html.css.percent(1), html.css.pixels(offsetX * 2));
-  context.canvas.style.height = html.css.subtract(html.css.percent(1), html.css.pixels(offsetY * 2));
+  context.canvas.style.inset = `${offsetY}px ${offsetX}px`;
+  context.canvas.style.width = `calc(100% - ${offsetX * 2}px)`
+  context.canvas.style.height = `calc(100% - ${offsetY * 2}px)`
 };
 
 /**
@@ -224,7 +221,7 @@ export const createContext = async (width, height) => {
     stride,
     pixels,
     ctx2d,
-  }
+  };
   
   onResize();
   window.addEventListener('resize', onResize);
