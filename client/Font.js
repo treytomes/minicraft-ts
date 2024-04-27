@@ -13,6 +13,14 @@ export class Font {
     this.#tileset = tileset;
   }
 
+  get width() {
+    return this.#tileset.tileWidth;
+  }
+
+  get height() {
+    return this.#tileset.tileHeight;
+  }
+
   /**
    * Write some text to the screen.
    * 

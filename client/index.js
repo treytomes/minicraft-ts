@@ -2,10 +2,57 @@ import * as system from './system/index.js'
 import { Image } from './image.js'
 import { PALETTE } from './palette.js';
 import { Font } from './Font.js';
-import TileSet from './system/display/TileSet.js';
 
+/**
+ * @property {number} x
+ * @property {number} y
+ * @property {number} width
+ * @property {number} height
+ */
 class UIElement {
-  update(deltaTime) {}
+  static MOUSE_HOVER = undefined;
+  static MOUSE_FOCUS = undefined;
+
+  constructor(x, y, width, height) {
+    this.bounds = new system.math.Rectangle(x, y, width, height);
+  }
+
+  /**
+   * @returns {boolean} Is the mouse hovering over this UI element?
+   */
+  get hasMouseHover() {
+    return UIElement.MOUSE_HOVER === this;
+  }
+
+  /**
+   * @returns {boolean} Is the mouse focused on this UI element?
+   */
+  get hasMouseFocus() {
+    return UIElement.MOUSE_FOCUS === this;
+  }
+
+  /**
+   * @param {MouseEvent} e
+   */
+  onMouseMove(e) {
+    UIElement.MOUSE_HOVER = this;
+  }
+
+  /**
+   * @param {MouseEvent} e
+   */
+  onMouseDown(e) {
+    UIElement.MOUSE_FOCUS = this;
+  }
+
+  /**
+   * @param {MouseEvent} e
+   */
+  onMouseUp(e) {
+    UIElement.MOUSE_FOCUS = undefined;
+  }
+
+  update(deltaTime) { }
   render() {}
 }
 
@@ -25,11 +72,10 @@ class LabelUIElement extends UIElement {
    * @param {number} y 
    */
   constructor(font, text, x, y) {
-    super();
+    super(x, y, font.width * text.length, font.height);
+
     this.font = font;
     this.text = text;
-    this.x = x;
-    this.y = y;
     this.colors = PALETTE.get4(-1, -1, -1, 550);
   }
 
@@ -40,7 +86,7 @@ class LabelUIElement extends UIElement {
     if (typeof this.text === 'function') {
       text = this.text();
     }
-    this.font.render(text?.toString() ?? 'null', this.x, this.y, this.colors);
+    this.font.render(text?.toString() ?? 'null', this.bounds.x, this.bounds.y, this.colors);
   }
 }
 
@@ -55,25 +101,43 @@ class LabelUIElement extends UIElement {
  */
 class ButtonUIElement extends UIElement {
   /**
-   * 
-   * @param {TileSet} tileset 
+   * @param {system.display.TileSet} tileset 
    * @param {Font} font 
    * @param {any} text 
    * @param {number} x 
    * @param {number} y 
    */
   constructor(tileset, font, text, x, y) {
-    super();
+    super(x, y, font.width * text.length + tileset.tileWidth * 2, font.height);
+
     this.tileset = tileset;
     this.font = font;
     this.text = text;
-    this.x = x;
-    this.y = y;
-    this.chromeColors = PALETTE.get4(3, -1, -1, -1);
-    this.textColors = PALETTE.get4(3, -1, -1, 550);
+    this.chromeColors = PALETTE.get4(222, -1, -1, -1);
+    this.textColors = PALETTE.get4(222, -1, -1, 550);
+    this.onClick = () => { };
   }
 
-  update(deltaTime) {}
+  /**
+   * @param {MouseEvent} e
+   */
+  onMouseUp(e) {
+    super.onMouseUp(e);
+    this.onClick();
+  }
+
+  update(deltaTime) {
+    if (this.hasMouseFocus) {
+      this.chromeColors[0] = PALETTE.get(111);
+      this.textColors[0] = PALETTE.get(111);
+    } else if (this.hasMouseHover) {
+      this.chromeColors[0] = PALETTE.get(333);
+      this.textColors[0] = PALETTE.get(333);
+    } else {
+      this.chromeColors[0] = PALETTE.get(222);
+      this.textColors[0] = PALETTE.get(222);
+    }
+  }
 
   render() {
     let text = this.text;
@@ -82,10 +146,20 @@ class ButtonUIElement extends UIElement {
     }
     text = text?.toString() ?? 'null';
 
-    this.tileset.render(1 + 29 * 32, this.x, this.y, this.chromeColors);
+    // Left side of button.
+    this.tileset.render(1 + 29 * 32, this.bounds.x, this.bounds.y, this.chromeColors);
 
-    this.font.render(text, this.x + this.tileset.tileWidth, this.y, this.textColors);
-    this.tileset.render(1 + 29 * 32, this.x + this.tileset.tileWidth + text.length * this.tileset.tileWidth, this.y, this.chromeColors, system.display.BIT_MIRROR_X);
+    // Button text.
+    this.font.render(text, this.bounds.x + this.tileset.tileWidth, this.bounds.y, this.textColors);
+    
+    // Right side of button.
+    this.tileset.render(
+      1 + 29 * 32,
+      this.bounds.x + this.tileset.tileWidth + text.length * this.tileset.tileWidth,
+      this.bounds.y,
+      this.chromeColors,
+      system.display.BIT_MIRROR_X
+    );
   }
 }
 
@@ -95,6 +169,8 @@ await system.display.createContext(160, 120);
 const image = new Image(await window.api.gfx.getTiles())
 const tileset = new system.display.TileSet(image, 8, 8);
 const font = new Font(tileset);
+
+let counter = 0;
 
 /**
  * @type {Sprite[]}
@@ -114,8 +190,27 @@ let player = new system.display.Sprite(tileset, 0, 14, [ -1, 100, 220, 532 ]);
 player.moveTo(50, 50);
 sprites.push(player);
 
+const getCounterValue = () => parseInt(localStorage.getItem('counter') ?? 0);
+
 uiElements.push(new LabelUIElement(font, () => `X:${Math.floor(player.x)},Y:${Math.floor(player.y)}`, 0, 0));
-uiElements.push(new ButtonUIElement(tileset, font, 'Click me!', 10, 10));
+
+uiElements.push(new LabelUIElement(font, () => `Counter:${getCounterValue()}`, 20, 20));
+
+const upButton = new ButtonUIElement(tileset, font, 'Up', 10, 10);
+upButton.onClick = () => {
+  let counter = getCounterValue();
+  counter++;
+  localStorage.setItem('counter', counter.toString());
+}
+uiElements.push(upButton);
+
+const downButton = new ButtonUIElement(tileset, font, 'Down', 40, 10);
+downButton.onClick = () => {
+  let counter = getCounterValue();
+  counter--;
+  localStorage.setItem('counter', counter.toString());
+}
+uiElements.push(downButton);
 
 let isPlayerSelected = false;
 
@@ -197,6 +292,16 @@ const onMouseMove = (e) => {
     const bounds = player.bounds;
     player.moveTo(e.clientX - bounds.width / 2, e.clientY - bounds.height / 2);
   }
+
+  UIElement.MOUSE_HOVER = undefined;
+  for (let n = 0; n < uiElements.length; n++) {
+    const uiElement = uiElements[n];
+    // console.log(uiElement.bounds, e.clientX, e.clientY);
+    if (uiElement.bounds.contains(e.clientX, e.clientY)) {
+      uiElement.onMouseMove(e);
+      break;
+    }
+  }
 }
 
 /**
@@ -209,6 +314,11 @@ const onMouseDown = (e) => {
     if (player.bounds.contains(e.clientX, e.clientY) && !isPlayerSelected) {
       isPlayerSelected = true;
     }
+
+    UIElement.MOUSE_FOCUS = undefined;
+    if (UIElement.MOUSE_HOVER) {
+      UIElement.MOUSE_HOVER.onMouseDown(e);
+    }
   }
 }
 
@@ -219,6 +329,10 @@ const onMouseUp = (e) => {
   if (e.button === 0) {
     if (isPlayerSelected) {
       isPlayerSelected = false;
+    }
+
+    if (UIElement.MOUSE_FOCUS) {
+      UIElement.MOUSE_FOCUS.onMouseUp(e);
     }
   }
 }
