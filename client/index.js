@@ -4,8 +4,9 @@ import { PALETTE } from './system/display/palette.js';
 import Font from './system/display/Font.js';
 import { ButtonUIElement, LabelUIElement, ProgressMeterUIElement, UIElement } from './system/ui/index.js';
 
-await system.display.createContext(160, 120);
-// await system.display.createContext(320, 240);
+await system.display.createContext(160, 120); // Minicraft Standard
+// await system.display.createContext(256, 240); // NES
+// await system.display.createContext(320, 240); // VGA
 
 const image = new Image(await window.api.gfx.getTiles())
 const tileset = new system.display.TileSet(image, 8, 8);
@@ -23,7 +24,6 @@ const uiElements = [];
 
 let mouseCursor = new system.display.Sprite(tileset, 0, 29, [-1, -1, -1, 555], 1);
 mouseCursor.moveTo(system.display.getWidth() / 2, system.display.getHeight() / 2);
-// sprites.push(mouseCursor);
 
 let player = new system.display.Sprite(tileset, 0, 14, [ -1, 100, 220, 532 ]);
 player.moveTo(50, 50);
