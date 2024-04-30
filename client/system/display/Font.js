@@ -1,14 +1,20 @@
-export class Font {
+import Color from "./Color.js";
+import TileSet from "./TileSet.js";
+
+export default class Font {
   #chars = "" +
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ      " +
     "0123456789.,!?'\"-+=/\\%()<>:;     " +
     "";
   
   /**
-   * @type {system.display.TileSet}
+   * @type {TileSet}
    */
   #tileset;
   
+  /**
+   * @param {TileSet} tileset 
+   */
   constructor(tileset) {
     this.#tileset = tileset;
   }

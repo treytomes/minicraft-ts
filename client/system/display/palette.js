@@ -1,4 +1,4 @@
-import { Color } from "./system/display/index.js";
+import { Color } from "./index.js";
 
 class Palette {
   constructor() {
