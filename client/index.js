@@ -2,6 +2,7 @@ import * as system from './system/index.js'
 import { Image } from './image.js'
 import { PALETTE } from './palette.js';
 import { Font } from './Font.js';
+import TileSet from './system/display/TileSet.js';
 
 /**
  * @property {number} x
@@ -163,14 +164,58 @@ class ButtonUIElement extends UIElement {
   }
 }
 
+class ProgressMeterUIElement extends UIElement {
+  /**
+   * @type {TileSet}
+   */
+  #tileset;
+
+  /**
+   * 
+   * @param {number} x 
+   * @param {number} y 
+   * @param {number} maxValue 
+   * @param {number} tileIndex
+   * @param {TileSet} tileset 
+   * @param {Color[]} onColor
+   * @param {Color[]} offColor
+   * @param {()=>number | undefined} currentValue
+   */
+  constructor(x, y, maxValue, tileIndex, tileset, onColor, offColor, currentValue=undefined) {
+    super(x, y, tileset.tileWidth * maxValue, tileset.tileHeight);
+    this.#tileset = tileset;
+    this.maxValue = maxValue;
+    if (currentValue) {
+      this.currentValue = currentValue;
+    } else {
+      this.currentValue = this.maxValue;
+    }
+    this.tileIndex = tileIndex;
+    this.onColor = onColor;
+    this.offColor = offColor;
+  }
+
+  render() {
+    let value = this.currentValue;
+    if (typeof this.currentValue === 'function') {
+      value = this.currentValue();
+    }
+    for (let n = 0; n < this.maxValue; n++) {
+      if (n < value) {
+        this.#tileset.render(this.tileIndex, this.bounds.x + n * this.#tileset.tileWidth, this.bounds.y, this.onColor);
+      } else {
+        this.#tileset.render(this.tileIndex, this.bounds.x + n * this.#tileset.tileWidth, this.bounds.y, this.offColor);
+      }
+    }
+  }
+}
+
 await system.display.createContext(160, 120);
 // await system.display.createContext(320, 240);
 
 const image = new Image(await window.api.gfx.getTiles())
 const tileset = new system.display.TileSet(image, 8, 8);
 const font = new Font(tileset);
-
-let counter = 0;
 
 /**
  * @type {Sprite[]}
@@ -193,7 +238,6 @@ sprites.push(player);
 const getCounterValue = () => parseInt(localStorage.getItem('counter') ?? 0);
 
 uiElements.push(new LabelUIElement(font, () => `X:${Math.floor(player.x)},Y:${Math.floor(player.y)}`, 0, 0));
-
 uiElements.push(new LabelUIElement(font, () => `Counter:${getCounterValue()}`, 20, 20));
 
 const upButton = new ButtonUIElement(tileset, font, 'Up', 10, 10);
@@ -211,6 +255,12 @@ downButton.onClick = () => {
   localStorage.setItem('counter', counter.toString());
 }
 uiElements.push(downButton);
+
+const healthMeter = new ProgressMeterUIElement(0, system.display.getHeight() - 16, 10, 0 + 12 * 32, tileset, PALETTE.get4(0, 200, 500, 533), PALETTE.get4(0, 100, 0, 0), getCounterValue);
+uiElements.push(healthMeter);
+
+const staminaMeter = new ProgressMeterUIElement(0, system.display.getHeight() - 8, 10, 1 + 12 * 32, tileset, PALETTE.get4(0, 220, 550, 553), PALETTE.get4(0, 110, 0, 0), getCounterValue);
+uiElements.push(staminaMeter);
 
 let isPlayerSelected = false;
 
