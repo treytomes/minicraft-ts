@@ -1,0 +1,21 @@
+diff --git a/node_modules/ml-regression-base/src/index.ts b/node_modules/ml-regression-base/src/index.ts
+index e33697e..0dca7e9 100644
+--- a/node_modules/ml-regression-base/src/index.ts
++++ b/node_modules/ml-regression-base/src/index.ts
+@@ -18,13 +18,13 @@ export default class BaseRegression {
+     }
+   }
+ 
+-  predict(x: number): number;
+-  predict(x: NumberArray): number[];
++  // predict(x: number): number;
++  // predict(x: NumberArray): number[];
+   predict(x: number | NumberArray) {
+     if (typeof x === 'number') {
+       return this._predict(x);
+     } else if (isAnyArray(x)) {
+-      const y = [];
++      const y: number[] = [];
+       for (const xVal of x) {
+         y.push(this._predict(xVal));
+       }

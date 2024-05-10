@@ -3,8 +3,10 @@
   "productName": "minicraft-ts",
   "version": "1.0.0",
   "description": "My Electron application description",
-  "main": "server/index.js",
+  "main": "dist/app.js",
   "scripts": {
+    "build": "./node_modules/.bin/tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
@@ -19,7 +21,10 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.3.1",
     "@electron-forge/plugin-fuses": "^7.3.1",
     "@electron/fuses": "^1.8.0",
-    "electron": "29.2.0"
+    "@types/electron": "^1.6.10",
+    "electron": "29.2.0",
+    "patch-package": "^8.0.0",
+    "typescript": "^5.4.5"
   },
   "keywords": [],
   "author": {
@@ -29,6 +34,8 @@
   "license": "MIT",
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
-    "image-js": "^0.35.5"
+    "image-js": "^0.35.5",
+    "ml-regression-base": "^3.0.0",
+    "ml-regression-exponential": "^2.1.2"
   }
 }

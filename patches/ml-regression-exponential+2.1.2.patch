@@ -1,0 +1,60 @@
+diff --git a/node_modules/ml-regression-exponential/lib/index.js b/node_modules/ml-regression-exponential/lib/index.ts
+similarity index 65%
+rename from node_modules/ml-regression-exponential/lib/index.js
+rename to node_modules/ml-regression-exponential/lib/index.ts
+index 4d234ab..5cde694 100644
+--- a/node_modules/ml-regression-exponential/lib/index.js
++++ b/node_modules/ml-regression-exponential/lib/index.ts
+@@ -1,16 +1,17 @@
+-'use strict';
+-
+-var BaseRegression = require('ml-regression-base');
+-var mlRegressionSimpleLinear = require('ml-regression-simple-linear');
++import BaseRegression, { checkArrayLength, maybeToPrecision } from "ml-regression-base";
++import mlRegressionSimpleLinear from "ml-regression-simple-linear";
+ 
+ class ExponentialRegression extends BaseRegression {
++  A: number;
++  B: number;
++
+   constructor(x, y) {
+     super();
+     if (x === true) {
+       this.A = y.A;
+       this.B = y.B;
+     } else {
+-      BaseRegression.checkArrayLength(x, y);
++      checkArrayLength(x, y);
+       regress(this, x, y);
+     }
+   }
+@@ -28,23 +29,23 @@ class ExponentialRegression extends BaseRegression {
+   }
+ 
+   toString(precision) {
+-    return `f(x) = ${BaseRegression.maybeToPrecision(
++    return `f(x) = ${maybeToPrecision(
+       this.B,
+       precision,
+-    )} * e^(${BaseRegression.maybeToPrecision(this.A, precision)} * x)`;
++    )} * e^(${maybeToPrecision(this.A, precision)} * x)`;
+   }
+ 
+   toLaTeX(precision) {
+     if (this.A >= 0) {
+-      return `f(x) = ${BaseRegression.maybeToPrecision(
++      return `f(x) = ${maybeToPrecision(
+         this.B,
+         precision,
+-      )}e^{${BaseRegression.maybeToPrecision(this.A, precision)}x}`;
++      )}e^{${maybeToPrecision(this.A, precision)}x}`;
+     } else {
+-      return `f(x) = \\frac{${BaseRegression.maybeToPrecision(
++      return `f(x) = \\frac{${maybeToPrecision(
+         this.B,
+         precision,
+-      )}}{e^{${BaseRegression.maybeToPrecision(-this.A, precision)}x}}`;
++      )}}{e^{${maybeToPrecision(-this.A, precision)}x}}`;
+     }
+   }
+ 
