@@ -26,17 +26,17 @@ export default class Main {
     Main.mainWindow = new Main.BrowserWindow({
       width: 1280,
       height: 720,
-      icon: path.join(__dirname, '../client/assets/favicon.ico'),
+      icon: path.join(__dirname, '../../client/assets/favicon.ico'),
       webPreferences: {
         // nodeIntegration: true,
         // contextIsolation: false,
         preload: path.join(__dirname, '../preload/index.js'),
       },
     });
-    console.log('icon: ', path.join(__dirname, '../client/assets/favicon.ico'));
-    console.log('preload: ', path.join(__dirname, '../preload/index.js'));
-    console.log('index: ', path.join(__dirname, '../client/index.html'));
-    Main.mainWindow.loadFile(path.join(__dirname, '../client/index.html'));
+    // console.log('icon: ', path.join(__dirname, '../../client/assets/favicon.ico'));
+    // console.log('preload: ', path.join(__dirname, '../../client/index.js'));
+    // console.log('index: ', path.join(__dirname, '../../client/index.html'));
+    Main.mainWindow.loadFile(path.join(__dirname, '../../client/index.html'));
     Main.mainWindow.on('closed', Main.onClose);
 
     Main.mainWindow.webContents.openDevTools();

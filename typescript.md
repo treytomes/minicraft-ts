@@ -22,3 +22,21 @@ image-js TypeScript definitions were broken:
 Similar with ml-regression-base and ml-regression-exponential.
 patch-package was a big help in resolving the little TypeScript bugs.
 
+nodemon
+2 instances:
+1. Watch for changes in the server and preload folders and restart the Electron app.
+2. Watch for changes in the client folder and hot-reload the Electron instance.
+
+The hot-reload function should only run in the development environment.
+Use dotenv to setup environment variables:
+`npm install dotenv`
+
+The convict library is used to help manage app configuration based on the environment variables:
+```
+npm install convict
+npm install @types/convict --save-dev
+```
+
+Check out how I mapped the Environment enum to the convict configuration.
+The dotenv is loaded in the app.ts file, then the configuration is spit out to the console.
+
