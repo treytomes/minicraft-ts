@@ -1,6 +1,6 @@
-import { PALETTE } from '../display/palette.js';
-import Font from '../display/Font.js';
-import UIElement from './UIElement.js';
+import { PALETTE } from '../display/palette';
+import UIElement from './UIElement';
+import { Color, Font } from '../display';
 
 /**
  * A Label that can be positioned anywhere on the screen.
@@ -11,13 +11,17 @@ import UIElement from './UIElement.js';
  * @property {number} y
  */
 export default class LabelUIElement extends UIElement {
+  font: Font;
+  text: any;
+  colors: Color[];
+
   /**
    * @param {Font} font 
    * @param {any} text 
    * @param {number} x 
    * @param {number} y 
    */
-  constructor(font, text, x, y) {
+  constructor(font: Font, text: any, x: number, y: number) {
     super(x, y, font.width * text.length, font.height);
 
     this.font = font;
@@ -25,7 +29,7 @@ export default class LabelUIElement extends UIElement {
     this.colors = PALETTE.get4(-1, -1, -1, 550);
   }
 
-  update(deltaTime) {}
+  update(deltaTime: number) { }
 
   render() {
     let text = this.text;

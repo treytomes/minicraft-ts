@@ -1,36 +1,36 @@
-import Color from './Color.js';
-import Sprite from './Sprite.js';
-import TileSet, { BIT_MIRROR_X, BIT_MIRROR_Y } from './TileSet.js';
-import Font from './Font.js';
-import { PALETTE } from './palette.js';
+import Color from './Color';
+import Sprite from './Sprite';
+import TileSet, { BIT_MIRROR_X, BIT_MIRROR_Y } from './TileSet';
+import Font from './Font';
+import { PALETTE } from './palette';
 
 export { Color, Font, Sprite, TileSet, BIT_MIRROR_X, BIT_MIRROR_Y, PALETTE };
 
+type RenderingContext = {
+  canvas: HTMLCanvasElement,
+  width: number,
+  height: number,
+  bpp: number,
+  stride: number,
+  pixels: Uint8ClampedArray,
+  ctx2d: CanvasRenderingContext2D,
+}
+
 /**
  * Container for the details necessary to render to the screen.
- * 
- * @type {{
- *          canvas: HTMLCanvasElement,
- *          width: number,
- *          height: number,
- *          bpp: number,
- *          stride: number,
- *          pixels: Uint8ClampedArray,
- *          ctx2d: CanvasRenderingContext2D,
- *        }}
  */
-export let context;
+export let context: RenderingContext;
 
-export const getWidth = () => context.width;
-export const getHeight = () => context.height;
-export const getOffset = (x, y) => (y * context.width + x) * context.bpp;
+export const getWidth = (): number => context.width;
+export const getHeight = (): number => context.height;
+export const getOffset = (x: number, y: number): number => (y * context.width + x) * context.bpp;
 
 /**
  * Clear the screen to a color.
  * 
  * @param {Color} color The color to clear to.
  */
-export const clear = (color) => {
+export const clear = (color: Color) => {
   for (let y = 0; y < getHeight(); y++) {
     for (let x = 0; x < getWidth(); x++) {
       setPixel(x, y, color);
@@ -47,7 +47,7 @@ export const clear = (color) => {
  * @param {number} y2 The ending y-value.
  * @param {{r: number, g: number, b: number}} color The line color.
  */
-export const drawLine = (x1, y1, x2, y2, color) => {
+export const drawLine = (x1: number, y1: number, x2: number, y2: number, color: Color) => {
   x1 = Math.floor(x1);
   x2 = Math.floor(x2);
   y1 = Math.floor(y1);
@@ -57,7 +57,7 @@ export const drawLine = (x1, y1, x2, y2, color) => {
     setPixel(x1, y1, color);
     return;
   }
-  
+
   const xMin = Math.min(x1, x2);
   const xMax = Math.max(x1, x2);
   const yMin = Math.min(y1, y2);
@@ -77,7 +77,7 @@ export const drawLine = (x1, y1, x2, y2, color) => {
     dy = -dy;
     let sy = (y1 < y2) ? 1 : -1;
     let err = dx + dy;
-  
+
     while (true) {
       setPixel(x1, y1, color);
       if ((x1 == x2) && (y1 == y2)) break;
@@ -104,11 +104,11 @@ export const drawLine = (x1, y1, x2, y2, color) => {
  * @param {number} r The radius of the circle.
  * @param {Color} c The color of the circle.
  */
-export const drawCircle = (xc, yc, r, c) => {
+export const drawCircle = (xc: number, yc: number, r: number, c: Color) => {
   xc = Math.floor(xc);
   yc = Math.floor(yc);
   r = Math.floor(r);
-  
+
   const drawOctants = (x, y) => {
     setPixel(xc + x, yc + y, c);
     setPixel(xc - x, yc + y, c);
@@ -138,7 +138,7 @@ export const drawCircle = (xc, yc, r, c) => {
   }
 }
 
-export const fillRect = (x, y, w, h, color) => {
+export const fillRect = (x: number, y: number, w: number, h: number, color: Color) => {
   for (let yd = 0; yd < h; yd++) {
     for (let xd = 0; xd < w; xd++) {
       setPixel(x + xd, y + yd, color);
@@ -154,7 +154,7 @@ export const fillRect = (x, y, w, h, color) => {
  * @param {number} y 
  * @param {Color} color 
  */
-export const setPixel = (x, y, color) => {
+export const setPixel = (x: number, y: number, color: Color) => {
   const offset = getOffset(x, y);
   context.pixels[offset + 0] = color.r;
   context.pixels[offset + 1] = color.g;
@@ -167,6 +167,7 @@ export const setPixel = (x, y, color) => {
  */
 export const postRender = () => {
   // Write the image data in `context.pixels` to the 2d canvas context in context.ctx2d.
+  // TODO: Can I avoid rebuilding ImageDAta on each frame.
   context.ctx2d.putImageData(new ImageData(context.pixels, context.width, context.height), 0, 0);
 };
 
@@ -198,16 +199,16 @@ const onResize = () => {
  * @param {number} width The width of the display canvas in pixels.
  * @param {number} height The height of the display canvas in pixels.
  */
-export const createContext = async (width, height) => {
+export const createContext = async (width: number, height: number) => {
   const canvas = document.createElement('canvas');
   document.body.appendChild(canvas);
-  
+
   canvas.width = width;
   canvas.height = height;
 
   const ctx2d = canvas.getContext('2d', {
     antialias: false,
-  });
+  }) as CanvasRenderingContext2D;
   if (!ctx2d) throw new Error('Unable to acquire the 2d context.');
 
   const bpp = 4;
@@ -223,7 +224,7 @@ export const createContext = async (width, height) => {
     pixels,
     ctx2d,
   };
-  
+
   onResize();
   window.addEventListener('resize', onResize);
 };
@@ -235,30 +236,30 @@ export const createContext = async (width, height) => {
  * @param {number} y 
  * @returns {x: number, y: number} An object with the converted x and y properties.
  */
-export const convertPosition = (x, y) => {
-    const rect = context.canvas.getBoundingClientRect();
+export const convertPosition = (x: number, y: number): { x: number, y: number } => {
+  const rect = context.canvas.getBoundingClientRect();
 
-    const displayWidth = context.canvas.clientWidth;
-    const displayHeight = context.canvas.clientHeight;
-    let drawWidth = 0;
-    let drawHeight = 0;
-    if (displayWidth > displayHeight) {
-        // Most of the time the window will be horizontal.
-        drawHeight = displayHeight;
-        drawWidth = context.width * drawHeight / context.height;
-    } else {
-        // Sometimes the window will be vertical.
-        drawWidth = displayWidth;
-        drawHeight = context.height * drawWidth / context.width;
-    }
+  const displayWidth = context.canvas.clientWidth;
+  const displayHeight = context.canvas.clientHeight;
+  let drawWidth = 0;
+  let drawHeight = 0;
+  if (displayWidth > displayHeight) {
+    // Most of the time the window will be horizontal.
+    drawHeight = displayHeight;
+    drawWidth = context.width * drawHeight / context.height;
+  } else {
+    // Sometimes the window will be vertical.
+    drawWidth = displayWidth;
+    drawHeight = context.height * drawWidth / context.width;
+  }
 
-    rect.x += (displayWidth - drawWidth) / 2;
-    rect.y += (displayHeight - drawHeight) / 2;
-    rect.width = drawWidth;
-    rect.height = drawHeight;
+  rect.x += (displayWidth - drawWidth) / 2;
+  rect.y += (displayHeight - drawHeight) / 2;
+  rect.width = drawWidth;
+  rect.height = drawHeight;
 
-    const newX = Math.floor((x - rect.left) / rect.width * context.width);
-    const newY = Math.floor((y - rect.top) / rect.height * context.height);
+  const newX = Math.floor((x - rect.left) / rect.width * context.width);
+  const newY = Math.floor((y - rect.top) / rect.height * context.height);
 
-    return { x: newX, y: newY };
+  return { x: newX, y: newY };
 }

@@ -1,4 +1,9 @@
-class Image {
+export default class Image {
+  components: number;
+  data: number[];
+  height: number;
+  width: number;
+
   constructor(data) {
     this.components = data.components
     this.data = data.data
@@ -20,5 +25,3 @@ class Image {
     return { r, g, b }
   }
 }
-
-export { Image }

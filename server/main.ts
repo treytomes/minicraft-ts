@@ -5,9 +5,9 @@ import path from 'path';
 import { config } from './config';
 
 export default class Main {
-  static mainWindow: Electron.BrowserWindow;
+  static mainWindow: Electron.BrowserWindow | null;
   static application: Electron.App;
-  static BrowserWindow;
+  static BrowserWindow: any;
 
   // Quit when all windows are closed, except on macOS. There, it's common
   // for applications and their menu bar to stay active until the user quits
@@ -23,24 +23,37 @@ export default class Main {
     Main.mainWindow = null;
   }
 
+  private static getClientPath(relativePath: string): string {
+    // return path.join(__dirname, `../dist/client/${relativePath}`);
+    return path.join(this.application.getAppPath(), `/dist/client/${relativePath}`);
+  }
+
+  private static getPreloadPath(relativePath: string): string {
+    return path.join(this.application.getAppPath(), `/dist/preload/${relativePath}`);
+  }
+
   private static createWindow() {
     Main.mainWindow = new Main.BrowserWindow({
       width: 1280,
       height: 720,
-      icon: path.join(__dirname, '../../client/assets/favicon.ico'),
+      icon: this.getClientPath('favicon.ico'),
       webPreferences: {
         // nodeIntegration: true,
         // contextIsolation: false,
-        preload: path.join(__dirname, '../preload/index.js'),
+        preload: this.getPreloadPath('preload-bundle.js'),
       },
     });
+
+    if (!Main.mainWindow) throw new Error('Unable to create main window.');
+
     // console.log('icon: ', path.join(__dirname, '../../client/assets/favicon.ico'));
     // console.log('preload: ', path.join(__dirname, '../../client/index.js'));
     // console.log('index: ', path.join(__dirname, '../../client/index.html'));
-    Main.mainWindow.loadFile(path.join(__dirname, '../../client/index.html'));
+    console.log('index: ', this.getClientPath('index.html'));
+    Main.mainWindow.loadFile(this.getClientPath('index.html'));
     Main.mainWindow.on('closed', Main.onClose);
 
-    Main.mainWindow.webContents.openDevTools();
+    if (config.get('debug')) Main.mainWindow.webContents.openDevTools();
   }
 
   // On OS X it's common to re-create a window in the app when the

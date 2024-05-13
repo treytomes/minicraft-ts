@@ -1,8 +1,9 @@
-import { BIT_MIRROR_X, PALETTE } from '../display/index.js';
-import Color from "../display/Color.js";
-import Font from "../display/Font.js";
-import TileSet from "../display/TileSet.js";
-import UIElement from "./UIElement.js";
+import { BIT_MIRROR_X, PALETTE } from '../display/index';
+import Color from "../display/Color";
+import Font from "../display/Font";
+import TileSet from "../display/TileSet";
+import UIElement from "./UIElement";
+import { MouseEventProxy } from '../input';
 
 /**
  * @property {TileSet} tileset
@@ -14,6 +15,13 @@ import UIElement from "./UIElement.js";
  * @property {Color[]} textColors
  */
 export default class ButtonUIElement extends UIElement {
+  tileset: TileSet;
+  font: Font;
+  text: any;
+  chromeColors: Color[];
+  textColors: Color[];
+  onClick: () => void;
+
   /**
    * @param {TileSet} tileset 
    * @param {Font} font 
@@ -21,7 +29,7 @@ export default class ButtonUIElement extends UIElement {
    * @param {number} x 
    * @param {number} y 
    */
-  constructor(tileset, font, text, x, y) {
+  constructor(tileset: TileSet, font: Font, text: any, x: number, y: number) {
     super(x, y, font.width * text.length + tileset.tileWidth * 2, font.height);
 
     this.tileset = tileset;
@@ -32,15 +40,12 @@ export default class ButtonUIElement extends UIElement {
     this.onClick = () => { };
   }
 
-  /**
-   * @param {MouseEvent} e
-   */
-  onMouseUp(e) {
+  onMouseUp(e: MouseEventProxy) {
     super.onMouseUp(e);
     this.onClick();
   }
 
-  update(deltaTime) {
+  update(deltaTime: number) {
     if (this.hasMouseFocus) {
       this.chromeColors[0] = PALETTE.get(111);
       this.textColors[0] = PALETTE.get(111);
@@ -65,7 +70,7 @@ export default class ButtonUIElement extends UIElement {
 
     // Button text.
     this.font.render(text, this.bounds.x + this.tileset.tileWidth, this.bounds.y, this.textColors);
-    
+
     // Right side of button.
     this.tileset.render(
       1 + 29 * 32,

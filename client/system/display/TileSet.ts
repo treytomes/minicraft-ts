@@ -1,4 +1,6 @@
-import { getHeight, getWidth, setPixel } from "./index.js";
+import { getHeight, getWidth, setPixel } from "./index";
+import Image from './Image';
+import Color from "./Color";
 
 export const BIT_MIRROR_X = 0x01;
 export const BIT_MIRROR_Y = 0x02;
@@ -9,18 +11,22 @@ export const BIT_MIRROR_Y = 0x02;
  * @property {number} tilesPerRow Number of tiles per row.
  */
 export default class TileSet {
-  #tiles;
+  private tiles;
+
+  tileWidth: number;
+  tileHeight: number;
+  tilesPerRow: number;
 
   /**
    * @param {Image} image The source image to pull tiles from.
    * @param {number} tileWidth Tile width.
    * @param {number} tileHeight Tile height.
    */
-  constructor(image, tileWidth, tileHeight) {
+  constructor(image: Image, tileWidth: number, tileHeight: number) {
     this.tileWidth = tileWidth;
     this.tileHeight = tileHeight;
     this.tilesPerRow = Math.floor(image.width / tileWidth);
-    this.#tiles = [];
+    this.tiles = [];
 
     const NUM_COLUMNS = Math.floor(image.width / tileWidth);
     const NUM_ROWS = Math.floor(image.height / tileHeight);
@@ -29,7 +35,7 @@ export default class TileSet {
       for (let column = 0; column < NUM_COLUMNS; column++) {
         const x = column * tileWidth;
         const y = row * tileHeight;
-        const tile = [];
+        const tile: number[] = [];
         for (let yd = 0; yd < tileHeight; yd++) {
           for (let xd = 0; xd < tileWidth; xd++) {
             const { r, g, b } = image.getPixel(x + xd, y + yd);
@@ -38,7 +44,7 @@ export default class TileSet {
           }
         }
 
-        this.#tiles.push(tile);
+        this.tiles.push(tile);
       }
     }
   }
@@ -51,13 +57,13 @@ export default class TileSet {
    * @param {number[]} colors An array of 4 numbers that represents the color of the tile.  -1 is transparent.
    * @param {number} bits Bit flags to apply to the rendering, used to flip on the x or y axis.
    */
-  render(tileIndex, x, y, colors, bits = 0) {
-		const mirrorX = (bits & BIT_MIRROR_X) > 0;
-		const mirrorY = (bits & BIT_MIRROR_Y) > 0;
+  render(tileIndex: number, x: number, y: number, colors: Color[], bits: number = 0) {
+    const mirrorX = (bits & BIT_MIRROR_X) > 0;
+    const mirrorY = (bits & BIT_MIRROR_Y) > 0;
 
     x = Math.floor(x);
     y = Math.floor(y);
-    const tile = this.#tiles[tileIndex];
+    const tile = this.tiles[tileIndex];
     let index = 0;
     for (let yd = 0; yd < this.tileHeight; yd++) {
       let ys = y + yd;

@@ -1,6 +1,8 @@
-import { Color } from "./index.js";
+import { Color } from "./index";
 
-class Palette {
+export class Palette {
+  colors: Color[];
+
   constructor() {
     this.colors = [];
     for (let r = 0; r <= 5; r++) {
@@ -14,7 +16,7 @@ class Palette {
           const r1 = Math.floor(((rr + mid * 1) / 2) * 230 / 255 + 10);
           const g1 = Math.floor(((gg + mid * 1) / 2) * 230 / 255 + 10);
           const b1 = Math.floor(((bb + mid * 1) / 2) * 230 / 255 + 10);
-          
+
           // palette.push bitOr(bitOr(shl(r1, 16), shl(g1, 8)), b1)
           this.colors.push(new Color(r1, g1, b1));
         }
@@ -31,7 +33,7 @@ class Palette {
    * @param {number} d The fourth rgb value to retrieve. 
    * @returns {Color[]} A set of colors.
    */
-  get4(a, b, c, d) {
+  get4(a: number, b: number, c: number, d: number): Color[] {
     return [this.get(a), this.get(b), this.get(c), this.get(d)];
   }
 
@@ -41,7 +43,7 @@ class Palette {
    * @param {number} d The rgb value to retrieve.
    * @returns {Color} A Color object.
    */
-  get(d) {
+  get(d: number): Color {
     if (d < 0) return this.colors[255];
     const r = Math.floor(d / 100) % 10;
     const g = Math.floor(d / 10) % 10;

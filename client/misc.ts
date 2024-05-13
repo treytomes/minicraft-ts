@@ -1,5 +1,13 @@
+import { Color, drawCircle, getHeight, getWidth } from "./system/display";
 
 export class Ball {
+  r: number;
+  x: number;
+  y: number;
+  color: Color;
+  dx: number;
+  dy: number;
+
   constructor(x = undefined, y = undefined, r = undefined, color = undefined) {
     this.r = r ?? Math.random() * 20 + 10;
     this.x = x ?? Math.random() * getWidth();
@@ -17,7 +25,7 @@ export class Ball {
     }
 
     this.color = color ?? new Color(Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255));
-    
+
     this.dx = Math.random() * 2 - 1;
     this.dy = Math.random() * 2 - 1;
   }

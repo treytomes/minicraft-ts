@@ -45,3 +45,6 @@ to through the ipcRenderer.
 The dotenv is loaded in the app.ts file, then the configuration is spit out to the console.
 
 I'm using the `electron-reloader` package to handle hot-reloading.
+
+
+The frontend conversion mandated the creation of window.d.ts in the client to resolve type errors.

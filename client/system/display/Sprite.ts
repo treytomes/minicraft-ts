@@ -1,6 +1,7 @@
-import { Rectangle } from "../math/index.js";
-import { PALETTE } from "./palette.js";
-import TileSet from "./TileSet.js";
+import { Rectangle } from "../math/index";
+import Color from "./Color";
+import { PALETTE } from "./palette";
+import TileSet from "./TileSet";
 
 /**
  * A colored group of tiles that can move around.
@@ -15,15 +16,24 @@ import TileSet from "./TileSet.js";
  * @property {number[]} colors The color values.
  */
 export default class Sprite {
+  tileset: TileSet;
+  tileIndex: number;
+  size: number;
+  x: number;
+  y: number;
+  dx: number;
+  dy: number;
+  colors: Color[];
+
   /**
    * @param {TileSet} tileset The tileset that contains the tiles.
    * @param {number} xt X tile index.
    * @param {number} yt Y tile index.
    * @param {number} x X position.
    * @param {number} y Y position.
-   * @param {colors} colors An array of 4 RGB numbers.  Or -1 for transparent.
+   * @param {number[]} colors An array of 4 RGB numbers.  Or -1 for transparent.
    */
-  constructor(tileset, xt, yt, colors, size = 2) {
+  constructor(tileset: TileSet, xt: number, yt: number, colors: number[], size = 2) {
     this.tileset = tileset;
     this.tileIndex = xt + yt * tileset.tilesPerRow;
     this.size = size;
@@ -32,19 +42,19 @@ export default class Sprite {
     this.y = 0;
     this.dx = 0;
     this.dy = 0;
-    this.colors = PALETTE.get4(...colors);
+    this.colors = PALETTE.get4(colors[0], colors[1], colors[2], colors[3]);
   }
 
   get bounds() {
     return new Rectangle(this.x, this.y, this.tileset.tileWidth * this.size, this.tileset.tileHeight * this.size);
   }
 
-  update(deltaTime) {
+  update(deltaTime: number) {
     this.x += this.dx * deltaTime;
     this.y += this.dy * deltaTime;
   }
 
-  moveTo(x, y) {
+  moveTo(x: number, y: number) {
     this.x = x;
     this.y = y;
   }
