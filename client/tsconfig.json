@@ -13,11 +13,10 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noImplicitAny": false,
-    "removeComments": false,
+    "removeComments": true,
     "sourceMap": true,
     "skipLibCheck": true,
     "allowJs": true,
-    "jsx": "preserve",
   },
   "exclude": [
     "node_modules",

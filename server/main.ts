@@ -1,8 +1,8 @@
 
 import { BrowserWindow, ipcMain } from 'electron';
 import api from './api';
-import path from 'path';
 import { config } from './config';
+import * as paths from './paths';
 
 export default class Main {
   static mainWindow: Electron.BrowserWindow | null;
@@ -23,24 +23,15 @@ export default class Main {
     Main.mainWindow = null;
   }
 
-  private static getClientPath(relativePath: string): string {
-    // return path.join(__dirname, `../dist/client/${relativePath}`);
-    return path.join(this.application.getAppPath(), `/dist/client/${relativePath}`);
-  }
-
-  private static getPreloadPath(relativePath: string): string {
-    return path.join(this.application.getAppPath(), `/dist/preload/${relativePath}`);
-  }
-
   private static createWindow() {
     Main.mainWindow = new Main.BrowserWindow({
       width: 1280,
       height: 720,
-      icon: this.getClientPath('favicon.ico'),
+      icon: paths.getClientPath('favicon.ico'),
       webPreferences: {
         // nodeIntegration: true,
         // contextIsolation: false,
-        preload: this.getPreloadPath('preload-bundle.js'),
+        preload: paths.getPreloadPath('preload-bundle.js'),
       },
     });
 
@@ -49,8 +40,8 @@ export default class Main {
     // console.log('icon: ', path.join(__dirname, '../../client/assets/favicon.ico'));
     // console.log('preload: ', path.join(__dirname, '../../client/index.js'));
     // console.log('index: ', path.join(__dirname, '../../client/index.html'));
-    console.log('index: ', this.getClientPath('index.html'));
-    Main.mainWindow.loadFile(this.getClientPath('index.html'));
+    console.log('index: ', paths.getClientPath('index.html'));
+    Main.mainWindow.loadFile(paths.getClientPath('index.html'));
     Main.mainWindow.on('closed', Main.onClose);
 
     if (config.get('debug')) Main.mainWindow.webContents.openDevTools();
