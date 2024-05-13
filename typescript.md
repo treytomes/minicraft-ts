@@ -37,6 +37,11 @@ npm install convict
 npm install @types/convict --save-dev
 ```
 
-Check out how I mapped the Environment enum to the convict configuration.
+Check out how I mapped the Environment enum to the convict configuration:
+`Object.values(Environment)`.  That along with using a string enum allows the environment selection
+to function logically.  This same configuration is exposed through the API that we are sharing
+to through the ipcRenderer.
+
 The dotenv is loaded in the app.ts file, then the configuration is spit out to the console.
 
+I'm using the `electron-reloader` package to handle hot-reloading.

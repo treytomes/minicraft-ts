@@ -2,6 +2,7 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import api from './api';
 import path from 'path';
+import { config } from './config';
 
 export default class Main {
   static mainWindow: Electron.BrowserWindow;
@@ -62,7 +63,14 @@ export default class Main {
     ipcMain.handle('gfx/getTiles', async () => {
       console.log('Calling gfx/getTiles.')
       return await (await api).gfx.getTiles()
-    })
+    });
+
+    ipcMain.handle('config', () => {
+      return {
+        debug: config.get('debug'),
+        environment: config.get('environment'),
+      }
+    });
 
     Main.createWindow();
   }

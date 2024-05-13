@@ -2,10 +2,16 @@ import convict from 'convict';
 import { Environment } from '../models';
 
 export const config = convict({
+  debug: {
+    doc: 'Is the app currently being debugged?',
+    format: [true, false],
+    default: false,
+    env: 'DEBUG',
+  },
   environment: {
     doc: 'The type of execution environment.',
-    format: Object.values(Environment).filter(value => typeof value === 'string'),
-    default: Environment[Environment.dev],
+    format: [Environment.dev, Environment.prd],
+    default: Environment.dev,
     env: 'ENVIRONMENT',
   },
 }).validate({ allowed: 'strict' });

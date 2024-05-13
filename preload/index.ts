@@ -7,8 +7,11 @@ contextBridge.exposeInMainWorld('versions', {
   node: () => process.versions.node,
   chrome: () => process.versions.chrome,
   electron: () => process.versions.electron,
+
   // we can also expose variables, not just functions
-})
+});
+
+// contextBridge.exposeInMainWorld('config', config);
 
 contextBridge.exposeInMainWorld('api', {
   sample: {
@@ -16,5 +19,6 @@ contextBridge.exposeInMainWorld('api', {
   },
   gfx: {
     getTiles: async () => await ipcRenderer.invoke('gfx/getTiles')
-  }
-})
+  },
+  config: async () => await ipcRenderer.invoke('config'),
+});
