@@ -183,8 +183,8 @@ export default class SpriteTestScene extends Scene {
       10,
       0 + 12 * 32,
       this.tileset,
-      PALETTE.get4(0, 200, 500, 533),
-      PALETTE.get4(0, 100, 0, 0),
+      PALETTE.get(0, 200, 500, 533),
+      PALETTE.get(0, 100, 0, 0),
       this.getCounterValue
     );
     this.uiElements.push(healthMeter);
@@ -195,8 +195,8 @@ export default class SpriteTestScene extends Scene {
       10,
       1 + 12 * 32,
       this.tileset,
-      PALETTE.get4(0, 220, 550, 553),
-      PALETTE.get4(0, 110, 0, 0),
+      PALETTE.get(0, 220, 550, 553),
+      PALETTE.get(0, 110, 0, 0),
       this.getCounterValue
     );
     this.uiElements.push(staminaMeter);
@@ -207,7 +207,7 @@ export default class SpriteTestScene extends Scene {
   }
 
   render(time: GameTime) {
-    clear(PALETTE.get(1));
+    clear(PALETTE.get(1)[0]);
 
     const r = 40;
     const dx = this.width / 2;
@@ -233,9 +233,9 @@ export default class SpriteTestScene extends Scene {
       text.length + 1,
       2
     );
-    slicer.render(50, 50, PALETTE.get4(-1, 112, 223, 334));
-    this.font.render(text, x + 6, y + 6, PALETTE.get4(-1, -1, -1, 0));
-    this.font.render(text, x + 5, y + 5, PALETTE.get4(-1, -1, -1, 555));
+    slicer.render(50, 50, PALETTE.get(-1, 112, 223, 334));
+    this.font.render(text, x + 6, y + 6, PALETTE.get(-1, -1, -1, 0));
+    this.font.render(text, x + 5, y + 5, PALETTE.get(-1, -1, -1, 555));
 
     super.render(time);
   }

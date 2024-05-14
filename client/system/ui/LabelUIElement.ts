@@ -27,7 +27,7 @@ export default class LabelUIElement extends UIElement {
 
     this.font = font;
     this.text = text;
-    this.colors = PALETTE.get4(-1, -1, -1, 550);
+    this.colors = PALETTE.get(-1, -1, -1, 550);
   }
 
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */

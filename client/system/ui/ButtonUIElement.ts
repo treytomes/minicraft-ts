@@ -27,8 +27,8 @@ export default class ButtonUIElement extends UIElement {
     this.tileset = tileset;
     this.font = font;
     this.text = text;
-    this.chromeColors = PALETTE.get4(222, -1, -1, -1);
-    this.textColors = PALETTE.get4(222, -1, -1, 550);
+    this.chromeColors = PALETTE.get(222, -1, -1, -1);
+    this.textColors = PALETTE.get(222, -1, -1, 550);
     this.onClick = () => {};
   }
 
@@ -40,14 +40,14 @@ export default class ButtonUIElement extends UIElement {
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   update(time: GameTime) {
     if (this.hasMouseFocus) {
-      this.chromeColors[0] = PALETTE.get(111);
-      this.textColors[0] = PALETTE.get(111);
+      this.chromeColors[0] = PALETTE.get(111)[0];
+      this.textColors[0] = PALETTE.get(111)[0];
     } else if (this.hasMouseHover) {
-      this.chromeColors[0] = PALETTE.get(333);
-      this.textColors[0] = PALETTE.get(333);
+      this.chromeColors[0] = PALETTE.get(333)[0];
+      this.textColors[0] = PALETTE.get(333)[0];
     } else {
-      this.chromeColors[0] = PALETTE.get(222);
-      this.textColors[0] = PALETTE.get(222);
+      this.chromeColors[0] = PALETTE.get(222)[0];
+      this.textColors[0] = PALETTE.get(222)[0];
     }
   }
 

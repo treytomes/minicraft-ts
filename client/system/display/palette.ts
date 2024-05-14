@@ -27,28 +27,23 @@ export class Palette {
   /**
    * Convert a set of rgb values into a set of colors.
    *
-   * @param {number} a The first rgb value to retrieve.
-   * @param {number} b The second rgb value to retrieve.
-   * @param {number} c The third rgb value to retrieve.
-   * @param {number} d The fourth rgb value to retrieve.
+   * @param {number[]} cols The rgb values to retrieve.
    * @returns {Color[]} A set of colors.
    */
-  get4(a: number, b: number, c: number, d: number): Color[] {
-    return [this.get(a), this.get(b), this.get(c), this.get(d)];
-  }
-
-  /**
-   * Convert an rgb value into a color.
-   *
-   * @param {number} d The rgb value to retrieve.
-   * @returns {Color} A Color object.
-   */
-  get(d: number): Color {
-    if (d < 0) return this.colors[255];
-    const r = Math.floor(d / 100) % 10;
-    const g = Math.floor(d / 10) % 10;
-    const b = d % 10;
-    return this.colors[r * 36 + g * 6 + b];
+  get(...cols: number[]): Color[] {
+    const gotCols: Color[] = [];
+    for (let n = 0; n < cols.length; n++) {
+      const d = cols[0];
+      if (d < 0) {
+        gotCols.push(this.colors[255]);
+      } else {
+        const r = Math.floor(d / 100) % 10;
+        const g = Math.floor(d / 10) % 10;
+        const b = d % 10;
+        gotCols.push(this.colors[r * 36 + g * 6 + b]);
+      }
+    }
+    return gotCols;
   }
 }
 

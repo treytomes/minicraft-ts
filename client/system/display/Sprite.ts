@@ -49,7 +49,7 @@ export default class Sprite {
     this.y = 0;
     this.dx = 0;
     this.dy = 0;
-    this.colors = PALETTE.get4(colors[0], colors[1], colors[2], colors[3]);
+    this.colors = PALETTE.get(colors[0], colors[1], colors[2], colors[3]);
   }
 
   get bounds() {
