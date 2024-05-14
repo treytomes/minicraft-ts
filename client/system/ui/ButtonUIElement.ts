@@ -59,6 +59,9 @@ export default class ButtonUIElement extends UIElement {
     }
     text = text?.toString() ?? 'null';
 
+    // TODO: If the button isn't held down, draw a shadow beneath it.
+    // TODO: Maybe an indicator to the left if it's hovered?
+
     // Left side of button.
     this.tileset.render(
       1 + 29 * 32,
