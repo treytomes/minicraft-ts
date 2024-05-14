@@ -53,7 +53,7 @@ export default class Game {
     const image = new Image(await window.api.gfx.getTiles());
     this._tileset = new TileSet(image, 8, 8);
     this._font = new Font(this._tileset);
-    this._mouseCursor = new Sprite(this.tileset, 0, 29, [-1, -1, -1, 555], 1);
+    this._mouseCursor = new Sprite(this.tileset, 0, 29, [-1, 1, 112, 445], 1);
   }
 
   update(time: GameTime) {
