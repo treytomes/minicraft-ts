@@ -17,6 +17,7 @@
   ],
   "ignorePaths": [
     "node_modules",
+    "patches",
     "cspell.json",
     "**/*.js",
     "**/auto_docs/**",
@@ -24,8 +25,17 @@
     "**/dist/**",
     "**/coverage/**",
     "**/junit.xml",
-    "**/.gitignore"
+    "**/.gitignore",
+    "**/*.png",
+    "**/*.wav"
   ],
-  "words": ["commitlint", "conventionalcommits", "Minicraft", "tileset"],
+  "words": [
+    "Bresenham's",
+    "commitlint",
+    "conventionalcommits",
+    "lerp",
+    "Minicraft",
+    "tileset"
+  ],
   "flagWords": []
 }

@@ -34,7 +34,6 @@
     "@electron/fuses": "^1.8.0",
     "@types/electron": "^1.6.10",
     "@types/node": "^20.12.11",
-    "commitlint-plugin-tense": "^1.0.2",
     "copy-webpack-plugin": "^12.0.2",
     "cspell": "^8.8.1",
     "electron": "^29.2.0",
@@ -77,16 +76,7 @@
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
-    ],
-    "plugins": [
-      "commitlint-plugin-tense"
-    ],
-    "rules": {
-      "tense/subject-tense": [
-        2,
-        "always"
-      ]
-    }
+    ]
   },
   "engines": {
     "node": "20.x"
