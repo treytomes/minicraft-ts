@@ -11,6 +11,10 @@ declare global {
       sample: {
         ping: () => string,
       },
+      system: {
+        config: () => string,
+        exit: (exitCode: number) => void,
+      },
     };
 
     versions: {

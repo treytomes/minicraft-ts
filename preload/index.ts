@@ -20,5 +20,8 @@ contextBridge.exposeInMainWorld('api', {
   gfx: {
     getTiles: async () => await ipcRenderer.invoke('gfx/getTiles')
   },
-  config: async () => await ipcRenderer.invoke('config'),
+  system: {
+    config: async () => await ipcRenderer.invoke('system/config'),
+    exit: async (exitCode: number) => await ipcRenderer.invoke('system/exit', exitCode),
+  },
 });

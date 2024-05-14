@@ -80,6 +80,11 @@ export default class SpriteTestScene extends Scene {
     } else if (e.key === Keys.ArrowRight) {
       this.player.dx = PLAYER_SPEED;
     }
+
+    if (e.key === Keys.Escape) {
+      // this.game.scenes.pop();
+      window.api.system.exit(0);
+    }
   }
 
   onKeyUp(e: KeyboardEvent) {

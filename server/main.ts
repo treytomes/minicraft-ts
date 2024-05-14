@@ -1,5 +1,5 @@
 
-import { BrowserWindow, ipcMain } from 'electron';
+import { BrowserWindow, IpcMainInvokeEvent, ipcMain } from 'electron';
 import api from './api';
 import { config } from './config';
 import * as paths from './paths';
@@ -69,12 +69,17 @@ export default class Main {
       return await (await api).gfx.getTiles()
     });
 
-    ipcMain.handle('config', () => {
+    ipcMain.handle('system/config', () => {
       return {
         debug: config.get('debug'),
         environment: config.get('environment'),
       }
     });
+
+    ipcMain.handle('system/exit', async (event: IpcMainInvokeEvent, exitCode) => {
+      console.log(`Calling system/exit: ${exitCode}`);
+      Main.application.exit(exitCode);
+    })
 
     Main.createWindow();
   }
