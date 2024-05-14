@@ -36,6 +36,7 @@
     "@types/node": "^20.12.11",
     "commitlint-plugin-tense": "^1.0.2",
     "copy-webpack-plugin": "^12.0.2",
+    "cspell": "^8.8.1",
     "electron": "^29.2.0",
     "gts": "^5.3.0",
     "html-webpack-plugin": "^5.6.0",
@@ -70,7 +71,8 @@
   },
   "lint-staged": {
     "*": "prettier --write",
-    "*.{js,ts}": "eslint"
+    "*.{js,ts}": "eslint",
+    "**,!.vscode/settings.json": "cspell --no-must-find-files"
   },
   "commitlint": {
     "extends": [
