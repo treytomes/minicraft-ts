@@ -10,7 +10,7 @@ export default class MainMenuScene extends Scene {
     const startButton = new ButtonUIElement(
       this.tileset,
       this.font,
-      'START',
+      'STRT',
       10,
       10
     );
