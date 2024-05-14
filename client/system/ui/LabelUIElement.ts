@@ -1,6 +1,7 @@
 import { PALETTE } from '../display/palette';
 import UIElement from './UIElement';
 import { Color, Font } from '../display';
+import { GameTime } from '../GameTime';
 
 /**
  * A Label that can be positioned anywhere on the screen.
@@ -29,9 +30,9 @@ export default class LabelUIElement extends UIElement {
     this.colors = PALETTE.get4(-1, -1, -1, 550);
   }
 
-  update(deltaTime: number) { }
+  update(time: GameTime) { }
 
-  render() {
+  render(time: GameTime) {
     let text = this.text;
     if (typeof this.text === 'function') {
       text = this.text();

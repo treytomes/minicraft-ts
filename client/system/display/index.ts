@@ -39,6 +39,150 @@ export const clear = (color: Color) => {
 }
 
 /**
+ * @param {number} xc Center point along the x-axis.
+ * @param {number} yc Center point along the y-axis.
+ * @param {number} rx Radius along the x-axis.
+ * @param {number} ry Radius along the y-axis.
+ * @param {Color} c The color to use.
+ * @param {boolean} filled Should the interior of the circle be filled in?
+ */
+export const drawEllipse = (xc: number, yc: number, rx: number, ry: number, c: Color, filled = false) => {
+  xc = Math.floor(xc);
+  yc = Math.floor(yc);
+  rx = Math.floor(rx);
+  ry = Math.floor(ry);
+
+  if (rx === ry) {
+    // An ellipse collapses into a circle if both radii are equal.
+    drawCircle(xc, yc, rx, c, filled);
+    return;
+  }
+
+  let x = 0;
+  let y = ry;
+
+  // Initial decision parameter of region 1.
+  let d1 = (ry * ry) - (rx * rx * ry) + (0.25 * rx * rx);
+  let dx = 2 * ry * ry * x;
+  let dy = 2 * rx * rx * y;
+
+  // For region 1
+  while (dx < dy) {
+    // Print points based on 4-way symmetry.
+    if (filled) {
+      for (let xx = xc - x; xx <= xc + x; xx++) {
+        setPixel(xx, yc + y, c);
+        setPixel(xx, yc - y, c);
+      }
+    } else {
+      setPixel(x + xc, y + yc, c);
+      setPixel(-x + xc, y + yc, c);
+
+      setPixel(x + xc, -y + yc, c);
+      setPixel(-x + xc, -y + yc, c);
+    }
+
+    // Checking and updating value of decision parameter based on algorithm
+    if (d1 < 0) {
+      x++;
+      dx = dx + (2 * ry * ry);
+      d1 = d1 + dx + (ry * ry);
+    } else {
+      x++;
+      y--;
+      dx = dx + (2 * ry * ry);
+      dy = dy - (2 * rx * rx);
+      d1 = d1 + dx - dy + (ry * ry);
+    }
+  }
+
+  // Decision parameter of region 2
+  let d2 = ((ry * ry) * ((x + 0.5) * (x + 0.5))) + ((rx * rx) * ((y - 1) * (y - 1))) - (rx * rx * ry * ry);
+
+  // Plotting points of region 2
+  while (y >= 0) {
+    // Print points based on 4-way symmetry.
+    if (filled) {
+      for (let xx = xc - x; xx <= xc + x; xx++) {
+        setPixel(xx, yc + y, c);
+        setPixel(xx, yc - y, c);
+      }
+    } else {
+      setPixel(x + xc, y + yc, c);
+      setPixel(-x + xc, y + yc, c);
+
+      setPixel(x + xc, -y + yc, c);
+      setPixel(-x + xc, -y + yc, c);
+    }
+
+    // Checking and updating parameter value based on algorithm
+    if (d2 > 0) {
+      y--;
+      dy = dy - (2 * rx * rx);
+      d2 = d2 + (rx * rx) - dy;
+    } else {
+      y--;
+      x++;
+      dx = dx + (2 * ry * ry);
+      dy = dy - (2 * rx * rx);
+      d2 = d2 + dx - dy + (rx * rx);
+    }
+  }
+};
+
+/**
+ * Function for circle-generation using Bresenham's algorithm.
+ * 
+ * @param {number} xc The center x-value of the circle.
+ * @param {number} yc The center y-value of the circle.
+ * @param {number} r The radius of the circle.
+ * @param {Color} c The color of the circle.
+ * @param {boolean} filled Should the interior of the circle be filled in?
+ */
+export const drawCircle = (xc: number, yc: number, r: number, c: Color, filled = false) => {
+  xc = Math.floor(xc);
+  yc = Math.floor(yc);
+  r = Math.floor(r);
+
+  const drawOctants = (x, y) => {
+    setPixel(xc + x, yc + y, c);
+    setPixel(xc - x, yc + y, c);
+    setPixel(xc + x, yc - y, c);
+    setPixel(xc - x, yc - y, c);
+
+    setPixel(xc + y, yc + x, c);
+    setPixel(xc - y, yc + x, c);
+    setPixel(xc + y, yc - x, c);
+    setPixel(xc - y, yc - x, c);
+  };
+
+  const fillOctants = (x, y) => {
+    for (let xx = xc - x; xx <= xc + x; xx++) setPixel(xx, yc + y, c);
+    for (let xx = xc - x; xx <= xc + x; xx++) setPixel(xx, yc - y, c);
+
+    for (let xx = xc - y; xx <= xc + y; xx++) setPixel(xx, yc + x, c);
+    for (let xx = xc - y; xx <= xc + y; xx++) setPixel(xx, yc - x, c);
+  }
+
+  let x = 0, y = r;
+  let d = 3 - 2 * r;
+  filled ? fillOctants(x, y) : drawOctants(x, y);
+  while (y >= x) {
+    // For each pixel we will draw all eight pixels.
+    x++;
+
+    // Check for decision parameter and correspondingly update d, x, y.
+    if (d > 0) {
+      y--;
+      d = d + 4 * (x - y) + 10;
+    } else {
+      d = d + 4 * x + 6;
+    }
+    filled ? fillOctants(x, y) : drawOctants(x, y);
+  }
+}
+
+/**
  * Draw an arbitrary line across the screen.
  * 
  * @param {number} x1 The starting x-value.
@@ -93,48 +237,6 @@ export const drawLine = (x1: number, y1: number, x2: number, y2: number, color: 
         y1 += sy;
       }
     }
-  }
-}
-
-/**
- * Function for circle-generation using Bresenham's algorithm.
- * 
- * @param {number} xc The center x-value of the circle.
- * @param {number} yc The center y-value of the circle.
- * @param {number} r The radius of the circle.
- * @param {Color} c The color of the circle.
- */
-export const drawCircle = (xc: number, yc: number, r: number, c: Color) => {
-  xc = Math.floor(xc);
-  yc = Math.floor(yc);
-  r = Math.floor(r);
-
-  const drawOctants = (x, y) => {
-    setPixel(xc + x, yc + y, c);
-    setPixel(xc - x, yc + y, c);
-    setPixel(xc + x, yc - y, c);
-    setPixel(xc - x, yc - y, c);
-    setPixel(xc + y, yc + x, c);
-    setPixel(xc - y, yc + x, c);
-    setPixel(xc + y, yc - x, c);
-    setPixel(xc - y, yc - x, c);
-  }
-
-  let x = 0, y = r;
-  let d = 3 - 2 * r;
-  drawOctants(x, y);
-  while (y >= x) {
-    // For each pixel we will draw all eight pixels.
-    x++;
-
-    // Check for decision parameter and correspondingly update d, x, y.
-    if (d > 0) {
-      y--;
-      d = d + 4 * (x - y) + 10;
-    } else {
-      d = d + 4 * x + 6;
-    }
-    drawOctants(x, y);
   }
 }
 

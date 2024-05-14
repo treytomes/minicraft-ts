@@ -4,6 +4,7 @@ import Font from "../display/Font";
 import TileSet from "../display/TileSet";
 import UIElement from "./UIElement";
 import { MouseEventProxy } from '../input';
+import { GameTime } from '../GameTime';
 
 /**
  * @property {TileSet} tileset
@@ -45,7 +46,7 @@ export default class ButtonUIElement extends UIElement {
     this.onClick();
   }
 
-  update(deltaTime: number) {
+  update(time: GameTime) {
     if (this.hasMouseFocus) {
       this.chromeColors[0] = PALETTE.get(111);
       this.textColors[0] = PALETTE.get(111);
@@ -58,7 +59,7 @@ export default class ButtonUIElement extends UIElement {
     }
   }
 
-  render() {
+  render(time: GameTime) {
     let text = this.text;
     if (typeof this.text === 'function') {
       text = this.text();

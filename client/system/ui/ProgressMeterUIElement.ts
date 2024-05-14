@@ -1,3 +1,4 @@
+import { GameTime } from "../GameTime";
 import Color from "../display/Color";
 import TileSet from "../display/TileSet";
 import UIElement from "./UIElement";
@@ -25,7 +26,7 @@ export default class ProgressMeterUIElement extends UIElement {
     this.offColor = offColor;
   }
 
-  render() {
+  render(time: GameTime) {
     let value: number = 0;
     if (typeof this.currentValue === 'function') {
       value = this.currentValue();

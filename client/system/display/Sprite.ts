@@ -1,3 +1,4 @@
+import { GameTime } from "../GameTime";
 import { Rectangle } from "../math/index";
 import Color from "./Color";
 import { PALETTE } from "./palette";
@@ -49,9 +50,9 @@ export default class Sprite {
     return new Rectangle(this.x, this.y, this.tileset.tileWidth * this.size, this.tileset.tileHeight * this.size);
   }
 
-  update(deltaTime: number) {
-    this.x += this.dx * deltaTime;
-    this.y += this.dy * deltaTime;
+  update(time: GameTime) {
+    this.x += this.dx * time.deltaTime;
+    this.y += this.dy * time.deltaTime;
   }
 
   moveTo(x: number, y: number) {
@@ -59,7 +60,7 @@ export default class Sprite {
     this.y = y;
   }
 
-  render() {
+  render(time: GameTime) {
     this.tileset.render(this.tileIndex, this.x, this.y, this.colors);
     if (this.size == 1) return;
 

@@ -1,3 +1,4 @@
+import { GameTime } from '../GameTime';
 import { MouseEventProxy } from '../input';
 import Rectangle from '../math/Rectangle';
 
@@ -43,6 +44,6 @@ export default class UIElement {
     UIElement.MOUSE_FOCUS = undefined;
   }
 
-  update(deltaTime: number) { }
-  render() { }
+  update(time: GameTime) { }
+  render(time: GameTime) { }
 }
