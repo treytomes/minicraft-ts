@@ -33,7 +33,7 @@ export class Palette {
   get(...cols: number[]): Color[] {
     const gotCols: Color[] = [];
     for (let n = 0; n < cols.length; n++) {
-      const d = cols[0];
+      const d = cols[n];
       if (d < 0) {
         gotCols.push(this.colors[255]);
       } else {
