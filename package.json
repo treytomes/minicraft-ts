@@ -11,15 +11,17 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "prepare": "husky",
     "lint": "gts lint",
     "prettier": "prettier .",
     "prettier:write": "prettier . --write",
     "clean": "gts clean",
     "fix": "gts fix",
-    "publish": "electron-forge publish"
+    "publish": "electron-forge publish",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
     "@cspell/eslint-plugin": "^8.8.1",
     "@electron-forge/cli": "^7.3.1",
     "@electron-forge/maker-deb": "^7.3.1",
@@ -32,6 +34,7 @@
     "@electron/fuses": "^1.8.0",
     "@types/electron": "^1.6.10",
     "@types/node": "^20.12.11",
+    "commitlint-plugin-tense": "^1.0.2",
     "copy-webpack-plugin": "^12.0.2",
     "electron": "^29.2.0",
     "gts": "^5.3.0",
@@ -64,5 +67,19 @@
     "ml-regression-base": "^3.0.0",
     "ml-regression-exponential": "^2.1.2",
     "webpack": "^5.91.0"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ],
+    "plugins": [
+      "commitlint-plugin-tense"
+    ],
+    "rules": {
+      "tense/subject-tense": [
+        2,
+        "always"
+      ]
+    }
   }
 }

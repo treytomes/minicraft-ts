@@ -57,6 +57,7 @@ export default class Game {
   }
 
   update(time: GameTime) {
+    if (this.currentScene === null) window.api.system.exit(0);
     this.currentScene?.update(time);
     this.mouseCursor.update(time);
   }

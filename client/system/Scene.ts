@@ -88,4 +88,12 @@ export default class Scene {
       }
     }
   }
+
+  enterScene(scene: Scene) {
+    this.game.scenes.push(scene);
+  }
+
+  exitScene() {
+    this.game.scenes.pop();
+  }
 }
