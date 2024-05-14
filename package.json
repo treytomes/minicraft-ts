@@ -85,5 +85,28 @@
         "always"
       ]
     }
+  },
+  "engines": {
+    "node": "20.x"
+  },
+  "release": {
+    "repositoryUrl": "git+https://github.com/treytomes/minicraft-ts",
+    "branches": [
+      "main"
+    ],
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits",
+          "releaseRules": [
+            {
+              "type": "chore",
+              "release": "patch"
+            }
+          ]
+        }
+      ]
+    ]
   }
 }
