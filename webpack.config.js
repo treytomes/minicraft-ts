@@ -1,11 +1,10 @@
 const path = require('path');
-const CopyPlugin = require("copy-webpack-plugin");
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 console.log(__dirname);
-let common_config = {
+const common_config = {
   node: {
-    __dirname: true
+    __dirname: true,
   },
   mode: process.env.ENV || 'development',
   module: {
@@ -17,12 +16,12 @@ let common_config = {
       },
       {
         test: /\.node$/,
-        loader: "node-loader",
+        loader: 'node-loader',
       },
     ],
   },
   resolve: {
-    extensions: ['.ts', '.js']
+    extensions: ['.ts', '.js'],
   },
 };
 
@@ -36,7 +35,7 @@ module.exports = [
     },
     output: {
       filename: '[name]-bundle.js',
-      path: path.resolve(__dirname, 'dist/server')
+      path: path.resolve(__dirname, 'dist/server'),
     },
   }),
   Object.assign({}, common_config, {
@@ -47,7 +46,7 @@ module.exports = [
     },
     output: {
       filename: 'preload-bundle.js',
-      path: path.resolve(__dirname, 'dist/preload')
+      path: path.resolve(__dirname, 'dist/preload'),
     },
   }),
   Object.assign({}, common_config, {
@@ -59,23 +58,17 @@ module.exports = [
     },
     output: {
       filename: '[name]-bundle.js',
-      path: path.resolve(__dirname, 'dist/client')
+      path: path.resolve(__dirname, 'dist/client'),
     },
     plugins: [
       // TODO: client web assets need to be copied to dist/client.
       new CopyPlugin({
         patterns: [
-          { from: "./client/assets/favicon.ico", to: "favicon.ico" },
-          { from: "./client/public/index.html", to: "index.html" },
-          { from: "./client/public/index.css", to: "index.css" },
+          { from: './client/assets/favicon.ico', to: 'favicon.ico' },
+          { from: './client/public/index.html', to: 'index.html' },
+          { from: './client/public/index.css', to: 'index.css' },
         ],
       }),
-      // new HtmlWebpackPlugin({
-      //   // ...
-      //   csp: {
-      //     'script-src': ["'self'"],
-      //   },
-      // }),
     ],
-  })
-]
+  }),
+];

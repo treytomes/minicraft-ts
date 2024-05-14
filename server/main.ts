@@ -1,13 +1,12 @@
-
-import { BrowserWindow, IpcMainInvokeEvent, ipcMain } from 'electron';
+import {BrowserWindow, IpcMainInvokeEvent, ipcMain} from 'electron';
 import api from './api';
-import { config } from './config';
+import {config} from './config';
 import * as paths from './paths';
 
 export default class Main {
   static mainWindow: Electron.BrowserWindow | null;
   static application: Electron.App;
-  static BrowserWindow: any;
+  static BrowserWindow: typeof BrowserWindow;
 
   // Quit when all windows are closed, except on macOS. There, it's common
   // for applications and their menu bar to stay active until the user quits
@@ -19,7 +18,7 @@ export default class Main {
   }
 
   private static onClose() {
-    // Dereference the window object. 
+    // Dereference the window object.
     Main.mainWindow = null;
   }
 
@@ -51,44 +50,47 @@ export default class Main {
   // dock icon is clicked and there are no other windows open.
   private static onActivate() {
     if (BrowserWindow.getAllWindows().length === 0) {
-      Main.createWindow()
+      Main.createWindow();
     }
   }
 
   private static onReady() {
-    console.log('Hello from Electron 👋')
+    console.log('Hello from Electron 👋');
 
     ipcMain.handle('sample/ping', async () => {
-      console.log('Calling sample/ping.')
-      return await (await api).sample.ping()
+      console.log('Calling sample/ping.');
+      return await (await api).sample.ping();
       // await api.sample.ping();
-    })
+    });
 
     ipcMain.handle('gfx/getTiles', async () => {
-      console.log('Calling gfx/getTiles.')
-      return await (await api).gfx.getTiles()
+      console.log('Calling gfx/getTiles.');
+      return await (await api).gfx.getTiles();
     });
 
     ipcMain.handle('system/config', () => {
       return {
         debug: config.get('debug'),
         environment: config.get('environment'),
-      }
+      };
     });
 
-    ipcMain.handle('system/exit', async (event: IpcMainInvokeEvent, exitCode) => {
-      console.log(`Calling system/exit: ${exitCode}`);
-      Main.application.exit(exitCode);
-    })
+    ipcMain.handle(
+      'system/exit',
+      async (event: IpcMainInvokeEvent, exitCode) => {
+        console.log(`Calling system/exit: ${exitCode}`);
+        Main.application.exit(exitCode);
+      }
+    );
 
     Main.createWindow();
   }
 
   static main(app: Electron.App, browserWindow: typeof BrowserWindow) {
-    // we pass the Electron.App object and the  
-    // Electron.BrowserWindow into this function 
-    // so this class has no dependencies. This 
-    // makes the code easier to write tests for 
+    // we pass the Electron.App object and the
+    // Electron.BrowserWindow into this function
+    // so this class has no dependencies. This
+    // makes the code easier to write tests for
     Main.BrowserWindow = browserWindow;
     Main.application = app;
     Main.application.on('activate', Main.onActivate);

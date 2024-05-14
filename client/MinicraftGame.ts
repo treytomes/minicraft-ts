@@ -1,6 +1,6 @@
-import Game from "./system/Game";
-import SpriteTestScene from "./SpriteTestScene";
-import { GameTime } from "./system/GameTime";
+import Game from './system/Game';
+import SpriteTestScene from './SpriteTestScene';
+import {GameTime} from './system/GameTime';
 
 export default class MinicraftGame extends Game {
   constructor(width: number, height: number) {

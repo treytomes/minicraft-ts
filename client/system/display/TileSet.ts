@@ -1,6 +1,6 @@
-import { getHeight, getWidth, setPixel } from "./index";
+import {getHeight, getWidth, setPixel} from './index';
 import Image from './Image';
-import Color from "./Color";
+import Color from './Color';
 
 export const BIT_MIRROR_X = 0x01;
 export const BIT_MIRROR_Y = 0x02;
@@ -38,7 +38,8 @@ export default class TileSet {
         const tile: number[] = [];
         for (let yd = 0; yd < tileHeight; yd++) {
           for (let xd = 0; xd < tileWidth; xd++) {
-            const { r, g, b } = image.getPixel(x + xd, y + yd);
+            /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+            const {r, g, b} = image.getPixel(x + xd, y + yd);
             const v = Math.floor(r / 64);
             tile.push(v);
           }
@@ -50,14 +51,14 @@ export default class TileSet {
   }
 
   /**
-   * 
+   *
    * @param {number} tileIndex Index into the tileset.
    * @param {number} x X-position to draw at.
    * @param {number} y Y-position to draw at.
    * @param {number[]} colors An array of 4 numbers that represents the color of the tile.  -1 is transparent.
    * @param {number} bits Bit flags to apply to the rendering, used to flip on the x or y axis.
    */
-  render(tileIndex: number, x: number, y: number, colors: Color[], bits: number = 0) {
+  render(tileIndex: number, x: number, y: number, colors: Color[], bits = 0) {
     const mirrorX = (bits & BIT_MIRROR_X) > 0;
     const mirrorY = (bits & BIT_MIRROR_Y) > 0;
 

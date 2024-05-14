@@ -1,8 +1,8 @@
 import 'dotenv/config';
-import { config } from './config';
+import {config} from './config';
 
 import Main from './main';
-import { app, BrowserWindow } from 'electron';
+import {app, BrowserWindow} from 'electron';
 
 console.log('Environment:', config.get('environment'));
 console.log('Debug:', config.get('debug'));

@@ -1,7 +1,7 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 
-import { contextBridge, ipcRenderer } from "electron";
+import {contextBridge, ipcRenderer} from 'electron';
 
 contextBridge.exposeInMainWorld('versions', {
   node: () => process.versions.node,
@@ -15,13 +15,14 @@ contextBridge.exposeInMainWorld('versions', {
 
 contextBridge.exposeInMainWorld('api', {
   sample: {
-    ping: async () => await ipcRenderer.invoke('sample/ping')
+    ping: async () => await ipcRenderer.invoke('sample/ping'),
   },
   gfx: {
-    getTiles: async () => await ipcRenderer.invoke('gfx/getTiles')
+    getTiles: async () => await ipcRenderer.invoke('gfx/getTiles'),
   },
   system: {
     config: async () => await ipcRenderer.invoke('system/config'),
-    exit: async (exitCode: number) => await ipcRenderer.invoke('system/exit', exitCode),
+    exit: async (exitCode: number) =>
+      await ipcRenderer.invoke('system/exit', exitCode),
   },
 });

@@ -1,5 +1,5 @@
 import convict from 'convict';
-import { Environment } from '../models';
+import {Environment} from '../models';
 
 export const config = convict({
   debug: {
@@ -14,4 +14,4 @@ export const config = convict({
     default: Environment.dev,
     env: 'ENVIRONMENT',
   },
-}).validate({ allowed: 'strict' });
+}).validate({allowed: 'strict'});

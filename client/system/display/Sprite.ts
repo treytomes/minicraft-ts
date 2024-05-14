@@ -1,12 +1,12 @@
-import { GameTime } from "../GameTime";
-import { Rectangle } from "../math/index";
-import Color from "./Color";
-import { PALETTE } from "./palette";
-import TileSet from "./TileSet";
+import {GameTime} from '../GameTime';
+import {Rectangle} from '../math/index';
+import Color from './Color';
+import {PALETTE} from './palette';
+import TileSet from './TileSet';
 
 /**
  * A colored group of tiles that can move around.
- * 
+ *
  * @property {TileSet} tileset The tileset that contains the tiles.
  * @property {number} tileIndex The tile index in the tileset.
  * @property {number} size The size of the sprite.
@@ -34,7 +34,13 @@ export default class Sprite {
    * @param {number} y Y position.
    * @param {number[]} colors An array of 4 RGB numbers.  Or -1 for transparent.
    */
-  constructor(tileset: TileSet, xt: number, yt: number, colors: number[], size = 2) {
+  constructor(
+    tileset: TileSet,
+    xt: number,
+    yt: number,
+    colors: number[],
+    size = 2
+  ) {
     this.tileset = tileset;
     this.tileIndex = xt + yt * tileset.tilesPerRow;
     this.size = size;
@@ -47,7 +53,12 @@ export default class Sprite {
   }
 
   get bounds() {
-    return new Rectangle(this.x, this.y, this.tileset.tileWidth * this.size, this.tileset.tileHeight * this.size);
+    return new Rectangle(
+      this.x,
+      this.y,
+      this.tileset.tileWidth * this.size,
+      this.tileset.tileHeight * this.size
+    );
   }
 
   update(time: GameTime) {
@@ -60,12 +71,28 @@ export default class Sprite {
     this.y = y;
   }
 
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   render(time: GameTime) {
     this.tileset.render(this.tileIndex, this.x, this.y, this.colors);
-    if (this.size == 1) return;
+    if (this.size === 1) return;
 
-    this.tileset.render(this.tileIndex + 1, this.x + this.tileset.tileWidth, this.y, this.colors);
-    this.tileset.render(this.tileIndex + this.tileset.tilesPerRow, this.x, this.y + this.tileset.tileHeight, this.colors);
-    this.tileset.render(this.tileIndex + this.tileset.tilesPerRow + 1, this.x + this.tileset.tileWidth, this.y + this.tileset.tileHeight, this.colors);
+    this.tileset.render(
+      this.tileIndex + 1,
+      this.x + this.tileset.tileWidth,
+      this.y,
+      this.colors
+    );
+    this.tileset.render(
+      this.tileIndex + this.tileset.tilesPerRow,
+      this.x,
+      this.y + this.tileset.tileHeight,
+      this.colors
+    );
+    this.tileset.render(
+      this.tileIndex + this.tileset.tilesPerRow + 1,
+      this.x + this.tileset.tileWidth,
+      this.y + this.tileset.tileHeight,
+      this.colors
+    );
   }
 }

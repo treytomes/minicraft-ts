@@ -1,7 +1,7 @@
-import { GameTime } from "../GameTime";
-import Color from "../display/Color";
-import TileSet from "../display/TileSet";
-import UIElement from "./UIElement";
+import {GameTime} from '../GameTime';
+import Color from '../display/Color';
+import TileSet from '../display/TileSet';
+import UIElement from './UIElement';
 
 export default class ProgressMeterUIElement extends UIElement {
   private tileset: TileSet;
@@ -12,7 +12,16 @@ export default class ProgressMeterUIElement extends UIElement {
   onColor: Color[];
   offColor: Color[];
 
-  constructor(x: number, y: number, maxValue: number, tileIndex: number, tileset: TileSet, onColor: Color[], offColor: Color[], currentValue: number | (() => number) | undefined = undefined) {
+  constructor(
+    x: number,
+    y: number,
+    maxValue: number,
+    tileIndex: number,
+    tileset: TileSet,
+    onColor: Color[],
+    offColor: Color[],
+    currentValue: number | (() => number) | undefined = undefined
+  ) {
     super(x, y, tileset.tileWidth * maxValue, tileset.tileHeight);
     this.tileset = tileset;
     this.maxValue = maxValue;
@@ -26,8 +35,9 @@ export default class ProgressMeterUIElement extends UIElement {
     this.offColor = offColor;
   }
 
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   render(time: GameTime) {
-    let value: number = 0;
+    let value = 0;
     if (typeof this.currentValue === 'function') {
       value = this.currentValue();
     } else {
@@ -36,9 +46,19 @@ export default class ProgressMeterUIElement extends UIElement {
 
     for (let n = 0; n < this.maxValue; n++) {
       if (n < value) {
-        this.tileset.render(this.tileIndex, this.bounds.x + n * this.tileset.tileWidth, this.bounds.y, this.onColor);
+        this.tileset.render(
+          this.tileIndex,
+          this.bounds.x + n * this.tileset.tileWidth,
+          this.bounds.y,
+          this.onColor
+        );
       } else {
-        this.tileset.render(this.tileIndex, this.bounds.x + n * this.tileset.tileWidth, this.bounds.y, this.offColor);
+        this.tileset.render(
+          this.tileIndex,
+          this.bounds.x + n * this.tileset.tileWidth,
+          this.bounds.y,
+          this.offColor
+        );
       }
     }
   }

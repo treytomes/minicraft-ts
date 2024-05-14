@@ -1,4 +1,4 @@
 export type GameTime = {
-  totalTime: number,
-  deltaTime: number,
-}
+  totalTime: number;
+  deltaTime: number;
+};

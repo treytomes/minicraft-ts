@@ -1,20 +1,20 @@
 import Color from './Color';
 import Sprite from './Sprite';
-import TileSet, { BIT_MIRROR_X, BIT_MIRROR_Y } from './TileSet';
+import TileSet, {BIT_MIRROR_X, BIT_MIRROR_Y} from './TileSet';
 import Font from './Font';
-import { PALETTE } from './palette';
+import {PALETTE} from './palette';
 
-export { Color, Font, Sprite, TileSet, BIT_MIRROR_X, BIT_MIRROR_Y, PALETTE };
+export {Color, Font, Sprite, TileSet, BIT_MIRROR_X, BIT_MIRROR_Y, PALETTE};
 
 type RenderingContext = {
-  canvas: HTMLCanvasElement,
-  width: number,
-  height: number,
-  bpp: number,
-  stride: number,
-  pixels: Uint8ClampedArray,
-  ctx2d: CanvasRenderingContext2D,
-}
+  canvas: HTMLCanvasElement;
+  width: number;
+  height: number;
+  bpp: number;
+  stride: number;
+  pixels: Uint8ClampedArray;
+  ctx2d: CanvasRenderingContext2D;
+};
 
 /**
  * Container for the details necessary to render to the screen.
@@ -23,11 +23,12 @@ export let context: RenderingContext;
 
 export const getWidth = (): number => context.width;
 export const getHeight = (): number => context.height;
-export const getOffset = (x: number, y: number): number => (y * context.width + x) * context.bpp;
+export const getOffset = (x: number, y: number): number =>
+  (y * context.width + x) * context.bpp;
 
 /**
  * Clear the screen to a color.
- * 
+ *
  * @param {Color} color The color to clear to.
  */
 export const clear = (color: Color) => {
@@ -36,7 +37,7 @@ export const clear = (color: Color) => {
       setPixel(x, y, color);
     }
   }
-}
+};
 
 /**
  * @param {number} xc Center point along the x-axis.
@@ -46,7 +47,14 @@ export const clear = (color: Color) => {
  * @param {Color} c The color to use.
  * @param {boolean} filled Should the interior of the circle be filled in?
  */
-export const drawEllipse = (xc: number, yc: number, rx: number, ry: number, c: Color, filled = false) => {
+export const drawEllipse = (
+  xc: number,
+  yc: number,
+  rx: number,
+  ry: number,
+  c: Color,
+  filled = false
+) => {
   xc = Math.floor(xc);
   yc = Math.floor(yc);
   rx = Math.floor(rx);
@@ -62,7 +70,7 @@ export const drawEllipse = (xc: number, yc: number, rx: number, ry: number, c: C
   let y = ry;
 
   // Initial decision parameter of region 1.
-  let d1 = (ry * ry) - (rx * rx * ry) + (0.25 * rx * rx);
+  let d1 = ry * ry - rx * rx * ry + 0.25 * rx * rx;
   let dx = 2 * ry * ry * x;
   let dy = 2 * rx * rx * y;
 
@@ -85,19 +93,22 @@ export const drawEllipse = (xc: number, yc: number, rx: number, ry: number, c: C
     // Checking and updating value of decision parameter based on algorithm
     if (d1 < 0) {
       x++;
-      dx = dx + (2 * ry * ry);
-      d1 = d1 + dx + (ry * ry);
+      dx = dx + 2 * ry * ry;
+      d1 = d1 + dx + ry * ry;
     } else {
       x++;
       y--;
-      dx = dx + (2 * ry * ry);
-      dy = dy - (2 * rx * rx);
-      d1 = d1 + dx - dy + (ry * ry);
+      dx = dx + 2 * ry * ry;
+      dy = dy - 2 * rx * rx;
+      d1 = d1 + dx - dy + ry * ry;
     }
   }
 
   // Decision parameter of region 2
-  let d2 = ((ry * ry) * ((x + 0.5) * (x + 0.5))) + ((rx * rx) * ((y - 1) * (y - 1))) - (rx * rx * ry * ry);
+  let d2 =
+    ry * ry * ((x + 0.5) * (x + 0.5)) +
+    rx * rx * ((y - 1) * (y - 1)) -
+    rx * rx * ry * ry;
 
   // Plotting points of region 2
   while (y >= 0) {
@@ -118,28 +129,34 @@ export const drawEllipse = (xc: number, yc: number, rx: number, ry: number, c: C
     // Checking and updating parameter value based on algorithm
     if (d2 > 0) {
       y--;
-      dy = dy - (2 * rx * rx);
-      d2 = d2 + (rx * rx) - dy;
+      dy = dy - 2 * rx * rx;
+      d2 = d2 + rx * rx - dy;
     } else {
       y--;
       x++;
-      dx = dx + (2 * ry * ry);
-      dy = dy - (2 * rx * rx);
-      d2 = d2 + dx - dy + (rx * rx);
+      dx = dx + 2 * ry * ry;
+      dy = dy - 2 * rx * rx;
+      d2 = d2 + dx - dy + rx * rx;
     }
   }
 };
 
 /**
  * Function for circle-generation using Bresenham's algorithm.
- * 
+ *
  * @param {number} xc The center x-value of the circle.
  * @param {number} yc The center y-value of the circle.
  * @param {number} r The radius of the circle.
  * @param {Color} c The color of the circle.
  * @param {boolean} filled Should the interior of the circle be filled in?
  */
-export const drawCircle = (xc: number, yc: number, r: number, c: Color, filled = false) => {
+export const drawCircle = (
+  xc: number,
+  yc: number,
+  r: number,
+  c: Color,
+  filled = false
+) => {
   xc = Math.floor(xc);
   yc = Math.floor(yc);
   r = Math.floor(r);
@@ -162,9 +179,10 @@ export const drawCircle = (xc: number, yc: number, r: number, c: Color, filled =
 
     for (let xx = xc - y; xx <= xc + y; xx++) setPixel(xx, yc + x, c);
     for (let xx = xc - y; xx <= xc + y; xx++) setPixel(xx, yc - x, c);
-  }
+  };
 
-  let x = 0, y = r;
+  let x = 0,
+    y = r;
   let d = 3 - 2 * r;
   filled ? fillOctants(x, y) : drawOctants(x, y);
   while (y >= x) {
@@ -180,18 +198,24 @@ export const drawCircle = (xc: number, yc: number, r: number, c: Color, filled =
     }
     filled ? fillOctants(x, y) : drawOctants(x, y);
   }
-}
+};
 
 /**
  * Draw an arbitrary line across the screen.
- * 
+ *
  * @param {number} x1 The starting x-value.
  * @param {number} y1 The starting y-value.
  * @param {number} x2 The ending x-value.
  * @param {number} y2 The ending y-value.
  * @param {{r: number, g: number, b: number}} color The line color.
  */
-export const drawLine = (x1: number, y1: number, x2: number, y2: number, color: Color) => {
+export const drawLine = (
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  color: Color
+) => {
   x1 = Math.floor(x1);
   x2 = Math.floor(x2);
   y1 = Math.floor(y1);
@@ -215,19 +239,20 @@ export const drawLine = (x1: number, y1: number, x2: number, y2: number, color: 
       setPixel(x, yMin, color);
     }
   } else {
-    let dx = Math.abs(x2 - x1);
-    let sx = (x1 < x2) ? 1 : -1;
+    const dx = Math.abs(x2 - x1);
+    const sx = x1 < x2 ? 1 : -1;
     let dy = Math.abs(y2 - y1);
     dy = -dy;
-    let sy = (y1 < y2) ? 1 : -1;
+    const sy = y1 < y2 ? 1 : -1;
     let err = dx + dy;
 
+    /* eslint-disable no-constant-condition */
     while (true) {
       setPixel(x1, y1, color);
-      if ((x1 == x2) && (y1 == y2)) break;
-      let e2 = err << 1;
+      if (x1 === x2 && y1 === y2) break;
+      const e2 = err << 1;
       if (e2 >= dy) {
-        if (x1 === x2) break
+        if (x1 === x2) break;
         err += dy;
         x1 += sx;
       }
@@ -238,23 +263,29 @@ export const drawLine = (x1: number, y1: number, x2: number, y2: number, color: 
       }
     }
   }
-}
+};
 
-export const fillRect = (x: number, y: number, w: number, h: number, color: Color) => {
+export const fillRect = (
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  color: Color
+) => {
   for (let yd = 0; yd < h; yd++) {
     for (let xd = 0; xd < w; xd++) {
       setPixel(x + xd, y + yd, color);
     }
   }
-}
+};
 
 /**
  * Write a single pixel to the pixel buffer.
  * This change will not be visible until the next `postRender` call.
- * 
- * @param {number} x 
- * @param {number} y 
- * @param {Color} color 
+ *
+ * @param {number} x
+ * @param {number} y
+ * @param {Color} color
  */
 export const setPixel = (x: number, y: number, color: Color) => {
   const offset = getOffset(x, y);
@@ -270,7 +301,11 @@ export const setPixel = (x: number, y: number, color: Color) => {
 export const postRender = () => {
   // Write the image data in `context.pixels` to the 2d canvas context in context.ctx2d.
   // TODO: Can I avoid rebuilding ImageDAta on each frame.
-  context.ctx2d.putImageData(new ImageData(context.pixels, context.width, context.height), 0, 0);
+  context.ctx2d.putImageData(
+    new ImageData(context.pixels, context.width, context.height),
+    0,
+    0
+  );
 };
 
 /**
@@ -291,13 +326,13 @@ const onResize = () => {
   }
 
   context.canvas.style.inset = `${offsetY}px ${offsetX}px`;
-  context.canvas.style.width = `calc(100% - ${offsetX * 2}px)`
-  context.canvas.style.height = `calc(100% - ${offsetY * 2}px)`
+  context.canvas.style.width = `calc(100% - ${offsetX * 2}px)`;
+  context.canvas.style.height = `calc(100% - ${offsetY * 2}px)`;
 };
 
 /**
  * Create the canvas and 2D context.  Setup some event handlers.
- * 
+ *
  * @param {number} width The width of the display canvas in pixels.
  * @param {number} height The height of the display canvas in pixels.
  */
@@ -333,12 +368,15 @@ export const createContext = async (width: number, height: number) => {
 
 /**
  * Convert canvas coordinates into virtual screen coordinates.
- * 
- * @param {number} x 
- * @param {number} y 
+ *
+ * @param {number} x
+ * @param {number} y
  * @returns {x: number, y: number} An object with the converted x and y properties.
  */
-export const convertPosition = (x: number, y: number): { x: number, y: number } => {
+export const convertPosition = (
+  x: number,
+  y: number
+): {x: number; y: number} => {
   const rect = context.canvas.getBoundingClientRect();
 
   const displayWidth = context.canvas.clientWidth;
@@ -348,11 +386,11 @@ export const convertPosition = (x: number, y: number): { x: number, y: number } 
   if (displayWidth > displayHeight) {
     // Most of the time the window will be horizontal.
     drawHeight = displayHeight;
-    drawWidth = context.width * drawHeight / context.height;
+    drawWidth = (context.width * drawHeight) / context.height;
   } else {
     // Sometimes the window will be vertical.
     drawWidth = displayWidth;
-    drawHeight = context.height * drawWidth / context.width;
+    drawHeight = (context.height * drawWidth) / context.width;
   }
 
   rect.x += (displayWidth - drawWidth) / 2;
@@ -360,8 +398,8 @@ export const convertPosition = (x: number, y: number): { x: number, y: number } 
   rect.width = drawWidth;
   rect.height = drawHeight;
 
-  const newX = Math.floor((x - rect.left) / rect.width * context.width);
-  const newY = Math.floor((y - rect.top) / rect.height * context.height);
+  const newX = Math.floor(((x - rect.left) / rect.width) * context.width);
+  const newY = Math.floor(((y - rect.top) / rect.height) * context.height);
 
-  return { x: newX, y: newY };
-}
+  return {x: newX, y: newY};
+};

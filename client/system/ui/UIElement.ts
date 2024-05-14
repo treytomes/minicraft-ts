@@ -1,5 +1,5 @@
-import { GameTime } from '../GameTime';
-import { MouseEventProxy } from '../input';
+import {GameTime} from '../GameTime';
+import {MouseEventProxy} from '../input';
 import Rectangle from '../math/Rectangle';
 
 /**
@@ -14,7 +14,7 @@ export default class UIElement {
 
   bounds: Rectangle;
 
-  constructor(x, y, width, height) {
+  constructor(x: number, y: number, width: number, height: number) {
     this.bounds = new Rectangle(x, y, width, height);
   }
 
@@ -32,18 +32,24 @@ export default class UIElement {
     return UIElement.MOUSE_FOCUS === this;
   }
 
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onMouseMove(e: MouseEventProxy) {
     UIElement.MOUSE_HOVER = this;
   }
 
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onMouseDown(e: MouseEventProxy) {
     UIElement.MOUSE_FOCUS = this;
   }
 
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onMouseUp(e: MouseEventProxy) {
     UIElement.MOUSE_FOCUS = undefined;
   }
 
-  update(time: GameTime) { }
-  render(time: GameTime) { }
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  update(time: GameTime) {}
+
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  render(time: GameTime) {}
 }

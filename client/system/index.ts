@@ -1,14 +1,14 @@
 import Game from './Game';
-import { convertPosition, postRender } from './display';
+import {convertPosition, postRender} from './display';
 
 export * as display from './display';
 export * as math from './math';
 export * as html from './html';
 
 type SystemContext = {
-  game: Game | null,
-  lastUpdateTime: number,
-  lastRenderTime: number,
+  game: Game | null;
+  lastUpdateTime: number;
+  lastRenderTime: number;
 };
 
 const systemContext: SystemContext = {
@@ -21,30 +21,30 @@ export const initialize = (game: Game) => {
   systemContext.game = game;
   systemContext.lastUpdateTime = 0;
   systemContext.lastRenderTime = 0;
-}
+};
 
 const UPDATE_INTERVAL = 1000 / 60;
 const RENDER_INTERVAL = 1000 / 60;
-const onFrame = (totalTime) => {
+const onFrame = totalTime => {
   if (totalTime - systemContext.lastUpdateTime >= UPDATE_INTERVAL) {
     const deltaTime = totalTime - systemContext.lastUpdateTime;
-    const time = { deltaTime, totalTime: totalTime };
+    const time = {deltaTime, totalTime: totalTime};
     systemContext.game?.update(time);
     systemContext.lastUpdateTime = totalTime;
   }
 
   if (totalTime - systemContext.lastRenderTime >= RENDER_INTERVAL) {
     const deltaTime = totalTime - systemContext.lastRenderTime;
-    systemContext.game?.render({ deltaTime, totalTime: totalTime });
-    postRender()
+    systemContext.game?.render({deltaTime, totalTime: totalTime});
+    postRender();
     systemContext.lastRenderTime = totalTime;
   }
 
-  requestAnimationFrame(onFrame)
-}
+  requestAnimationFrame(onFrame);
+};
 
 // Don't initialize anything until the document is ready.
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener('DOMContentLoaded', async () => {
   await systemContext.game?.loadContent();
 
   console.log('Here we go.');
@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   /**
    * @param {MouseEvent} e
    */
-  window.addEventListener('mousemove', function (e) {
+  window.addEventListener('mousemove', e => {
     const pos = convertPosition(e.clientX, e.clientY);
     systemContext.game?.onMouseMove({
       clientX: pos.x,
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 
-  window.addEventListener('mousedown', function (e) {
+  window.addEventListener('mousedown', e => {
     // console.log(e);
     const pos = convertPosition(e.clientX, e.clientY);
     systemContext.game?.onMouseDown({
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 
-  window.addEventListener('mouseup', function (e) {
+  window.addEventListener('mouseup', e => {
     const pos = convertPosition(e.clientX, e.clientY);
     systemContext.game?.onMouseUp({
       clientX: pos.x,
@@ -118,5 +118,5 @@ document.addEventListener("DOMContentLoaded", async () => {
   // });
 
   // Begin the render loop.
-  requestAnimationFrame(onFrame)
+  requestAnimationFrame(onFrame);
 });

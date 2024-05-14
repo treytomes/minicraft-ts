@@ -1,8 +1,8 @@
-import Game from "./Game";
-import { GameTime } from "./GameTime";
-import { Font, Sprite, TileSet } from "./display";
-import { MouseEventProxy } from "./input";
-import { UIElement } from "./ui";
+import Game from './Game';
+import {GameTime} from './GameTime';
+import {Font, Sprite, TileSet} from './display';
+import {MouseEventProxy} from './input';
+import {UIElement} from './ui';
 
 export default class Scene {
   private game: Game;
@@ -53,9 +53,11 @@ export default class Scene {
     }
   }
 
-  onKeyDown(e: KeyboardEvent) { }
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  onKeyDown(e: KeyboardEvent) {}
 
-  onKeyUp(e: KeyboardEvent) { }
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  onKeyUp(e: KeyboardEvent) {}
 
   onMouseMove(e: MouseEventProxy) {
     UIElement.MOUSE_HOVER = undefined;

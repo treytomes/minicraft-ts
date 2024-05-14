@@ -1,11 +1,12 @@
-import Color from "./Color";
-import TileSet from "./TileSet";
+import Color from './Color';
+import TileSet from './TileSet';
 
 export default class Font {
-  private chars = "" +
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZ      " +
-    "0123456789.,!?'\"-+=/\\%()<>:;     " +
-    "";
+  private chars =
+    '' +
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZ      ' +
+    '0123456789.,!?\'"-+=/\\%()<>:;     ' +
+    '';
 
   private tileset: TileSet;
 
@@ -23,7 +24,7 @@ export default class Font {
 
   /**
    * Write some text to the screen.
-   * 
+   *
    * @param {string} msg The text to write.
    * @param {number} x The x-position to write at.
    * @param {number} y The y-position to write at.

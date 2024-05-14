@@ -1,4 +1,4 @@
-import { Color, drawCircle, getHeight, getWidth } from "./system/display";
+import {Color, drawCircle, getHeight, getWidth} from './system/display';
 
 export class Ball {
   r: number;
@@ -24,7 +24,13 @@ export class Ball {
       this.y = getHeight() - this.r;
     }
 
-    this.color = color ?? new Color(Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255));
+    this.color =
+      color ??
+      new Color(
+        Math.floor(Math.random() * 255),
+        Math.floor(Math.random() * 255),
+        Math.floor(Math.random() * 255)
+      );
 
     this.dx = Math.random() * 2 - 1;
     this.dy = Math.random() * 2 - 1;

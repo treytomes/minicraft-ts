@@ -1,3 +1,3 @@
-import { css } from './css';
+import {css} from './css';
 
-export { css };
+export {css};

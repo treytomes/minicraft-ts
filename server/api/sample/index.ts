@@ -2,4 +2,4 @@ const ping = async () => {
   return 'pong';
 };
 
-export { ping };
+export {ping};

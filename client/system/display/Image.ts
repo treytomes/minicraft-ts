@@ -5,10 +5,10 @@ export default class Image {
   width: number;
 
   constructor(data) {
-    this.components = data.components
-    this.data = data.data
-    this.height = data.height
-    this.width = data.width
+    this.components = data.components;
+    this.data = data.data;
+    this.height = data.height;
+    this.width = data.width;
   }
 
   /**
@@ -18,10 +18,10 @@ export default class Image {
    * @returns {{r: number, g: number, b: number}}
    */
   getPixel(x, y) {
-    const offset = y * this.width * this.components + x * this.components
-    const r = this.data[offset + 0]
-    const g = this.data[offset + 1]
-    const b = this.data[offset + 2]
-    return { r, g, b }
+    const offset = y * this.width * this.components + x * this.components;
+    const r = this.data[offset + 0];
+    const g = this.data[offset + 1];
+    const b = this.data[offset + 2];
+    return {r, g, b};
   }
 }

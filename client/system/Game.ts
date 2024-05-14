@@ -1,8 +1,7 @@
 import Image from './display/Image';
-import { Font, Sprite, TileSet, createContext, getHeight, getWidth } from "./display";
-import { UIElement } from "./ui";
-import { GameTime } from './GameTime';
-import { MouseEventProxy } from './input';
+import {Font, Sprite, TileSet, createContext} from './display';
+import {GameTime} from './GameTime';
+import {MouseEventProxy} from './input';
 import Scene from './Scene';
 
 export default class Game {

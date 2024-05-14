@@ -1,26 +1,26 @@
-import { type TileInfo } from "../server/api/gfx";
+import {type TileInfo} from '../server/api/gfx';
 
-export { };
+export {};
 
 declare global {
   interface Window {
     api: {
       gfx: {
-        getTiles: () => TileInfo,
-      }
+        getTiles: () => TileInfo;
+      };
       sample: {
-        ping: () => string,
-      },
+        ping: () => string;
+      };
       system: {
-        config: () => string,
-        exit: (exitCode: number) => void,
-      },
+        config: () => string;
+        exit: (exitCode: number) => void;
+      };
     };
 
     versions: {
-      node: () => string,
-      chrome: () => string,
-      electron: () => string,
+      node: () => string;
+      chrome: () => string;
+      electron: () => string;
     };
   }
 }

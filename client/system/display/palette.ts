@@ -1,4 +1,4 @@
-import { Color } from "./index";
+import {Color} from './index';
 
 export class Palette {
   colors: Color[];
@@ -8,14 +8,14 @@ export class Palette {
     for (let r = 0; r <= 5; r++) {
       for (let g = 0; g <= 5; g++) {
         for (let b = 0; b <= 5; b++) {
-          const rr = Math.floor(r * 255 / 5);
-          const gg = Math.floor(g * 255 / 5);
-          const bb = Math.floor(b * 255 / 5);
+          const rr = Math.floor((r * 255) / 5);
+          const gg = Math.floor((g * 255) / 5);
+          const bb = Math.floor((b * 255) / 5);
           const mid = Math.floor((rr * 30 + gg * 59 + bb * 11) / 100);
 
-          const r1 = Math.floor(((rr + mid * 1) / 2) * 230 / 255 + 10);
-          const g1 = Math.floor(((gg + mid * 1) / 2) * 230 / 255 + 10);
-          const b1 = Math.floor(((bb + mid * 1) / 2) * 230 / 255 + 10);
+          const r1 = Math.floor((((rr + mid * 1) / 2) * 230) / 255 + 10);
+          const g1 = Math.floor((((gg + mid * 1) / 2) * 230) / 255 + 10);
+          const b1 = Math.floor((((bb + mid * 1) / 2) * 230) / 255 + 10);
 
           // palette.push bitOr(bitOr(shl(r1, 16), shl(g1, 8)), b1)
           this.colors.push(new Color(r1, g1, b1));
@@ -26,11 +26,11 @@ export class Palette {
 
   /**
    * Convert a set of rgb values into a set of colors.
-   * 
+   *
    * @param {number} a The first rgb value to retrieve.
    * @param {number} b The second rgb value to retrieve.
    * @param {number} c The third rgb value to retrieve.
-   * @param {number} d The fourth rgb value to retrieve. 
+   * @param {number} d The fourth rgb value to retrieve.
    * @returns {Color[]} A set of colors.
    */
   get4(a: number, b: number, c: number, d: number): Color[] {
@@ -39,7 +39,7 @@ export class Palette {
 
   /**
    * Convert an rgb value into a color.
-   * 
+   *
    * @param {number} d The rgb value to retrieve.
    * @returns {Color} A Color object.
    */

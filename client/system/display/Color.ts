@@ -10,4 +10,4 @@ export default class Color {
     this.b = b;
     this.a = 255;
   }
-};
+}
