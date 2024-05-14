@@ -1,5 +1,5 @@
 import convict from 'convict';
-import {Environment} from '../models';
+import {Environment} from '../../shared/models';
 
 export const config = convict({
   debug: {

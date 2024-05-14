@@ -11,7 +11,7 @@ export const BIT_MIRROR_Y = 0x02;
  * @property {number} tilesPerRow Number of tiles per row.
  */
 export default class TileSet {
-  private tiles;
+  tiles: number[][];
 
   tileWidth: number;
   tileHeight: number;

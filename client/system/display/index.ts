@@ -55,6 +55,20 @@ export const drawEllipse = (
   c: Color,
   filled = false
 ) => {
+  // Draw points based on 4-way symmetry.
+  const drawQuadrants = (x: number, y: number) => {
+    if (filled) {
+      drawLine(x, yc - y, x, yc + y, c);
+      drawLine(xc - x, y, xc + x, y, c);
+    } else {
+      setPixel(x, yc - y, c);
+      setPixel(x, yc + y, c);
+
+      setPixel(xc - x, y, c);
+      setPixel(xc + x, y, c);
+    }
+  };
+
   xc = Math.floor(xc);
   yc = Math.floor(yc);
   rx = Math.floor(rx);
@@ -76,19 +90,7 @@ export const drawEllipse = (
 
   // For region 1
   while (dx < dy) {
-    // Print points based on 4-way symmetry.
-    if (filled) {
-      for (let xx = xc - x; xx <= xc + x; xx++) {
-        setPixel(xx, yc + y, c);
-        setPixel(xx, yc - y, c);
-      }
-    } else {
-      setPixel(x + xc, y + yc, c);
-      setPixel(-x + xc, y + yc, c);
-
-      setPixel(x + xc, -y + yc, c);
-      setPixel(-x + xc, -y + yc, c);
-    }
+    drawQuadrants(x, y);
 
     // Checking and updating value of decision parameter based on algorithm
     if (d1 < 0) {
@@ -112,19 +114,7 @@ export const drawEllipse = (
 
   // Plotting points of region 2
   while (y >= 0) {
-    // Print points based on 4-way symmetry.
-    if (filled) {
-      for (let xx = xc - x; xx <= xc + x; xx++) {
-        setPixel(xx, yc + y, c);
-        setPixel(xx, yc - y, c);
-      }
-    } else {
-      setPixel(x + xc, y + yc, c);
-      setPixel(-x + xc, y + yc, c);
-
-      setPixel(x + xc, -y + yc, c);
-      setPixel(-x + xc, -y + yc, c);
-    }
+    drawQuadrants(x, y);
 
     // Checking and updating parameter value based on algorithm
     if (d2 > 0) {
@@ -161,7 +151,7 @@ export const drawCircle = (
   yc = Math.floor(yc);
   r = Math.floor(r);
 
-  const drawOctants = (x, y) => {
+  const drawOctants = (x: number, y: number) => {
     setPixel(xc + x, yc + y, c);
     setPixel(xc - x, yc + y, c);
     setPixel(xc + x, yc - y, c);
@@ -173,7 +163,7 @@ export const drawCircle = (
     setPixel(xc - y, yc - x, c);
   };
 
-  const fillOctants = (x, y) => {
+  const fillOctants = (x: number, y: number) => {
     for (let xx = xc - x; xx <= xc + x; xx++) setPixel(xx, yc + y, c);
     for (let xx = xc - x; xx <= xc + x; xx++) setPixel(xx, yc - y, c);
 

@@ -2,15 +2,10 @@ import {Image} from 'image-js';
 
 import path from 'node:path';
 import process from 'node:process';
+import {TileInfo} from '../../../shared/models/tile-info';
+// TODO: tsconfig path: @shared
 
 const ICONS_PATH = path.join(process.cwd(), './server/assets/icons.png');
-
-export type TileInfo = {
-  components: number;
-  data: Uint8Array;
-  height: number;
-  width: number;
-};
 
 export const getTiles = async (): Promise<TileInfo> => {
   const image = await Image.load(ICONS_PATH);
@@ -19,7 +14,7 @@ export const getTiles = async (): Promise<TileInfo> => {
   }
   return {
     components: image.components,
-    data: image.data,
+    data: Array.from(image.data),
     height: image.height,
     width: image.width,
   };

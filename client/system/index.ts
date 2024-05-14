@@ -25,7 +25,7 @@ export const initialize = (game: Game) => {
 
 const UPDATE_INTERVAL = 1000 / 60;
 const RENDER_INTERVAL = 1000 / 60;
-const onFrame = totalTime => {
+const onFrame = (totalTime: number) => {
   if (totalTime - systemContext.lastUpdateTime >= UPDATE_INTERVAL) {
     const deltaTime = totalTime - systemContext.lastUpdateTime;
     const time = {deltaTime, totalTime: totalTime};
