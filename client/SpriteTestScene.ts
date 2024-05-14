@@ -5,6 +5,7 @@ import {
   Color,
   PALETTE,
   Sprite,
+  TileSet,
   clear,
   drawEllipse,
   drawLine,
@@ -17,6 +18,109 @@ import {
 } from './system/ui';
 
 const BLINK_INTERVAL_MS = 500;
+
+export class NineSlice {
+  private readonly tileset: TileSet;
+
+  // The index of the top-left tile of the 9-slice.
+  private readonly tileIndex: number;
+
+  private readonly columns: number;
+  private readonly rows: number;
+
+  constructor(
+    tileset: TileSet,
+    tileIndex: number,
+    columns: number,
+    rows: number
+  ) {
+    this.tileset = tileset;
+    this.tileIndex = tileIndex;
+    this.columns = columns;
+    this.rows = rows;
+  }
+
+  render(x: number, y: number, colors: Color[]) {
+    // top-left
+    this.tileset.render(this.tileIndex, x, y, colors);
+
+    // top-right
+    this.tileset.render(
+      this.tileIndex + 2,
+      x + this.tileset.tileWidth * (this.columns - 1),
+      y,
+      colors
+    );
+
+    // bottom-left
+    this.tileset.render(
+      this.tileIndex + this.tileset.tilesPerRow * 2,
+      x,
+      y + this.tileset.tileHeight * (this.rows - 1),
+      colors
+    );
+
+    // bottom-right
+    this.tileset.render(
+      this.tileIndex + 2 + this.tileset.tilesPerRow * 2,
+      x + this.tileset.tileWidth * (this.columns - 1),
+      y + this.tileset.tileHeight * (this.rows - 1),
+      colors
+    );
+
+    // left
+    for (let row = 1; row < this.rows - 1; row++) {
+      this.tileset.render(
+        this.tileIndex + this.tileset.tilesPerRow,
+        x,
+        y + this.tileset.tileHeight * row,
+        colors
+      );
+    }
+
+    // right
+    for (let row = 1; row < this.rows - 1; row++) {
+      this.tileset.render(
+        this.tileIndex + 2 + this.tileset.tilesPerRow,
+        x + this.tileset.tileWidth * (this.columns - 1),
+        y + this.tileset.tileHeight * row,
+        colors
+      );
+    }
+
+    // top
+    for (let col = 1; col < this.columns - 1; col++) {
+      this.tileset.render(
+        this.tileIndex + 1,
+        x + this.tileset.tileWidth * col,
+        y,
+        colors
+      );
+    }
+
+    // bottom
+    for (let col = 1; col < this.columns - 1; col++) {
+      this.tileset.render(
+        this.tileIndex + 1 + this.tileset.tilesPerRow * 2,
+        x + this.tileset.tileWidth * col,
+        y + this.tileset.tileHeight * (this.rows - 1),
+        colors
+      );
+    }
+
+    // center
+    for (let row = 1; row < this.rows - 1; row++) {
+      for (let col = 1; col < this.columns - 1; col++) {
+        this.tileset.render(
+          this.tileIndex + this.tileset.tilesPerRow + 1,
+          x + this.tileset.tileWidth * col,
+          y + this.tileset.tileHeight * row,
+          colors
+        );
+      }
+    }
+  }
+}
 
 export default class SpriteTestScene extends Scene {
   private _player: Sprite | undefined;
@@ -119,6 +223,19 @@ export default class SpriteTestScene extends Scene {
     );
 
     drawLine(0, 0, this.width - 1, this.height - 1, new Color(255, 0, 0));
+
+    const text = 'HELLO';
+    const x = 50;
+    const y = 50;
+    const slicer = new NineSlice(
+      this.tileset,
+      0 + 26 * this.tileset.tilesPerRow,
+      text.length + 1,
+      2
+    );
+    slicer.render(50, 50, PALETTE.get4(-1, 112, 223, 334));
+    this.font.render(text, x + 6, y + 6, PALETTE.get4(-1, -1, -1, 0));
+    this.font.render(text, x + 5, y + 5, PALETTE.get4(-1, -1, -1, 555));
 
     super.render(time);
   }
