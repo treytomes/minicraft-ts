@@ -68,6 +68,10 @@
     "ml-regression-exponential": "^2.1.2",
     "webpack": "^5.91.0"
   },
+  "lint-staged": {
+    "*": "prettier --write",
+    "*.{js,ts}": "eslint"
+  },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
