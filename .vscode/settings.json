@@ -4,8 +4,5 @@
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
   "files.eol": "\n",
-  "editor.formatOnPaste": true,
-  "[typescript]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-  }
+  "editor.formatOnPaste": true
 }
