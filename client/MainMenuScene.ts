@@ -1,3 +1,4 @@
+import PixelsTestScene from './PixelsTestScene';
 import SpriteTestScene from './SpriteTestScene';
 import Game from './system/Game';
 import Scene from './system/Scene';
@@ -10,7 +11,7 @@ export default class MainMenuScene extends Scene {
     const startButton = new ButtonUIElement(
       this.tileset,
       this.font,
-      'START',
+      'SPRITES',
       10,
       10
     );
@@ -19,12 +20,24 @@ export default class MainMenuScene extends Scene {
     };
     this.uiElements.push(startButton);
 
+    const pixelsButton = new ButtonUIElement(
+      this.tileset,
+      this.font,
+      'PIXELS',
+      10,
+      20
+    );
+    pixelsButton.onClick = () => {
+      this.enterScene(new PixelsTestScene(game));
+    };
+    this.uiElements.push(pixelsButton);
+
     const exitButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'EXIT',
       10,
-      10
+      30
     );
     exitButton.onClick = () => {
       this.exitScene();

@@ -57,15 +57,28 @@ export const drawEllipse = (
 ) => {
   // Draw points based on 4-way symmetry.
   const drawQuadrants = (x: number, y: number) => {
-    if (filled) {
-      drawLine(x, yc - y, x, yc + y, c);
-      drawLine(xc - x, y, xc + x, y, c);
-    } else {
-      setPixel(x, yc - y, c);
-      setPixel(x, yc + y, c);
+    // if (filled) {
+    //   drawLine(x, yc - y, x, yc + y, c);
+    //   drawLine(xc - x, y, xc + x, y, c);
+    // } else {
+    //   setPixel(x, yc - y, c);
+    //   setPixel(x, yc + y, c);
 
-      setPixel(xc - x, y, c);
-      setPixel(xc + x, y, c);
+    //   setPixel(xc - x, y, c);
+    //   setPixel(xc + x, y, c);
+    // }
+
+    if (filled) {
+      for (let xx = xc - x; xx <= xc + x; xx++) {
+        setPixel(xx, yc + y, c);
+        setPixel(xx, yc - y, c);
+      }
+    } else {
+      setPixel(x + xc, y + yc, c);
+      setPixel(-x + xc, y + yc, c);
+
+      setPixel(x + xc, -y + yc, c);
+      setPixel(-x + xc, -y + yc, c);
     }
   };
 
