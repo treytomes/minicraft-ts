@@ -1,8 +1,8 @@
 {
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": false,
   "editor.formatOnType": true,
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
   "files.eol": "\n",
-  "editor.formatOnPaste": true
+  "editor.formatOnPaste": false
 }
