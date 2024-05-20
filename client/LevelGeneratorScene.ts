@@ -155,20 +155,4 @@ export default class LevelGeneratorScene extends Scene {
       this.exitScene();
     }
   }
-
-  onKeyUp(e: KeyboardEvent) {
-    super.onKeyUp(e);
-  }
-
-  onMouseMove(e: MouseEventProxy) {
-    super.onMouseMove(e);
-  }
-
-  onMouseDown(e: MouseEventProxy) {
-    super.onMouseDown(e);
-  }
-
-  onMouseUp(e: MouseEventProxy) {
-    super.onMouseUp(e);
-  }
 }
