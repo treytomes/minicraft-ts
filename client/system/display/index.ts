@@ -40,6 +40,40 @@ export const clear = (color: Color) => {
 };
 
 /**
+ * Fill a region with a color.
+ */
+export const floodFill = (x: number, y: number, c: Color) => {
+  const queue: [number, number][] = [];
+
+  // This is the source color we are replacing.
+  const sourceColor = getPixel(x, y);
+
+  // Is it in range?  Does it match our source color?
+  const isValid = (xp: number, yp: number) =>
+    xp >= 0 &&
+    xp < getWidth() &&
+    yp >= 0 &&
+    yp < getHeight() &&
+    getPixel(xp, yp).equals(sourceColor);
+
+  // Push the origin onto the queue.
+  queue.push([x, y]);
+
+  while (queue.length > 0) {
+    const currPixel = queue.pop()!;
+
+    const posX = currPixel[0];
+    const posY = currPixel[1];
+    setPixel(posX, posY, c);
+
+    if (isValid(posX + 1, posY)) queue.push([posX + 1, posY]);
+    if (isValid(posX - 1, posY)) queue.push([posX - 1, posY]);
+    if (isValid(posX, posY + 1)) queue.push([posX, posY + 1]);
+    if (isValid(posX, posY - 1)) queue.push([posX, posY - 1]);
+  }
+};
+
+/**
  * @param {number} xc Center point along the x-axis.
  * @param {number} yc Center point along the y-axis.
  * @param {number} rx Radius along the x-axis.
@@ -57,17 +91,6 @@ export const drawEllipse = (
 ) => {
   // Draw points based on 4-way symmetry.
   const drawQuadrants = (x: number, y: number) => {
-    // if (filled) {
-    //   drawLine(x, yc - y, x, yc + y, c);
-    //   drawLine(xc - x, y, xc + x, y, c);
-    // } else {
-    //   setPixel(x, yc - y, c);
-    //   setPixel(x, yc + y, c);
-
-    //   setPixel(xc - x, y, c);
-    //   setPixel(xc + x, y, c);
-    // }
-
     if (filled) {
       for (let xx = xc - x; xx <= xc + x; xx++) {
         setPixel(xx, yc + y, c);
@@ -296,6 +319,15 @@ export const setPixel = (x: number, y: number, color: Color) => {
   context.pixels[offset + 1] = color.g;
   context.pixels[offset + 2] = color.b;
   context.pixels[offset + 3] = color.a;
+};
+
+export const getPixel = (x: number, y: number) => {
+  const offset = getOffset(x, y);
+  return new Color(
+    context.pixels[offset + 0],
+    context.pixels[offset + 1],
+    context.pixels[offset + 2]
+  );
 };
 
 /**
