@@ -149,9 +149,9 @@ export default class LevelGen {
   }
 
   private static createTopMap(w: number, h: number): number[][] {
-    const mnoise1 = new LevelGen(w, h, 16);
-    const mnoise2 = new LevelGen(w, h, 16);
-    const mnoise3 = new LevelGen(w, h, 16);
+    const mNoise1 = new LevelGen(w, h, 16);
+    const mNoise2 = new LevelGen(w, h, 16);
+    const mNoise3 = new LevelGen(w, h, 16);
 
     const noise1 = new LevelGen(w, h, 32);
     const noise2 = new LevelGen(w, h, 32);
@@ -163,8 +163,8 @@ export default class LevelGen {
         const i = x + y * w;
 
         let val = Math.abs(noise1.values[i] - noise2.values[i]) * 3 - 2;
-        let mval = Math.abs(mnoise1.values[i] - mnoise2.values[i]);
-        mval = Math.abs(mval - mnoise3.values[i]) * 3 - 2;
+        let mVal = Math.abs(mNoise1.values[i] - mNoise2.values[i]);
+        mVal = Math.abs(mVal - mNoise3.values[i]) * 3 - 2;
 
         let xd = (x / (w - 1.0)) * 2 - 1;
         let yd = (y / (h - 1.0)) * 2 - 1;
@@ -177,7 +177,7 @@ export default class LevelGen {
 
         if (val < -0.5) {
           map[i] = TileIDs.water;
-        } else if (val > 0.5 && mval < -1.5) {
+        } else if (val > 0.5 && mVal < -1.5) {
           map[i] = TileIDs.rock;
         } else {
           map[i] = TileIDs.grass;
@@ -204,10 +204,6 @@ export default class LevelGen {
         }
       }
     }
-
-    /*
-     * for (int i = 0; i < w * h / 2800; i++) { int xs = random.nextInt(w); int ys = random.nextInt(h); for (int k = 0; k < 10; k++) { int x = xs + random.nextInt(21) - 10; int y = ys + random.nextInt(21) - 10; for (int j = 0; j < 100; j++) { int xo = x + random.nextInt(5) - random.nextInt(5); int yo = y + random.nextInt(5) - random.nextInt(5); for (int yy = yo - 1; yy <= yo + 1; yy++) for (int xx = xo - 1; xx <= xo + 1; xx++) if (xx >= 0 && yy >= 0 && xx < w && yy < h) { if (map[xx + yy * w] == Tile.grass.id) { map[xx + yy * w] = Tile.dirt.id; } } } } }
-     */
 
     for (let i = 0; i < (w * h) / 400; i++) {
       const x = Random.nextInt(w);
@@ -272,17 +268,15 @@ export default class LevelGen {
     h: number,
     depth: number
   ): number[][] {
-    const mnoise1 = new LevelGen(w, h, 16);
-    const mnoise2 = new LevelGen(w, h, 16);
-    const mnoise3 = new LevelGen(w, h, 16);
+    const mNoise1 = new LevelGen(w, h, 16);
+    const mNoise2 = new LevelGen(w, h, 16);
+    const mNoise3 = new LevelGen(w, h, 16);
 
-    const nnoise1 = new LevelGen(w, h, 16);
-    const nnoise2 = new LevelGen(w, h, 16);
-    const nnoise3 = new LevelGen(w, h, 16);
+    const nNoise1 = new LevelGen(w, h, 16);
+    const nNoise2 = new LevelGen(w, h, 16);
+    const nNoise3 = new LevelGen(w, h, 16);
 
-    const wnoise1 = new LevelGen(w, h, 16);
-    const wnoise2 = new LevelGen(w, h, 16);
-    const wnoise3 = new LevelGen(w, h, 16);
+    const wNoise = new LevelGen(w, h, 16);
 
     const noise1 = new LevelGen(w, h, 32);
     const noise2 = new LevelGen(w, h, 32);
@@ -295,14 +289,13 @@ export default class LevelGen {
 
         let val = Math.abs(noise1.values[i] - noise2.values[i]) * 3 - 2;
 
-        let mval = Math.abs(mnoise1.values[i] - mnoise2.values[i]);
-        mval = Math.abs(mval - mnoise3.values[i]) * 3 - 2;
+        let mVal = Math.abs(mNoise1.values[i] - mNoise2.values[i]);
+        mVal = Math.abs(mVal - mNoise3.values[i]) * 3 - 2;
 
-        let nval = Math.abs(nnoise1.values[i] - nnoise2.values[i]);
-        nval = Math.abs(nval - nnoise3.values[i]) * 3 - 2;
+        let nVal = Math.abs(nNoise1.values[i] - nNoise2.values[i]);
+        nVal = Math.abs(nVal - nNoise3.values[i]) * 3 - 2;
 
-        let wval = Math.abs(wnoise1.values[i] - wnoise2.values[i]);
-        wval = Math.abs(nval - wnoise3.values[i]) * 3 - 2;
+        const wVal = Math.abs(nVal - wNoise.values[i]) * 3 - 2;
 
         let xd = (x / (w - 1.0)) * 2 - 1;
         let yd = (y / (h - 1.0)) * 2 - 1;
@@ -313,10 +306,10 @@ export default class LevelGen {
         dist = dist * dist * dist * dist;
         val = val + 1 - dist * 20;
 
-        if (val > -2 && wval < -2.0 + (depth / 2) * 3) {
+        if (val > -2 && wVal < -2.0 + (depth / 2) * 3) {
           if (depth > 2) map[i] = TileIDs.lava;
           else map[i] = TileIDs.water;
-        } else if (val > -2 && (mval < -1.7 || nval < -1.4)) {
+        } else if (val > -2 && (mVal < -1.7 || nVal < -1.4)) {
           map[i] = TileIDs.dirt;
         } else {
           map[i] = TileIDs.rock;
