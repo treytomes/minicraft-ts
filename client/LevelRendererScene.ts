@@ -2,13 +2,18 @@ import Level from './Level';
 import Game from './system/Game';
 import {GameTime} from './system/GameTime';
 import Scene from './system/Scene';
-import {PALETTE, clear, setPixel} from './system/display';
-import {Keys} from './system/input';
+import {PALETTE, clear, fillRect} from './system/display';
+import {Keys, MouseEventProxy} from './system/input';
 import {ButtonUIElement, LabelUIElement} from './system/ui';
+import * as tiles from './tiles';
 
-export default class LevelGeneratorScene extends Scene {
+export default class LevelRendererScene extends Scene {
   private level: Level;
   private depth = 0;
+  private offsetX = 0;
+  private offsetY = 0;
+  private deltaX = 0;
+  private deltaY = 0;
 
   constructor(game: Game) {
     super(game);
@@ -74,13 +79,25 @@ export default class LevelGeneratorScene extends Scene {
     );
   }
 
+  update(time: GameTime) {
+    super.update(time);
+    this.offsetX += this.deltaX;
+    this.offsetY += this.deltaY;
+    console.log(this.offsetX, this.offsetY);
+  }
+
   render(time: GameTime) {
     clear(PALETTE.get(1)[0]);
 
+    const offsetX = Math.floor(this.offsetX);
+    const offsetY = Math.floor(this.offsetY);
     for (let y = 0; y < this.level.height; y++) {
       for (let x = 0; x < this.level.width; x++) {
         const tile = this.level.getTile(x, y);
-        setPixel(x, y, tile.mapColor);
+        tile.render(
+          x * tiles.Tile.width - offsetX,
+          y * tiles.Tile.height - offsetY
+        );
       }
     }
 
@@ -90,8 +107,29 @@ export default class LevelGeneratorScene extends Scene {
   onKeyDown(e: KeyboardEvent) {
     super.onKeyDown(e);
 
+    const PLAYER_SPEED = 1;
+    if (e.key === Keys.ArrowUp) {
+      this.deltaY = -PLAYER_SPEED;
+    } else if (e.key === Keys.ArrowDown) {
+      this.deltaY = PLAYER_SPEED;
+    } else if (e.key === Keys.ArrowLeft) {
+      this.deltaX = -PLAYER_SPEED;
+    } else if (e.key === Keys.ArrowRight) {
+      this.deltaX = PLAYER_SPEED;
+    }
+
     if (e.key === Keys.Escape) {
       this.exitScene();
+    }
+  }
+
+  onKeyUp(e: KeyboardEvent) {
+    super.onKeyUp(e);
+
+    if (e.key === Keys.ArrowUp || e.key === Keys.ArrowDown) {
+      this.deltaY = 0;
+    } else if (e.key === Keys.ArrowLeft || e.key === Keys.ArrowRight) {
+      this.deltaX = 0;
     }
   }
 }

@@ -299,7 +299,13 @@ export const fillRect = (
   color: Color
 ) => {
   for (let yd = 0; yd < h; yd++) {
+    if (y + yd < 0) continue;
+    if (y + yd >= getHeight()) break;
+
     for (let xd = 0; xd < w; xd++) {
+      if (x + xd < 0) continue;
+      if (x + xd >= getWidth()) break;
+
       setPixel(x + xd, y + yd, color);
     }
   }

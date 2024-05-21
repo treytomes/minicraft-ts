@@ -1,24 +1,5 @@
 import Random from './Random';
-
-export enum TileIDs {
-  rock = 0,
-  sand = 1,
-  grass = 2,
-  tree = 3,
-  stairsDown = 4,
-  ironOre = 5,
-  goldOre = 6,
-  gemOre = 7,
-  dirt = 8,
-  cloud = 9,
-  water = 10,
-  flower = 11,
-  cactus = 12,
-  lava = 13,
-  infiniteFall = 14,
-  cloudCactus = 15,
-  stairsUp = 16,
-}
+import * as tiles from './tiles';
 
 export default class LevelGen {
   public values: Float64Array;
@@ -97,11 +78,11 @@ export default class LevelGen {
       for (let i = 0; i < w * h; i++) {
         count[result[0][i] & 0xff]++;
       }
-      if (count[TileIDs.rock & 0xff] < 100) continue;
-      if (count[TileIDs.sand & 0xff] < 100) continue;
-      if (count[TileIDs.grass & 0xff] < 100) continue;
-      if (count[TileIDs.tree & 0xff] < 100) continue;
-      if (count[TileIDs.stairsDown & 0xff] < 2) continue;
+      if (count[tiles.rock.id & 0xff] < 100) continue;
+      if (count[tiles.sand.id & 0xff] < 100) continue;
+      if (count[tiles.grass.id & 0xff] < 100) continue;
+      if (count[tiles.tree.id & 0xff] < 100) continue;
+      if (count[tiles.stairsDown.id & 0xff] < 2) continue;
 
       return result;
       // eslint-disable-next-line no-constant-condition
@@ -121,10 +102,10 @@ export default class LevelGen {
       for (let i = 0; i < w * h; i++) {
         count[result[0][i] & 0xff]++;
       }
-      if (count[TileIDs.rock & 0xff] < 100) continue;
-      if (count[TileIDs.dirt & 0xff] < 100) continue;
-      if (count[(TileIDs.ironOre & 0xff) + depth - 1] < 20) continue;
-      if (depth < 3) if (count[TileIDs.stairsDown & 0xff] < 2) continue;
+      if (count[tiles.rock.id & 0xff] < 100) continue;
+      if (count[tiles.dirt.id & 0xff] < 100) continue;
+      if (count[(tiles.ironOre.id & 0xff) + depth - 1] < 20) continue;
+      if (depth < 3) if (count[tiles.stairsDown.id & 0xff] < 2) continue;
 
       return result;
       // eslint-disable-next-line no-constant-condition
@@ -140,8 +121,8 @@ export default class LevelGen {
       for (let i = 0; i < w * h; i++) {
         count[result[0][i] & 0xff]++;
       }
-      if (count[TileIDs.cloud & 0xff] < 2000) continue;
-      if (count[TileIDs.stairsDown & 0xff] < 2) continue;
+      if (count[tiles.cloud.id & 0xff] < 2000) continue;
+      if (count[tiles.stairsDown.id & 0xff] < 2) continue;
 
       return result;
       // eslint-disable-next-line no-constant-condition
@@ -176,11 +157,11 @@ export default class LevelGen {
         val = val + 1 - dist * 20;
 
         if (val < -0.5) {
-          map[i] = TileIDs.water;
+          map[i] = tiles.water.id;
         } else if (val > 0.5 && mVal < -1.5) {
-          map[i] = TileIDs.rock;
+          map[i] = tiles.rock.id;
         } else {
-          map[i] = TileIDs.grass;
+          map[i] = tiles.grass.id;
         }
       }
     }
@@ -197,8 +178,8 @@ export default class LevelGen {
           for (let yy = yo - 1; yy <= yo + 1; yy++)
             for (let xx = xo - 1; xx <= xo + 1; xx++)
               if (xx >= 0 && yy >= 0 && xx < w && yy < h) {
-                if (map[xx + yy * w] === TileIDs.grass) {
-                  map[xx + yy * w] = TileIDs.sand;
+                if (map[xx + yy * w] === tiles.grass.id) {
+                  map[xx + yy * w] = tiles.sand.id;
                 }
               }
         }
@@ -212,8 +193,8 @@ export default class LevelGen {
         const xx = x + Random.nextInt(15) - Random.nextInt(15);
         const yy = y + Random.nextInt(15) - Random.nextInt(15);
         if (xx >= 0 && yy >= 0 && xx < w && yy < h) {
-          if (map[xx + yy * w] === TileIDs.grass) {
-            map[xx + yy * w] = TileIDs.tree;
+          if (map[xx + yy * w] === tiles.grass.id) {
+            map[xx + yy * w] = tiles.tree.id;
           }
         }
       }
@@ -227,8 +208,8 @@ export default class LevelGen {
         const xx = x + Random.nextInt(5) - Random.nextInt(5);
         const yy = y + Random.nextInt(5) - Random.nextInt(5);
         if (xx >= 0 && yy >= 0 && xx < w && yy < h) {
-          if (map[xx + yy * w] === TileIDs.grass) {
-            map[xx + yy * w] = TileIDs.flower;
+          if (map[xx + yy * w] === tiles.grass.id) {
+            map[xx + yy * w] = tiles.flower.id;
             data[xx + yy * w] = col + Random.nextInt(4) * 16;
           }
         }
@@ -239,8 +220,8 @@ export default class LevelGen {
       const xx = Random.nextInt(w);
       const yy = Random.nextInt(h);
       if (xx >= 0 && yy >= 0 && xx < w && yy < h) {
-        if (map[xx + yy * w] === TileIDs.sand) {
-          map[xx + yy * w] = TileIDs.cactus;
+        if (map[xx + yy * w] === tiles.sand.id) {
+          map[xx + yy * w] = tiles.cactus.id;
         }
       }
     }
@@ -252,10 +233,10 @@ export default class LevelGen {
 
       for (let yy = y - 1; yy <= y + 1; yy++)
         for (let xx = x - 1; xx <= x + 1; xx++) {
-          if (map[xx + yy * w] !== TileIDs.rock) continue stairsLoop;
+          if (map[xx + yy * w] !== tiles.rock.id) continue stairsLoop;
         }
 
-      map[x + y * w] = TileIDs.stairsDown;
+      map[x + y * w] = tiles.stairsDown.id;
       count++;
       if (count === 4) break;
     }
@@ -307,12 +288,12 @@ export default class LevelGen {
         val = val + 1 - dist * 20;
 
         if (val > -2 && wVal < -2.0 + (depth / 2) * 3) {
-          if (depth > 2) map[i] = TileIDs.lava;
-          else map[i] = TileIDs.water;
+          if (depth > 2) map[i] = tiles.lava.id;
+          else map[i] = tiles.water.id;
         } else if (val > -2 && (mVal < -1.7 || nVal < -1.4)) {
-          map[i] = TileIDs.dirt;
+          map[i] = tiles.dirt.id;
         } else {
-          map[i] = TileIDs.rock;
+          map[i] = tiles.rock.id;
         }
       }
     }
@@ -326,8 +307,8 @@ export default class LevelGen {
           const xx = x + Random.nextInt(5) - Random.nextInt(5);
           const yy = y + Random.nextInt(5) - Random.nextInt(5);
           if (xx >= r && yy >= r && xx < w - r && yy < h - r) {
-            if (map[xx + yy * w] === TileIDs.rock) {
-              map[xx + yy * w] = (TileIDs.ironOre & 0xff) + depth - 1;
+            if (map[xx + yy * w] === tiles.rock.id) {
+              map[xx + yy * w] = (tiles.ironOre.id & 0xff) + depth - 1;
             }
           }
         }
@@ -342,10 +323,10 @@ export default class LevelGen {
 
         for (let yy = y - 1; yy <= y + 1; yy++)
           for (let xx = x - 1; xx <= x + 1; xx++) {
-            if (map[xx + yy * w] !== TileIDs.rock) continue stairsLoop;
+            if (map[xx + yy * w] !== tiles.rock.id) continue stairsLoop;
           }
 
-        map[x + y * w] = TileIDs.stairsDown;
+        map[x + y * w] = tiles.stairsDown.id;
         count++;
         if (count === 4) break;
       }
@@ -377,9 +358,9 @@ export default class LevelGen {
         val = val + 1 - dist * 20;
 
         if (val < -0.25) {
-          map[i] = TileIDs.infiniteFall;
+          map[i] = tiles.infiniteFall.id;
         } else {
-          map[i] = TileIDs.cloud;
+          map[i] = tiles.cloud.id;
         }
       }
     }
@@ -390,10 +371,10 @@ export default class LevelGen {
 
       for (let yy = y - 1; yy <= y + 1; yy++)
         for (let xx = x - 1; xx <= x + 1; xx++) {
-          if (map[xx + yy * w] !== TileIDs.cloud) continue stairsLoop;
+          if (map[xx + yy * w] !== tiles.cloud.id) continue stairsLoop;
         }
 
-      map[x + y * w] = TileIDs.cloudCactus;
+      map[x + y * w] = tiles.cloudCactus.id;
     }
 
     let count = 0;
@@ -403,10 +384,10 @@ export default class LevelGen {
 
       for (let yy = y - 1; yy <= y + 1; yy++)
         for (let xx = x - 1; xx <= x + 1; xx++) {
-          if (map[xx + yy * w] !== TileIDs.cloud) continue stairsLoop;
+          if (map[xx + yy * w] !== tiles.cloud.id) continue stairsLoop;
         }
 
-      map[x + y * w] = TileIDs.stairsDown;
+      map[x + y * w] = tiles.stairsDown.id;
       count++;
       if (count === 2) break;
     }
