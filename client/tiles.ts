@@ -1,7 +1,7 @@
 import {Color, fillRect} from './system/display';
 
-const TILE_WIDTH = 8;
-const TILE_HEIGHT = 8;
+const TILE_WIDTH = 16;
+const TILE_HEIGHT = 16;
 
 const tiles: Tile[] = [];
 
