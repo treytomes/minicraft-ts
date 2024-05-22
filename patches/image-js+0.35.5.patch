@@ -1,0 +1,66 @@
+diff --git a/node_modules/image-js/index.d.ts b/node_modules/image-js/index.d.ts
+index 78bfcb0..304c5a8 100644
+--- a/node_modules/image-js/index.d.ts
++++ b/node_modules/image-js/index.d.ts
+@@ -7,6 +7,9 @@ import Matrix from 'ml-matrix';
+ // Global variable exposed by UMD bundle
+ export as namespace IJS;
+ 
++// TODO: Had to add this one to satify the type checker.
++export type RoiManagerOptions = any | {};
++
+ export declare class Image {
+   width: number;
+   height: number;
+@@ -408,22 +411,18 @@ export declare class Roi {
+   getMask(options?: {
+     scale?: number;
+     kind?:
+-      | 'contour'
+-      | 'box'
+-      | 'filled'
+-      | 'center'
+-      | 'mbr'
+-      | 'hull'
+-      | 'hullContour'
+-      | 'mbrContour'
+-      | 'feret'
+-      | 'normal';
++    | 'contour'
++    | 'box'
++    | 'filled'
++    | 'center'
++    | 'mbr'
++    | 'hull'
++    | 'hullContour'
++    | 'mbrContour'
++    | 'feret'
++    | 'normal';
+   }): Image;
+ 
+-  get height(): number;
+-  get width(): number;
+-  get center(): [number, number];
+-  get ratio(): number;
+   get center(): [number, number];
+   get ratio(): number;
+   get width(): number;
+@@ -431,7 +430,6 @@ export declare class Roi {
+   get externalIDs(): number[];
+   get externalLengths(): number[];
+   get borderIDs(): number[];
+-  get borderIDs(): number[];
+   get borderLengths(): number[];
+   get boxIDs(): number[];
+   get internalIDs(): number[];
+@@ -555,10 +553,6 @@ export class RoiManager {
+   getAnalysisMasks(options?: { analysisProperty: string }): Image[];
+   getData(options?: Record<string, any>): number[];
+   paint(options?: {
+-    labelProperty?: string;
+-    analysisProperty?: string;
+-    analysisProperty?: string;
+-    labelProperty?: string;
+     analysisProperty?: string;
+     labelProperty?: string;
+     pixelSize?: number;

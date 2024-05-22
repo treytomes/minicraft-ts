@@ -1,0 +1,45 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "language": "en_US",
+  "useGitignore": true,
+  "cache": {
+    "useCache": true
+  },
+  "dictionaries": [
+    "softwareTerms",
+    "typescript",
+    "aws",
+    "bash",
+    "git",
+    "node",
+    "npm"
+  ],
+  "ignorePaths": [
+    "node_modules",
+    "patches",
+    "cspell.json",
+    "**/*.js",
+    "**/auto_docs/**",
+    "**/build/**",
+    "**/dist/**",
+    "**/coverage/**",
+    "**/junit.xml",
+    "**/.gitignore",
+    "**/*.png",
+    "**/*.wav"
+  ],
+  "words": [
+    "Bresenham's",
+    "Codacy",
+    "commitlint",
+    "conventionalcommits",
+    "lerp",
+    "LEVELGEN",
+    "Minicraft",
+    "REGEN",
+    "Snyk",
+    "tileset"
+  ],
+  "flagWords": []
+}
