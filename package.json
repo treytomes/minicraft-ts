@@ -1,8 +1,8 @@
 {
   "name": "minicraft-ts",
-  "productName": "minicraft-ts",
+  "productName": "MiniCraft/TypeScript",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Reimagining the MiniCraft game in a TypeScript/Electron environment.",
   "main": "dist/server/server-bundle.js",
   "scripts": {
     "start": "npm-run-all build watch",
