@@ -19,8 +19,8 @@ export default class LevelRendererScene extends Scene {
     super(game);
 
     this.level = new Level(0);
-    let y = 0;
-    const x = 128 - 24;
+    let y = -10;
+    const x = getWidth() - 7 * 8;
 
     const regenButton = new ButtonUIElement(
       this.tileset,
