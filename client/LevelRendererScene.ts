@@ -1,11 +1,11 @@
 import Level from './Level';
+import {Tile} from './tiles/Tile';
 import Game from './system/Game';
 import {GameTime} from './system/GameTime';
 import Scene from './system/Scene';
-import {PALETTE, clear} from './system/display';
+import {PALETTE, clear, getHeight, getWidth} from './system/display';
 import {Keys} from './system/input';
 import {ButtonUIElement, LabelUIElement} from './system/ui';
-import * as tiles from './tiles';
 
 export default class LevelRendererScene extends Scene {
   private level: Level;
@@ -81,22 +81,37 @@ export default class LevelRendererScene extends Scene {
 
   update(time: GameTime) {
     super.update(time);
+
     this.offsetX += this.deltaX;
+    if (this.offsetX < 0) this.offsetX = 0;
+    if (this.offsetX > this.level.width * Tile.width - getWidth()) {
+      this.offsetX = this.level.width * Tile.width - getWidth();
+    }
+
     this.offsetY += this.deltaY;
-    console.log(this.offsetX, this.offsetY);
+    if (this.offsetY < 0) this.offsetY = 0;
+    if (this.offsetY > this.level.height * Tile.height - getHeight()) {
+      this.offsetY = this.level.height * Tile.height - getHeight();
+    }
+
+    Tile.updateTicks(time);
   }
 
   render(time: GameTime) {
     clear(PALETTE.get(1)[0]);
 
-    const offsetX = Math.floor(this.offsetX);
-    const offsetY = Math.floor(this.offsetY);
+    const offsetX = -Math.floor(this.offsetX);
+    const offsetY = -Math.floor(this.offsetY);
     for (let y = 0; y < this.level.height; y++) {
       for (let x = 0; x < this.level.width; x++) {
         const tile = this.level.getTile(x, y);
         tile.render(
-          x * tiles.Tile.width - offsetX,
-          y * tiles.Tile.height - offsetY
+          this.tileset,
+          this.level,
+          x * Tile.width,
+          y * Tile.height,
+          offsetX,
+          offsetY
         );
       }
     }

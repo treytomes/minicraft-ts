@@ -3,6 +3,7 @@ import * as tiles from './tiles';
 
 export default class LevelGen {
   public values: Float64Array;
+
   private w: number;
   private h: number;
 

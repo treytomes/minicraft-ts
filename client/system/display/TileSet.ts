@@ -73,7 +73,7 @@ export default class TileSet {
         index += this.tileWidth;
         continue;
       }
-      if (ys >= getHeight()) break;
+      if (ys >= getHeight()) continue;
 
       for (let xd = 0; xd < this.tileWidth; xd++) {
         let xs = x + xd;
@@ -82,11 +82,11 @@ export default class TileSet {
           index++;
           continue;
         }
-        if (xs >= getWidth()) {
-          const remaining = this.tileWidth - xd;
-          index += remaining;
-          break;
-        }
+        // if (xs >= getWidth()) {
+        //   const remaining = this.tileWidth - xd;
+        //   index += remaining;
+        //   continue;
+        // }
 
         const v = tile[index++];
         const c = colors[v];

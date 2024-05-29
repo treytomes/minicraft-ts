@@ -320,6 +320,7 @@ export const fillRect = (
  * @param {Color} color
  */
 export const setPixel = (x: number, y: number, color: Color) => {
+  if (x < 0 || y < 0 || x >= getWidth() || y >= getHeight()) return;
   const offset = getOffset(x, y);
   context.pixels[offset + 0] = color.r;
   context.pixels[offset + 1] = color.g;
