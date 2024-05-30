@@ -4,6 +4,7 @@ import {Color, fillRect} from '../system/display';
 import {GameTime} from '../system/GameTime';
 import {Camera} from '../Camera';
 import {Rectangle} from '../system/math';
+import Entity from '../Entity';
 
 const TILE_WIDTH = 16;
 const TILE_HEIGHT = 16;
@@ -40,5 +41,17 @@ export class Tile {
       Tile.tickCount++;
       Tile.lastTickMs = time.totalTime;
     }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  mayPass(level: Level, x: number, y: number, e: Entity) {
+    return true;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  tick(level: Level, xt: number, yt: number) {}
+
+  equals(tile: Tile) {
+    return tile && tile.id === this.id;
   }
 }

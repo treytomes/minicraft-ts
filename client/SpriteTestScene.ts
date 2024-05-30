@@ -1,8 +1,10 @@
+import Entity from './Entity';
 import Game from './system/Game';
 import {GameTime} from './system/GameTime';
 import Scene from './system/Scene';
 import {PALETTE, Sprite, clear} from './system/display';
 import {Keys, MouseEventProxy} from './system/input';
+import {Point} from './system/math';
 import {
   ButtonUIElement,
   LabelUIElement,
@@ -10,25 +12,21 @@ import {
 } from './system/ui';
 
 export default class SpriteTestScene extends Scene {
-  private _player: Sprite | undefined;
+  public readonly player: Entity;
   public isPlayerSelected = false;
-
-  get player(): Sprite {
-    if (!this._player) throw new Error('Content is not loaded.');
-    return this._player;
-  }
 
   constructor(game: Game) {
     super(game);
 
-    this._player = new Sprite(this.tileset, 0, 14, [-1, 100, 220, 532]);
-    this._player.moveTo(50, 50);
-    this.sprites.push(this._player);
+    this.player = new Entity(this.tileset, 0, 14, [-1, 100, 220, 532]);
+    this.player.moveTo(50, 50);
+    this.sprites.push(this.player);
 
     this.uiElements.push(
       new LabelUIElement(
         this.font,
-        () => `X:${Math.floor(this.player.x)},Y:${Math.floor(this.player.y)}`,
+        () =>
+          `X:${Math.floor(this.player.position.x)},Y:${Math.floor(this.player.position.y)}`,
         0,
         0
       )
@@ -103,13 +101,13 @@ export default class SpriteTestScene extends Scene {
 
     const PLAYER_SPEED = 0.05;
     if (e.key === Keys.ArrowUp) {
-      this.player.dy = -PLAYER_SPEED;
+      this.player.speed = Point.unitY.multiply(PLAYER_SPEED).negate;
     } else if (e.key === Keys.ArrowDown) {
-      this.player.dy = PLAYER_SPEED;
+      this.player.speed = Point.unitY.multiply(PLAYER_SPEED);
     } else if (e.key === Keys.ArrowLeft) {
-      this.player.dx = -PLAYER_SPEED;
+      this.player.speed = Point.unitX.multiply(PLAYER_SPEED).negate;
     } else if (e.key === Keys.ArrowRight) {
-      this.player.dx = PLAYER_SPEED;
+      this.player.speed = Point.unitY.multiply(PLAYER_SPEED);
     }
 
     if (e.key === Keys.Escape) {
@@ -120,10 +118,17 @@ export default class SpriteTestScene extends Scene {
   onKeyUp(e: KeyboardEvent) {
     super.onKeyUp(e);
 
-    if (e.key === Keys.ArrowUp || e.key === Keys.ArrowDown) {
-      this.player.dy = 0;
-    } else if (e.key === Keys.ArrowLeft || e.key === Keys.ArrowRight) {
-      this.player.dx = 0;
+    switch (e.key) {
+      case Keys.ArrowUp:
+      case Keys.ArrowDown:
+        // 0 the y-axis
+        this.player.speed = Point.unitX.multiply(this.player.speed.x);
+        break;
+      case Keys.ArrowLeft:
+      case Keys.ArrowRight:
+        // 0 the x-axis
+        this.player.speed = Point.unitY.multiply(this.player.speed.y);
+        break;
     }
   }
 

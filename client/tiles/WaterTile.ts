@@ -1,11 +1,14 @@
 import Level from '../Level';
 import {Tile} from './Tile';
+import * as tiles from '../tiles';
 import {Color, PALETTE, TileSet} from '../system/display';
 import {Camera} from '../Camera';
+import Entity from '../Entity';
+import Random from '../Random';
 
 export class WaterTile extends Tile {
   constructor() {
-    super(PALETTE.get(3)[0]); // new Color(0, 0, 0x80));
+    super(PALETTE.get(3)[0]);
     this.connectsToSand = true;
     this.connectsToWater = true;
   }
@@ -110,23 +113,22 @@ export class WaterTile extends Tile {
     }
   }
 
-  // TODO: Implement WaterTile.mayPass and tick.
-  // mayPass(level: Level, x: number, y: number, e: Entity) {
-  //   return e.canSwim();
-  // }
+  mayPass(level: Level, x: number, y: number, e: Entity) {
+    return e.canSwim;
+  }
 
-  // tick(level: Level, xt: number, yt: number) {
-  //   let xn = xt;
-  //   let yn = yt;
+  tick(level: Level, xt: number, yt: number) {
+    let xn = xt;
+    let yn = yt;
 
-  //   if (Random.nextBoolean()) {
-  //     xn += Random.nextInt(2) * 2 - 1;
-  //   } else {
-  //     yn += Random.nextInt(2) * 2 - 1;
-  //   }
+    if (Random.nextBoolean()) {
+      xn += Random.nextInt(2) * 2 - 1;
+    } else {
+      yn += Random.nextInt(2) * 2 - 1;
+    }
 
-  //   if (level.getTile(xn, yn) === tiles.hole) {
-  //     level.setTile(xn, yn, this, 0);
-  //   }
-  // }
+    if (level.getTile(xn, yn).equals(tiles.hole)) {
+      level.setTile(xn, yn, this, 0);
+    }
+  }
 }
