@@ -3,6 +3,7 @@ import Sprite from './Sprite';
 import TileSet, {BIT_MIRROR_X, BIT_MIRROR_Y} from './TileSet';
 import Font from './Font';
 import {PALETTE} from './palette';
+import {Rectangle} from '../math';
 
 export {Color, Font, Sprite, TileSet, BIT_MIRROR_X, BIT_MIRROR_Y, PALETTE};
 
@@ -291,13 +292,32 @@ export const drawLine = (
   }
 };
 
-export const fillRect = (
+export function fillRect(rect: Rectangle, color: Color): void;
+export function fillRect(
   x: number,
   y: number,
   w: number,
   h: number,
   color: Color
-) => {
+): void;
+export function fillRect(
+  xOrRect: number | Rectangle,
+  yOrColor: number | Color,
+  w?: number,
+  h?: number,
+  color?: Color
+) {
+  if (xOrRect instanceof Rectangle && yOrColor instanceof Color) {
+    fillRect(xOrRect.x, xOrRect.y, xOrRect.width, xOrRect.height, yOrColor);
+    return;
+  }
+  if (w === undefined || h === undefined || color === undefined) {
+    throw new Error('Invalid arguments');
+  }
+
+  const x = xOrRect as number;
+  const y = yOrColor as number;
+
   for (let yd = 0; yd < h; yd++) {
     if (y + yd < 0) continue;
     if (y + yd >= getHeight()) break;
@@ -309,7 +329,7 @@ export const fillRect = (
       setPixel(x + xd, y + yd, color);
     }
   }
-};
+}
 
 /**
  * Write a single pixel to the pixel buffer.

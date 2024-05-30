@@ -1,23 +1,16 @@
 import Level from '../Level';
 import {Tile} from './Tile';
 import {Color, PALETTE, TileSet} from '../system/display';
-import Random from '../Random';
+import {Camera} from '../Camera';
 
 export class WaterTile extends Tile {
   constructor() {
-    super(new Color(0, 0, 0x80));
+    super(PALETTE.get(3)[0]); // new Color(0, 0, 0x80));
     this.connectsToSand = true;
     this.connectsToWater = true;
   }
 
-  render(
-    tileset: TileSet,
-    level: Level,
-    x: number,
-    y: number,
-    offsetX: number,
-    offsetY: number
-  ) {
+  render(tileset: TileSet, level: Level, x: number, y: number, camera: Camera) {
     const col: Color[] = PALETTE.get(5, 5, 115, 115);
     const transitionColor1: Color[] = PALETTE.get(
       3,
@@ -40,24 +33,30 @@ export class WaterTile extends Tile {
     const l = !level.getTile(tx - 1, ty).connectsToWater;
     const r = !level.getTile(tx + 1, ty).connectsToWater;
 
-    const su: boolean = u && level.getTile(tx, ty - 1).connectsToSand;
-    const sd: boolean = d && level.getTile(tx, ty + 1).connectsToSand;
-    const sl: boolean = l && level.getTile(tx - 1, ty).connectsToSand;
-    const sr: boolean = r && level.getTile(tx + 1, ty).connectsToSand;
+    const su = u && level.getTile(tx, ty - 1).connectsToSand;
+    const sd = d && level.getTile(tx, ty + 1).connectsToSand;
+    const sl = l && level.getTile(tx - 1, ty).connectsToSand;
+    const sr = r && level.getTile(tx + 1, ty).connectsToSand;
+
+    const topLeft = camera.translate(x, y);
+    const topRight = camera.translate(x + tileset.tileWidth, y);
+    const bottomLeft = camera.translate(x, y + tileset.tileHeight);
+    const bottomRight = camera.translate(
+      x + tileset.tileWidth,
+      y + tileset.tileHeight
+    );
 
     if (!u && !l) {
       tileset.render(
-        (Tile.tickCount + 1) % 4, // Random.nextInt(4),
-        offsetX + x + 0,
-        offsetY + y + 0,
+        (Tile.tickCount + 1) % 4,
+        topLeft,
         col,
-        (Tile.tickCount - 2) % 4 // Random.nextInt(4)
+        (Tile.tickCount - 2) % 4
       );
     } else {
       tileset.render(
         (l ? 14 : 15) + (u ? 0 : 1) * tileset.tilesPerRow,
-        offsetX + x + 0,
-        offsetY + y + 0,
+        topLeft,
         su || sl ? transitionColor2 : transitionColor1,
         0
       );
@@ -65,17 +64,15 @@ export class WaterTile extends Tile {
 
     if (!u && !r) {
       tileset.render(
-        (Tile.tickCount + 3) % 4, // Random.nextInt(4),
-        offsetX + x + tileset.tileWidth,
-        offsetY + y + 0,
+        (Tile.tickCount + 3) % 4,
+        topRight,
         col,
-        (Tile.tickCount - 4) % 4 // Random.nextInt(4)
+        (Tile.tickCount - 4) % 4
       );
     } else {
       tileset.render(
         (r ? 16 : 15) + (u ? 0 : 1) * tileset.tilesPerRow,
-        offsetX + x + tileset.tileWidth,
-        offsetY + y + 0,
+        topRight,
         su || sr ? transitionColor2 : transitionColor1,
         0
       );
@@ -83,34 +80,30 @@ export class WaterTile extends Tile {
 
     if (!d && !l) {
       tileset.render(
-        (Tile.tickCount + 5) % 4, // Random.nextInt(4),
-        offsetX + x + 0,
-        offsetY + y + tileset.tileHeight,
+        (Tile.tickCount + 5) % 4,
+        bottomLeft,
         col,
-        (Tile.tickCount - 6) % 4 // Random.nextInt(4)
+        (Tile.tickCount - 6) % 4
       );
     } else {
       tileset.render(
         (l ? 14 : 15) + (d ? 2 : 1) * tileset.tilesPerRow,
-        offsetX + x + 0,
-        offsetY + y + tileset.tileHeight,
+        bottomLeft,
         sd || sl ? transitionColor2 : transitionColor1,
         0
       );
     }
     if (!d && !r) {
       tileset.render(
-        (Tile.tickCount + 7) % 4, // Random.nextInt(4),
-        offsetX + x + tileset.tileWidth,
-        offsetY + y + tileset.tileHeight,
+        (Tile.tickCount + 7) % 4,
+        bottomRight,
         col,
-        (Tile.tickCount - 8) % 4 // Random.nextInt(4)
+        (Tile.tickCount - 8) % 4
       );
     } else {
       tileset.render(
         (r ? 16 : 15) + (d ? 2 : 1) * tileset.tilesPerRow,
-        offsetX + x + tileset.tileWidth,
-        offsetY + y + tileset.tileHeight,
+        bottomRight,
         sd || sr ? transitionColor2 : transitionColor1,
         0
       );

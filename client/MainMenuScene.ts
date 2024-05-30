@@ -4,6 +4,7 @@ import PixelsTestScene from './PixelsTestScene';
 import SpriteTestScene from './SpriteTestScene';
 import Game from './system/Game';
 import Scene from './system/Scene';
+import {Keys} from './system/input';
 import {ButtonUIElement} from './system/ui';
 
 export default class MainMenuScene extends Scene {
@@ -71,5 +72,15 @@ export default class MainMenuScene extends Scene {
       this.exitScene();
     };
     this.uiElements.push(exitButton);
+  }
+
+  onKeyDown(e: KeyboardEvent) {
+    super.onKeyDown(e);
+
+    switch (e.key) {
+      case Keys.Escape:
+        this.exitScene();
+        break;
+    }
   }
 }

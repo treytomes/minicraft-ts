@@ -6,13 +6,6 @@ export default class Rectangle {
   readonly width: number;
   readonly height: number;
 
-  /**
-   *
-   * @param {number} x
-   * @param {number} y
-   * @param {number} width
-   * @param {number} height
-   */
   constructor(x: number, y: number, width: number, height: number) {
     this.x = x;
     this.y = y;

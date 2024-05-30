@@ -2,6 +2,8 @@ import {TileSet} from '../system/display';
 import Level from '../Level';
 import {Color, fillRect} from '../system/display';
 import {GameTime} from '../system/GameTime';
+import {Camera} from '../Camera';
+import {Rectangle} from '../system/math';
 
 const TILE_WIDTH = 16;
 const TILE_HEIGHT = 16;
@@ -26,16 +28,11 @@ export class Tile {
     this.mapColor = mapColor;
   }
 
-  // TODO: Implement Camera in place of offsetX/offsetY pairs.
-  render(
-    tileset: TileSet,
-    level: Level,
-    x: number,
-    y: number,
-    offsetX: number,
-    offsetY: number
-  ) {
-    fillRect(x + offsetX, y + offsetY, Tile.width, Tile.height, this.mapColor);
+  render(tileset: TileSet, level: Level, x: number, y: number, camera: Camera) {
+    fillRect(
+      camera.translate(new Rectangle(x, y, Tile.width, Tile.height)),
+      this.mapColor
+    );
   }
 
   static updateTicks(time: GameTime) {

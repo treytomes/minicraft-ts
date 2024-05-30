@@ -1,6 +1,7 @@
 import {getHeight, getWidth, setPixel} from './index';
 import Image from './Image';
 import Color from './Color';
+import {Point} from '../math';
 
 export const BIT_MIRROR_X = 0x01;
 export const BIT_MIRROR_Y = 0x02;
@@ -50,20 +51,41 @@ export default class TileSet {
     }
   }
 
-  /**
-   *
-   * @param {number} tileIndex Index into the tileset.
-   * @param {number} x X-position to draw at.
-   * @param {number} y Y-position to draw at.
-   * @param {number[]} colors An array of 4 numbers that represents the color of the tile.  -1 is transparent.
-   * @param {number} bits Bit flags to apply to the rendering, used to flip on the x or y axis.
-   */
-  render(tileIndex: number, x: number, y: number, colors: Color[], bits = 0) {
+  render(tileIndex: number, pnt: Point, colors: Color[], bits: number): void;
+  render(tileIndex: number, pnt: Point, colors: Color[]): void;
+  render(
+    tileIndex: number,
+    x: number,
+    y: number,
+    colors: Color[],
+    bits: number
+  ): void;
+  render(tileIndex: number, x: number, y: number, colors: Color[]): void;
+  render(
+    tileIndex: number,
+    xOrPnt: number | Point,
+    yOrColors: number | Color[],
+    colorsOrBits: Color[] | number = 0,
+    bits: number | undefined = 0
+  ) {
+    if (xOrPnt instanceof Point) {
+      this.render(
+        tileIndex,
+        xOrPnt.x,
+        xOrPnt.y,
+        yOrColors as Color[],
+        colorsOrBits as number
+      );
+      return;
+    }
+
     const mirrorX = (bits & BIT_MIRROR_X) > 0;
     const mirrorY = (bits & BIT_MIRROR_Y) > 0;
 
-    x = Math.floor(x);
-    y = Math.floor(y);
+    const x = Math.floor(xOrPnt);
+    const y = Math.floor(yOrColors as number);
+    const colors = colorsOrBits as Color[];
+
     const tile = this.tiles[tileIndex];
     let index = 0;
     for (let yd = 0; yd < this.tileHeight; yd++) {

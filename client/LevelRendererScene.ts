@@ -3,24 +3,36 @@ import {Tile} from './tiles/Tile';
 import Game from './system/Game';
 import {GameTime} from './system/GameTime';
 import Scene from './system/Scene';
-import {PALETTE, clear, getHeight, getWidth} from './system/display';
+import {PALETTE, clear} from './system/display';
 import {Keys} from './system/input';
 import {ButtonUIElement, LabelUIElement} from './system/ui';
+import {Point, Rectangle} from './system/math';
+import {Camera} from './Camera';
+
+const PLAYER_SPEED = 1;
 
 export default class LevelRendererScene extends Scene {
   private level: Level;
   private depth = 0;
-  private offsetX = 0;
-  private offsetY = 0;
-  private deltaX = 0;
-  private deltaY = 0;
+  private camera: Camera;
+  private delta = Point.zero;
 
   constructor(game: Game) {
     super(game);
 
     this.level = new Level(0);
+
+    this.camera = new Camera(
+      new Rectangle(
+        0,
+        0,
+        this.level.width * Tile.width - this.width,
+        this.level.height * Tile.height - this.height
+      )
+    );
+
     let y = -10;
-    const x = getWidth() - 7 * 8;
+    const x = this.width - 7 * 8;
 
     const regenButton = new ButtonUIElement(
       this.tileset,
@@ -81,27 +93,13 @@ export default class LevelRendererScene extends Scene {
 
   update(time: GameTime) {
     super.update(time);
-
-    this.offsetX += this.deltaX;
-    if (this.offsetX < 0) this.offsetX = 0;
-    if (this.offsetX > this.level.width * Tile.width - getWidth()) {
-      this.offsetX = this.level.width * Tile.width - getWidth();
-    }
-
-    this.offsetY += this.deltaY;
-    if (this.offsetY < 0) this.offsetY = 0;
-    if (this.offsetY > this.level.height * Tile.height - getHeight()) {
-      this.offsetY = this.level.height * Tile.height - getHeight();
-    }
-
+    this.camera.moveBy(this.delta);
     Tile.updateTicks(time);
   }
 
   render(time: GameTime) {
     clear(PALETTE.get(1)[0]);
 
-    const offsetX = -Math.floor(this.offsetX);
-    const offsetY = -Math.floor(this.offsetY);
     for (let y = 0; y < this.level.height; y++) {
       for (let x = 0; x < this.level.width; x++) {
         const tile = this.level.getTile(x, y);
@@ -110,8 +108,7 @@ export default class LevelRendererScene extends Scene {
           this.level,
           x * Tile.width,
           y * Tile.height,
-          offsetX,
-          offsetY
+          this.camera
         );
       }
     }
@@ -122,29 +119,47 @@ export default class LevelRendererScene extends Scene {
   onKeyDown(e: KeyboardEvent) {
     super.onKeyDown(e);
 
-    const PLAYER_SPEED = 1;
-    if (e.key === Keys.ArrowUp) {
-      this.deltaY = -PLAYER_SPEED;
-    } else if (e.key === Keys.ArrowDown) {
-      this.deltaY = PLAYER_SPEED;
-    } else if (e.key === Keys.ArrowLeft) {
-      this.deltaX = -PLAYER_SPEED;
-    } else if (e.key === Keys.ArrowRight) {
-      this.deltaX = PLAYER_SPEED;
-    }
-
-    if (e.key === Keys.Escape) {
-      this.exitScene();
+    switch (e.key) {
+      case Keys.ArrowUp:
+        this.delta = Point.unitX
+          .multiply(this.delta.x)
+          .add(Point.unitY.multiply(PLAYER_SPEED).negate);
+        break;
+      case Keys.ArrowDown:
+        this.delta = Point.unitX
+          .multiply(this.delta.x)
+          .add(Point.unitY.multiply(PLAYER_SPEED));
+        break;
+      case Keys.ArrowLeft:
+        this.delta = Point.unitY
+          .multiply(this.delta.y)
+          .add(Point.unitX.multiply(PLAYER_SPEED).negate);
+        break;
+      case Keys.ArrowRight:
+        this.delta = Point.unitY
+          .multiply(this.delta.y)
+          .add(Point.unitX.multiply(PLAYER_SPEED));
+        break;
+      case Keys.Escape:
+        this.exitScene();
+        break;
     }
   }
 
   onKeyUp(e: KeyboardEvent) {
     super.onKeyUp(e);
 
-    if (e.key === Keys.ArrowUp || e.key === Keys.ArrowDown) {
-      this.deltaY = 0;
-    } else if (e.key === Keys.ArrowLeft || e.key === Keys.ArrowRight) {
-      this.deltaX = 0;
+    switch (e.key) {
+      case Keys.ArrowUp:
+      case Keys.ArrowDown:
+        // 0 the y-axis
+        this.delta = Point.unitX.multiply(this.delta.x);
+        break;
+      case Keys.ArrowLeft:
+      case Keys.ArrowRight:
+        // 0 the x-axis
+        this.delta = Point.unitY.multiply(this.delta.y);
+        break;
     }
   }
 }
