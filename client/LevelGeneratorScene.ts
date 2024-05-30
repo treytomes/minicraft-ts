@@ -14,8 +14,8 @@ export default class LevelGeneratorScene extends Scene {
     super(game);
 
     this.level = new Level(0);
-    let y = 0;
-    const x = 128 - 24;
+    let y = -10;
+    const x = this.width - 8 * 7;
 
     const regenButton = new ButtonUIElement(
       this.tileset,
@@ -77,10 +77,12 @@ export default class LevelGeneratorScene extends Scene {
   render(time: GameTime) {
     clear(PALETTE.get(1)[0]);
 
+    const offsetX = (this.width - this.level.width) / 2;
+    const offsetY = (this.height - this.level.height) / 2;
     for (let y = 0; y < this.level.height; y++) {
       for (let x = 0; x < this.level.width; x++) {
         const tile = this.level.getTile(x, y);
-        setPixel(x, y, tile.mapColor);
+        setPixel(offsetX + x, offsetY + y, tile.mapColor);
       }
     }
 
