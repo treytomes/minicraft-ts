@@ -2,12 +2,13 @@ import {tiles, Tile} from './Tile';
 export * as Tile from './Tile';
 import {WaterTile} from './WaterTile';
 import {Color, PALETTE} from '../system/display';
+import {GrassTile} from './GrassTile';
 
 export const getById = (tileId: number) => tiles[tileId];
 
 export const rock = new Tile(new Color(0xa0, 0xa0, 0xa0));
 export const sand = new Tile(new Color(0xa0, 0xa0, 0x40));
-export const grass = new Tile(new Color(0x20, 0x80, 0x20));
+export const grass = new GrassTile();
 export const tree = new Tile(new Color(0x00, 0x30, 0x00));
 export const stairsDown = new Tile(PALETTE.get(555)[0]);
 export const ironOre = new Tile(PALETTE.get(550)[0]);
@@ -23,3 +24,4 @@ export const infiniteFall = new Tile(PALETTE.get(0)[0]);
 export const cloudCactus = new Tile(PALETTE.get(505)[0]);
 export const stairsUp = new Tile(PALETTE.get(555)[0]);
 export const hole = new Tile(PALETTE.get(0)[0]);
+export const farmland = new Tile(new Color(0x60, 0x40, 0x40));

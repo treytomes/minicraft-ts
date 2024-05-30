@@ -1,8 +1,8 @@
-import Entity from './Entity';
+import Entity from './entities/Entity';
 import Game from './system/Game';
 import {GameTime} from './system/GameTime';
 import Scene from './system/Scene';
-import {PALETTE, Sprite, clear} from './system/display';
+import {PALETTE, clear} from './system/display';
 import {Keys, MouseEventProxy} from './system/input';
 import {Point} from './system/math';
 import {

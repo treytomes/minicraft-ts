@@ -4,7 +4,7 @@ import {Color, fillRect} from '../system/display';
 import {GameTime} from '../system/GameTime';
 import {Camera} from '../Camera';
 import {Rectangle} from '../system/math';
-import Entity from '../Entity';
+import Entity from '../entities/Entity';
 
 const TILE_WIDTH = 16;
 const TILE_HEIGHT = 16;
@@ -20,6 +20,8 @@ export class Tile {
 
   public readonly id: number;
   public readonly mapColor: Color;
+  public connectsToGrass = false;
+  public connectsToLava = false;
   public connectsToSand = false;
   public connectsToWater = false;
 

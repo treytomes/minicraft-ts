@@ -3,7 +3,7 @@ import {Tile} from './Tile';
 import * as tiles from '../tiles';
 import {Color, PALETTE, TileSet} from '../system/display';
 import {Camera} from '../Camera';
-import Entity from '../Entity';
+import Entity from '../entities/Entity';
 import Random from '../Random';
 
 export class WaterTile extends Tile {
