@@ -1,6 +1,6 @@
 import Game from './system/Game';
 import {GameTime} from './system/GameTime';
-import MainMenuScene from './MainMenuScene';
+import MainMenuScene from './scenes/MainMenuScene';
 import {PALETTE, clear} from './system/display';
 
 export default class MinicraftGame extends Game {
@@ -10,6 +10,7 @@ export default class MinicraftGame extends Game {
 
   async loadContent() {
     await super.loadContent();
+
     // this.scenes.push(new SpriteTestScene(this));
     this.scenes.push(new MainMenuScene(this));
   }

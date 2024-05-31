@@ -2,10 +2,11 @@ import LevelGeneratorScene from './LevelGeneratorScene';
 import LevelRendererScene from './LevelRendererScene';
 import PixelsTestScene from './PixelsTestScene';
 import SpriteTestScene from './SpriteTestScene';
-import Game from './system/Game';
-import Scene from './system/Scene';
-import {Keys} from './system/input';
-import {ButtonUIElement} from './system/ui';
+import Game from '../system/Game';
+import Scene from '../system/Scene';
+import {Keys} from '../system/input';
+import {ButtonUIElement} from '../system/ui';
+import SoundEffectTestScene from './SoundEffectTestScene';
 
 export default class MainMenuScene extends Scene {
   constructor(game: Game) {
@@ -60,6 +61,18 @@ export default class MainMenuScene extends Scene {
       this.enterScene(new LevelRendererScene(game));
     };
     this.uiElements.push(levelRendererButton);
+
+    const sfxTestButton = new ButtonUIElement(
+      this.tileset,
+      this.font,
+      'SFX',
+      10,
+      (y += 10)
+    );
+    sfxTestButton.onClick = () => {
+      this.enterScene(new SoundEffectTestScene(game));
+    };
+    this.uiElements.push(sfxTestButton);
 
     const exitButton = new ButtonUIElement(
       this.tileset,

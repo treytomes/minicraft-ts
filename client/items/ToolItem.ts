@@ -29,7 +29,7 @@ export default class ToolItem extends Item {
     return ToolItem.LEVEL_COLORS[this.level];
   }
 
-  get sprite() {
+  get icon() {
     return this.type.sprite + 5 * 32;
   }
 
@@ -42,11 +42,11 @@ export default class ToolItem extends Item {
   }
 
   renderIcon(tileset: TileSet, x: number, y: number) {
-    tileset.render(this.sprite, x, y, this.color);
+    tileset.render(this.icon, x, y, this.color);
   }
 
   renderInventory(tileset: TileSet, font: Font, x: number, y: number) {
-    tileset.render(this.sprite, x, y, this.color);
+    tileset.render(this.icon, x, y, this.color);
     font.render(this.name, x + 8, y, PALETTE.get(-1, 555, 555, 555));
   }
 

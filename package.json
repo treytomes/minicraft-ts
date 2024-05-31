@@ -59,13 +59,16 @@
   "license": "MIT",
   "dependencies": {
     "@types/convict": "^6.1.6",
+    "@types/pino": "^7.0.5",
     "canvas": "^2.11.2",
     "convict": "^6.2.4",
+    "dataurl": "^0.1.0",
     "dotenv": "^16.4.5",
     "electron-squirrel-startup": "^1.0.0",
     "image-js": "^0.35.5",
     "ml-regression-base": "^3.0.0",
     "ml-regression-exponential": "^2.1.2",
+    "pino": "^9.1.0",
     "webpack": "^5.91.0"
   },
   "lint-staged": {

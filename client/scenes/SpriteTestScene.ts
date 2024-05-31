@@ -1,15 +1,15 @@
-import Entity from './entities/Entity';
-import Game from './system/Game';
-import {GameTime} from './system/GameTime';
-import Scene from './system/Scene';
-import {PALETTE, clear} from './system/display';
-import {Keys, MouseEventProxy} from './system/input';
-import {Point} from './system/math';
+import Entity from '../entities/Entity';
+import Game from '../system/Game';
+import {GameTime} from '../system/GameTime';
+import Scene from '../system/Scene';
+import {PALETTE, clear} from '../system/display';
+import {Keys, MouseEventProxy} from '../system/input';
+import {Point} from '../system/math';
 import {
   ButtonUIElement,
   LabelUIElement,
   ProgressMeterUIElement,
-} from './system/ui';
+} from '../system/ui';
 
 export default class SpriteTestScene extends Scene {
   public readonly player: Entity;

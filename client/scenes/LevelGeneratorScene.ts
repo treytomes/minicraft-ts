@@ -1,10 +1,10 @@
-import Level from './Level';
-import Game from './system/Game';
-import {GameTime} from './system/GameTime';
-import Scene from './system/Scene';
-import {PALETTE, clear, setPixel} from './system/display';
-import {Keys} from './system/input';
-import {ButtonUIElement, LabelUIElement} from './system/ui';
+import Level from '../Level';
+import Game from '../system/Game';
+import {GameTime} from '../system/GameTime';
+import Scene from '../system/Scene';
+import {PALETTE, clear, setPixel} from '../system/display';
+import {Keys} from '../system/input';
+import {ButtonUIElement, LabelUIElement} from '../system/ui';
 
 export default class LevelGeneratorScene extends Scene {
   private level: Level;

@@ -30,13 +30,18 @@
     "**/*.wav"
   ],
   "words": [
+    "bossdeath",
     "Bresenham's",
     "Codacy",
     "commitlint",
     "conventionalcommits",
+    "dataurl",
     "lerp",
     "LEVELGEN",
     "Minicraft",
+    "monsterhurt",
+    "pino",
+    "playerhurt",
     "REGEN",
     "Shvl",
     "SNES",

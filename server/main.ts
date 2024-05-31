@@ -1,7 +1,8 @@
 import {BrowserWindow, IpcMainInvokeEvent, ipcMain} from 'electron';
-import api from './api';
+import * as api from './api';
 import {config} from './config';
 import * as paths from './paths';
+import {default as logger} from './logger';
 
 export default class Main {
   static mainWindow: Electron.BrowserWindow | null;
@@ -36,10 +37,7 @@ export default class Main {
 
     if (!Main.mainWindow) throw new Error('Unable to create main window.');
 
-    // console.log('icon: ', path.join(__dirname, '../../client/assets/favicon.ico'));
-    // console.log('preload: ', path.join(__dirname, '../../client/index.js'));
-    // console.log('index: ', path.join(__dirname, '../../client/index.html'));
-    console.log('index: ', paths.getClientPath('index.html'));
+    logger.debug('index: ', paths.getClientPath('index.html'));
     Main.mainWindow.loadFile(paths.getClientPath('index.html'));
     Main.mainWindow.on('closed', Main.onClose);
 
@@ -55,17 +53,22 @@ export default class Main {
   }
 
   private static onReady() {
-    console.log('Hello from Electron 👋');
+    logger.info('Hello from Electron 👋');
 
     ipcMain.handle('sample/ping', async () => {
-      console.log('Calling sample/ping.');
+      logger.debug('Calling sample/ping.');
       return await (await api).sample.ping();
       // await api.sample.ping();
     });
 
     ipcMain.handle('gfx/getTiles', async () => {
-      console.log('Calling gfx/getTiles.');
+      logger.debug('Calling gfx/getTiles.');
       return await (await api).gfx.getTiles();
+    });
+
+    ipcMain.handle('sfx/loadWave', async (event: IpcMainInvokeEvent, path) => {
+      logger.debug(`Calling sfx/loadWave: ${path}`);
+      return await (await api).sfx.loadWave(path);
     });
 
     ipcMain.handle('system/config', () => {
@@ -78,7 +81,7 @@ export default class Main {
     ipcMain.handle(
       'system/exit',
       async (event: IpcMainInvokeEvent, exitCode) => {
-        console.log(`Calling system/exit: ${exitCode}`);
+        logger.debug(`Calling system/exit: ${exitCode}`);
         Main.application.exit(exitCode);
       }
     );

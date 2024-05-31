@@ -1,7 +1,6 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 
-console.log(__dirname);
 const common_config = {
   node: {
     __dirname: true,
@@ -64,9 +63,10 @@ module.exports = [
       // TODO: client web assets need to be copied to dist/client.
       new CopyPlugin({
         patterns: [
-          { from: './client/assets/favicon.ico', to: 'favicon.ico' },
-          { from: './client/public/index.html', to: 'index.html' },
-          { from: './client/public/index.css', to: 'index.css' },
+          {from: './client/assets/favicon.ico', to: 'favicon.ico'},
+          {from: './client/public/index.html', to: 'index.html'},
+          {from: './client/public/index.css', to: 'index.css'},
+          {context: './client/', from: './assets/*.wav', to: '.'},
         ],
       }),
     ],

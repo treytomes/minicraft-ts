@@ -1,13 +1,13 @@
-import Level from './Level';
-import {Tile} from './tiles/Tile';
-import Game from './system/Game';
-import {GameTime} from './system/GameTime';
-import Scene from './system/Scene';
-import {PALETTE, clear} from './system/display';
-import {Keys} from './system/input';
-import {ButtonUIElement, LabelUIElement} from './system/ui';
-import {Point, Rectangle} from './system/math';
-import {Camera} from './Camera';
+import Level from '../Level';
+import {Tile} from '../tiles/Tile';
+import Game from '../system/Game';
+import {GameTime} from '../system/GameTime';
+import Scene from '../system/Scene';
+import {PALETTE, clear} from '../system/display';
+import {Keys} from '../system/input';
+import {ButtonUIElement, LabelUIElement} from '../system/ui';
+import {Point, Rectangle} from '../system/math';
+import {Camera} from '../Camera';
 
 const PLAYER_SPEED = 1;
 

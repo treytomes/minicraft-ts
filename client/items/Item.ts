@@ -10,7 +10,7 @@ export default class Item {
     return PALETTE.get(0, 0, 0, 0);
   }
 
-  get sprite(): number {
+  get icon(): number {
     return 0;
   }
 

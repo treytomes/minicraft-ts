@@ -1,9 +1,9 @@
-import NineSlice from './NineSlice';
-import Game from './system/Game';
-import {GameTime} from './system/GameTime';
-import Scene from './system/Scene';
-import {Color, PALETTE, clear, drawEllipse, drawLine} from './system/display';
-import {Keys, MouseEventProxy} from './system/input';
+import NineSlice from '../NineSlice';
+import Game from '../system/Game';
+import {GameTime} from '../system/GameTime';
+import Scene from '../system/Scene';
+import {Color, PALETTE, clear, drawEllipse, drawLine} from '../system/display';
+import {Keys, MouseEventProxy} from '../system/input';
 
 const BLINK_INTERVAL_MS = 500;
 

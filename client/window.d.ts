@@ -11,6 +11,9 @@ declare global {
       sample: {
         ping: () => string;
       };
+      sfx: {
+        loadWave: (path: string) => string;
+      };
       system: {
         config: () => string;
         exit: (exitCode: number) => void;
