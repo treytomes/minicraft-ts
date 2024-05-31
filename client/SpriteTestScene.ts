@@ -93,6 +93,18 @@ export default class SpriteTestScene extends Scene {
 
   render(time: GameTime) {
     clear(PALETTE.get(1)[0]);
+
+    // Render a giant tree.
+    const grassColor = 141;
+    const col = PALETTE.get(10, 30, 151, grassColor);
+    const barkCol1 = PALETTE.get(10, 30, 430, grassColor);
+    const barkCol2 = PALETTE.get(10, 30, 320, grassColor);
+    const colors = PALETTE.get(10, 30, 320, grassColor);
+    for (let j = 3, x = 150; j <= 10; j++, x += 8) {
+      for (let k = 21, y = 150; k <= 28; k++, y += 8) {
+        this.tileset.render(j + k * this.tileset.tilesPerRow, x, y, colors);
+      }
+    }
     super.render(time);
   }
 
