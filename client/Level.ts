@@ -57,4 +57,12 @@ export default class Level {
     this.tileData[x + y * this.width] = tile.id;
     this.metaData[x + y * this.width] = data;
   }
+
+  getData(x: number, y: number) {
+    return this.metaData[x + y * this.width];
+  }
+
+  setData(x: number, y: number, data: number) {
+    this.metaData[x + y * this.width] = data;
+  }
 }

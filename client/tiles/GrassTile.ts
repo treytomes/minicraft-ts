@@ -9,8 +9,6 @@ import Player from '../entities/Player';
 import ToolItem from '../items/ToolItem';
 import ToolType from '../ToolType';
 import {Sound} from '../system/audio/sound';
-import ItemEntity from '../entities/ItemEntity';
-import ResourceItem from '../ResourceItem';
 
 export class GrassTile extends Tile {
   constructor() {

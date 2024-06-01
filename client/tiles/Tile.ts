@@ -5,6 +5,9 @@ import {GameTime} from '../system/GameTime';
 import {Camera} from '../Camera';
 import {Rectangle} from '../system/math';
 import Entity from '../entities/Entity';
+import Mob from '../entities/Mob';
+import Item from '../items/Item';
+import Player from '../entities/Player';
 
 const TILE_WIDTH = 16;
 const TILE_HEIGHT = 16;
@@ -55,5 +58,61 @@ export class Tile {
 
   equals(tile: Tile) {
     return tile && tile.id === this.id;
+  }
+
+  interact(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    level: Level,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    xt: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    yt: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    player: Player,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    item: Item,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    attackDir: number
+  ): boolean {
+    return false;
+  }
+
+  hurt(
+    level: Level,
+    x: number,
+    y: number,
+    source: Mob,
+    dmg: number,
+    attackDir: number
+  ): void;
+  hurt(level: Level, x: number, y: number, dmg: number): void;
+  hurt(
+    level: Level,
+    x: number,
+    y: number,
+    sourceOrDmg: Mob | number,
+    dmg?: number,
+    attackDir?: number
+  ) {
+    if (!(sourceOrDmg instanceof Mob)) {
+      this.hurtTile(level, x, y, sourceOrDmg as number);
+    } else {
+      this.hurtMob(level, x, y, sourceOrDmg as Mob, dmg!, attackDir!);
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected hurtTile(level: Level, x: number, y: number, dmg: number) {}
+
+  protected hurtMob(
+    level: Level,
+    x: number,
+    y: number,
+    source: Mob,
+    dmg: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    attackDir: number
+  ) {
+    this.hurt(level, x, y, dmg);
   }
 }
