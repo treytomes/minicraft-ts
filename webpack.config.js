@@ -66,6 +66,8 @@ module.exports = [
           {from: './client/assets/favicon.ico', to: 'favicon.ico'},
           {from: './client/public/index.html', to: 'index.html'},
           {from: './client/public/index.css', to: 'index.css'},
+          {from: './client/public/canvas.fs', to: 'canvas.fs'},
+          {from: './client/public/canvas.vs', to: 'canvas.vs'},
           {context: './client/', from: './assets/*.wav', to: '.'},
         ],
       }),

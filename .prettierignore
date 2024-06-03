@@ -25,3 +25,5 @@ __snapshots__
 *.svg
 *.ico
 *.png
+canvas.fs
+canvas.vs
