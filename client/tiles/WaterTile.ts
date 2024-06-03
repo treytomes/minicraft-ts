@@ -50,66 +50,66 @@ export class WaterTile extends Tile {
     );
 
     if (!u && !l) {
-      tileset.render(
-        (Tile.tickCount + 1) % 4,
-        topLeft,
-        col,
-        (Tile.tickCount - 2) % 4
-      );
+      tileset.render({
+        tileIndex: (Tile.tickCount + 1) % 4,
+        pnt: topLeft,
+        colors: col,
+        bits: (Tile.tickCount - 2) % 4,
+      });
     } else {
-      tileset.render(
-        (l ? 14 : 15) + (u ? 0 : 1) * tileset.tilesPerRow,
-        topLeft,
-        su || sl ? transitionColor2 : transitionColor1,
-        0
-      );
+      tileset.render({
+        tileIndex: (l ? 14 : 15) + (u ? 0 : 1) * tileset.tilesPerRow,
+        pnt: topLeft,
+        colors: su || sl ? transitionColor2 : transitionColor1,
+        bits: 0,
+      });
     }
 
     if (!u && !r) {
-      tileset.render(
-        (Tile.tickCount + 3) % 4,
-        topRight,
-        col,
-        (Tile.tickCount - 4) % 4
-      );
+      tileset.render({
+        tileIndex: (Tile.tickCount + 3) % 4,
+        pnt: topRight,
+        colors: col,
+        bits: (Tile.tickCount - 4) % 4,
+      });
     } else {
-      tileset.render(
-        (r ? 16 : 15) + (u ? 0 : 1) * tileset.tilesPerRow,
-        topRight,
-        su || sr ? transitionColor2 : transitionColor1,
-        0
-      );
+      tileset.render({
+        tileIndex: (r ? 16 : 15) + (u ? 0 : 1) * tileset.tilesPerRow,
+        pnt: topRight,
+        colors: su || sr ? transitionColor2 : transitionColor1,
+        bits: 0,
+      });
     }
 
     if (!d && !l) {
-      tileset.render(
-        (Tile.tickCount + 5) % 4,
-        bottomLeft,
-        col,
-        (Tile.tickCount - 6) % 4
-      );
+      tileset.render({
+        tileIndex: (Tile.tickCount + 5) % 4,
+        pnt: bottomLeft,
+        colors: col,
+        bits: (Tile.tickCount - 6) % 4,
+      });
     } else {
-      tileset.render(
-        (l ? 14 : 15) + (d ? 2 : 1) * tileset.tilesPerRow,
-        bottomLeft,
-        sd || sl ? transitionColor2 : transitionColor1,
-        0
-      );
+      tileset.render({
+        tileIndex: (l ? 14 : 15) + (d ? 2 : 1) * tileset.tilesPerRow,
+        pnt: bottomLeft,
+        colors: sd || sl ? transitionColor2 : transitionColor1,
+        bits: 0,
+      });
     }
     if (!d && !r) {
-      tileset.render(
-        (Tile.tickCount + 7) % 4,
-        bottomRight,
-        col,
-        (Tile.tickCount - 8) % 4
-      );
+      tileset.render({
+        tileIndex: (Tile.tickCount + 7) % 4,
+        pnt: bottomRight,
+        colors: col,
+        bits: (Tile.tickCount - 8) % 4,
+      });
     } else {
-      tileset.render(
-        (r ? 16 : 15) + (d ? 2 : 1) * tileset.tilesPerRow,
-        bottomRight,
-        sd || sr ? transitionColor2 : transitionColor1,
-        0
-      );
+      tileset.render({
+        tileIndex: (r ? 16 : 15) + (d ? 2 : 1) * tileset.tilesPerRow,
+        pnt: bottomRight,
+        colors: sd || sr ? transitionColor2 : transitionColor1,
+        bits: 0,
+      });
     }
   }
 

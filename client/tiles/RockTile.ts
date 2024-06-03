@@ -42,58 +42,80 @@ export default class RockTile extends Tile {
 
     if (!u && !l) {
       if (!ul) {
-        tileset.render(0, topLeft, col, 0);
+        tileset.render({tileIndex: 0, pnt: topLeft, colors: col, bits: 0});
       } else {
-        tileset.render(7 + 0 * 32, topLeft, transitionColor, 3);
+        tileset.render({
+          tileIndex: 7 + 0 * 32,
+          pnt: topLeft,
+          colors: transitionColor,
+          bits: 3,
+        });
       }
     } else {
-      tileset.render(
-        (l ? 6 : 5) + (u ? 2 : 1) * 32,
-        topLeft,
-        transitionColor,
-        3
-      );
+      tileset.render({
+        tileIndex: (l ? 6 : 5) + (u ? 2 : 1) * 32,
+        pnt: topLeft,
+        colors: transitionColor,
+        bits: 3,
+      });
     }
 
     if (!u && !r) {
       if (!ur) {
-        tileset.render(1, topRight, col, 0);
+        tileset.render({tileIndex: 1, pnt: topRight, colors: col, bits: 0});
       } else {
-        tileset.render(8 + 0 * 32, topRight, transitionColor, 3);
+        tileset.render({
+          tileIndex: 8 + 0 * 32,
+          pnt: topRight,
+          colors: transitionColor,
+          bits: 3,
+        });
       }
     } else {
-      tileset.render(
-        (r ? 4 : 5) + (u ? 2 : 1) * 32,
-        topRight,
-        transitionColor,
-        3
-      );
+      tileset.render({
+        tileIndex: (r ? 4 : 5) + (u ? 2 : 1) * 32,
+        pnt: topRight,
+        colors: transitionColor,
+        bits: 3,
+      });
     }
 
     if (!d && !l) {
-      if (!dl) tileset.render(2, bottomLeft, col, 0);
-      else tileset.render(7 + 1 * 32, bottomLeft, transitionColor, 3);
+      if (!dl)
+        tileset.render({tileIndex: 2, pnt: bottomLeft, colors: col, bits: 0});
+      else
+        tileset.render({
+          tileIndex: 7 + 1 * 32,
+          pnt: bottomLeft,
+          colors: transitionColor,
+          bits: 3,
+        });
     } else
-      tileset.render(
-        (l ? 6 : 5) + (d ? 0 : 1) * 32,
-        bottomLeft,
-        transitionColor,
-        3
-      );
+      tileset.render({
+        tileIndex: (l ? 6 : 5) + (d ? 0 : 1) * 32,
+        pnt: bottomLeft,
+        colors: transitionColor,
+        bits: 3,
+      });
 
     if (!d && !r) {
       if (!dr) {
-        tileset.render(3, bottomRight, col, 0);
+        tileset.render({tileIndex: 3, pnt: bottomRight, colors: col, bits: 0});
       } else {
-        tileset.render(8 + 1 * 32, bottomRight, transitionColor, 3);
+        tileset.render({
+          tileIndex: 8 + 1 * 32,
+          pnt: bottomRight,
+          colors: transitionColor,
+          bits: 3,
+        });
       }
     } else {
-      tileset.render(
-        (r ? 4 : 5) + (d ? 0 : 1) * 32,
-        bottomRight,
-        transitionColor,
-        3
-      );
+      tileset.render({
+        tileIndex: (r ? 4 : 5) + (d ? 0 : 1) * 32,
+        pnt: bottomRight,
+        colors: transitionColor,
+        bits: 3,
+      });
     }
   }
 

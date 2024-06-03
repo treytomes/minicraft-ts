@@ -35,7 +35,12 @@ export default class Font {
     for (let i = 0; i < msg.length; i++) {
       const ix = this.chars.indexOf(msg[i]);
       if (ix >= 0) {
-        this.tileset.render(ix + 30 * 32, x + i * 8, y, col);
+        this.tileset.render({
+          tileIndex: ix + 30 * 32,
+          x: x + i * 8,
+          y,
+          colors: col,
+        });
       }
     }
   }

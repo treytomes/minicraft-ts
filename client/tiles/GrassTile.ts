@@ -47,43 +47,43 @@ export class GrassTile extends Tile {
     );
 
     if (!u && !l) {
-      tileset.render(0, topLeft, col, 0);
+      tileset.render({tileIndex: 0, pnt: topLeft, colors: col, bits: 0});
     } else
-      tileset.render(
-        (l ? 11 : 12) + (u ? 0 : 1) * 32,
-        topLeft,
-        transitionColor,
-        0
-      );
+      tileset.render({
+        tileIndex: (l ? 11 : 12) + (u ? 0 : 1) * 32,
+        pnt: topLeft,
+        colors: transitionColor,
+        bits: 0,
+      });
 
     if (!u && !r) {
-      tileset.render(1, topRight, col, 0);
+      tileset.render({tileIndex: 1, pnt: topRight, colors: col, bits: 0});
     } else
-      tileset.render(
-        (r ? 13 : 12) + (u ? 0 : 1) * 32,
-        topRight,
-        transitionColor,
-        0
-      );
+      tileset.render({
+        tileIndex: (r ? 13 : 12) + (u ? 0 : 1) * 32,
+        pnt: topRight,
+        colors: transitionColor,
+        bits: 0,
+      });
 
     if (!d && !l) {
-      tileset.render(2, bottomLeft, col, 0);
+      tileset.render({tileIndex: 2, pnt: bottomLeft, colors: col, bits: 0});
     } else
-      tileset.render(
-        (l ? 11 : 12) + (d ? 2 : 1) * 32,
-        bottomLeft,
-        transitionColor,
-        0
-      );
+      tileset.render({
+        tileIndex: (l ? 11 : 12) + (d ? 2 : 1) * 32,
+        pnt: bottomLeft,
+        colors: transitionColor,
+        bits: 0,
+      });
     if (!d && !r) {
-      tileset.render(3, bottomRight, col, 0);
+      tileset.render({tileIndex: 3, pnt: bottomRight, colors: col, bits: 0});
     } else
-      tileset.render(
-        (r ? 13 : 12) + (d ? 2 : 1) * 32,
-        bottomRight,
-        transitionColor,
-        0
-      );
+      tileset.render({
+        tileIndex: (r ? 13 : 12) + (d ? 2 : 1) * 32,
+        pnt: bottomRight,
+        colors: transitionColor,
+        bits: 0,
+      });
   }
 
   tick(level: Level, xt: number, yt: number) {

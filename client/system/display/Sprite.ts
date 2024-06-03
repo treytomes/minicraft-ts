@@ -56,26 +56,30 @@ export default class Sprite {
 
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   render(time: GameTime) {
-    this.tileset.render(this.tileIndex, this.position, this.colors);
+    this.tileset.render({
+      tileIndex: this.tileIndex,
+      pnt: this.position,
+      colors: this.colors,
+    });
     if (this.size === 1) return;
 
-    this.tileset.render(
-      this.tileIndex + 1,
-      this.position.x + this.tileset.tileWidth,
-      this.position.y,
-      this.colors
-    );
-    this.tileset.render(
-      this.tileIndex + this.tileset.tilesPerRow,
-      this.position.x,
-      this.position.y + this.tileset.tileHeight,
-      this.colors
-    );
-    this.tileset.render(
-      this.tileIndex + this.tileset.tilesPerRow + 1,
-      this.position.x + this.tileset.tileWidth,
-      this.position.y + this.tileset.tileHeight,
-      this.colors
-    );
+    this.tileset.render({
+      tileIndex: this.tileIndex + 1,
+      x: this.position.x + this.tileset.tileWidth,
+      y: this.position.y,
+      colors: this.colors,
+    });
+    this.tileset.render({
+      tileIndex: this.tileIndex + this.tileset.tilesPerRow,
+      x: this.position.x,
+      y: this.position.y + this.tileset.tileHeight,
+      colors: this.colors,
+    });
+    this.tileset.render({
+      tileIndex: this.tileIndex + this.tileset.tilesPerRow + 1,
+      x: this.position.x + this.tileset.tileWidth,
+      y: this.position.y + this.tileset.tileHeight,
+      colors: this.colors,
+    });
   }
 }

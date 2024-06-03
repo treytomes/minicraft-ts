@@ -42,11 +42,11 @@ export default class ToolItem extends Item {
   }
 
   renderIcon(tileset: TileSet, x: number, y: number) {
-    tileset.render(this.icon, x, y, this.color);
+    tileset.render({tileIndex: this.icon, x, y, colors: this.color});
   }
 
   renderInventory(tileset: TileSet, font: Font, x: number, y: number) {
-    tileset.render(this.icon, x, y, this.color);
+    tileset.render({tileIndex: this.icon, x, y, colors: this.color});
     font.render(this.name, x + 8, y, PALETTE.get(-1, 555, 555, 555));
   }
 

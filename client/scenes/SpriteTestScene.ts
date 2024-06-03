@@ -102,7 +102,12 @@ export default class SpriteTestScene extends Scene {
     const colors = PALETTE.get(10, 30, 320, grassColor);
     for (let j = 3, x = 150; j <= 10; j++, x += 8) {
       for (let k = 21, y = 150; k <= 28; k++, y += 8) {
-        this.tileset.render(j + k * this.tileset.tilesPerRow, x, y, colors);
+        this.tileset.render({
+          tileIndex: j + k * this.tileset.tilesPerRow,
+          x,
+          y,
+          colors,
+        });
       }
     }
     super.render(time);

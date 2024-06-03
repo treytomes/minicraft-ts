@@ -67,12 +67,12 @@ export default class ButtonUIElement extends UIElement {
     // TODO: Maybe an indicator to the left if it's hovered?
 
     // Left side of button.
-    this.tileset.render(
-      1 + 29 * 32,
-      this.bounds.x,
-      this.bounds.y,
-      this.chromeColors
-    );
+    this.tileset.render({
+      tileIndex: 1 + 29 * 32,
+      x: this.bounds.x,
+      y: this.bounds.y,
+      colors: this.chromeColors,
+    });
 
     // Button text.
     this.font.render(
@@ -83,14 +83,15 @@ export default class ButtonUIElement extends UIElement {
     );
 
     // Right side of button.
-    this.tileset.render(
-      1 + 29 * 32,
-      this.bounds.x +
+    this.tileset.render({
+      tileIndex: 1 + 29 * 32,
+      x:
+        this.bounds.x +
         this.tileset.tileWidth +
         text.length * this.tileset.tileWidth,
-      this.bounds.y,
-      this.chromeColors,
-      BIT_MIRROR_X
-    );
+      y: this.bounds.y,
+      colors: this.chromeColors,
+      bits: BIT_MIRROR_X,
+    });
   }
 }

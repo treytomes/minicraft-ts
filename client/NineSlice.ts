@@ -23,81 +23,81 @@ export default class NineSlice {
 
   render(x: number, y: number, colors: Color[]) {
     // top-left
-    this.tileset.render(this.tileIndex, x, y, colors);
+    this.tileset.render({tileIndex: this.tileIndex, x, y, colors});
 
     // top-right
-    this.tileset.render(
-      this.tileIndex + 2,
-      x + this.tileset.tileWidth * (this.columns - 1),
+    this.tileset.render({
+      tileIndex: this.tileIndex + 2,
+      x: x + this.tileset.tileWidth * (this.columns - 1),
       y,
-      colors
-    );
+      colors,
+    });
 
     // bottom-left
-    this.tileset.render(
-      this.tileIndex + this.tileset.tilesPerRow * 2,
+    this.tileset.render({
+      tileIndex: this.tileIndex + this.tileset.tilesPerRow * 2,
       x,
-      y + this.tileset.tileHeight * (this.rows - 1),
-      colors
-    );
+      y: y + this.tileset.tileHeight * (this.rows - 1),
+      colors,
+    });
 
     // bottom-right
-    this.tileset.render(
-      this.tileIndex + 2 + this.tileset.tilesPerRow * 2,
-      x + this.tileset.tileWidth * (this.columns - 1),
-      y + this.tileset.tileHeight * (this.rows - 1),
-      colors
-    );
+    this.tileset.render({
+      tileIndex: this.tileIndex + 2 + this.tileset.tilesPerRow * 2,
+      x: x + this.tileset.tileWidth * (this.columns - 1),
+      y: y + this.tileset.tileHeight * (this.rows - 1),
+      colors,
+    });
 
     // left
     for (let row = 1; row < this.rows - 1; row++) {
-      this.tileset.render(
-        this.tileIndex + this.tileset.tilesPerRow,
+      this.tileset.render({
+        tileIndex: this.tileIndex + this.tileset.tilesPerRow,
         x,
-        y + this.tileset.tileHeight * row,
-        colors
-      );
+        y: y + this.tileset.tileHeight * row,
+        colors,
+      });
     }
 
     // right
     for (let row = 1; row < this.rows - 1; row++) {
-      this.tileset.render(
-        this.tileIndex + 2 + this.tileset.tilesPerRow,
-        x + this.tileset.tileWidth * (this.columns - 1),
-        y + this.tileset.tileHeight * row,
-        colors
-      );
+      this.tileset.render({
+        tileIndex: this.tileIndex + 2 + this.tileset.tilesPerRow,
+        x: x + this.tileset.tileWidth * (this.columns - 1),
+        y: y + this.tileset.tileHeight * row,
+        colors,
+      });
     }
 
     // top
     for (let col = 1; col < this.columns - 1; col++) {
-      this.tileset.render(
-        this.tileIndex + 1,
-        x + this.tileset.tileWidth * col,
+      this.tileset.render({
+        tileIndex: this.tileIndex + 1,
+        x: x + this.tileset.tileWidth * col,
         y,
-        colors
-      );
+        colors,
+      });
     }
 
     // bottom
     for (let col = 1; col < this.columns - 1; col++) {
-      this.tileset.render(
-        this.tileIndex + 1 + this.tileset.tilesPerRow * 2,
-        x + this.tileset.tileWidth * col,
-        y + this.tileset.tileHeight * (this.rows - 1),
-        colors
-      );
+      this.tileset.render({
+        tileIndex: this.tileIndex + 1 + this.tileset.tilesPerRow * 2,
+        x: x + this.tileset.tileWidth * col,
+        y: y + this.tileset.tileHeight * (this.rows - 1),
+        colors,
+      });
     }
 
     // center
     for (let row = 1; row < this.rows - 1; row++) {
       for (let col = 1; col < this.columns - 1; col++) {
-        this.tileset.render(
-          this.tileIndex + this.tileset.tilesPerRow + 1,
-          x + this.tileset.tileWidth * col,
-          y + this.tileset.tileHeight * row,
-          colors
-        );
+        this.tileset.render({
+          tileIndex: this.tileIndex + this.tileset.tilesPerRow + 1,
+          x: x + this.tileset.tileWidth * col,
+          y: y + this.tileset.tileHeight * row,
+          colors,
+        });
       }
     }
   }

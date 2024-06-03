@@ -42,24 +42,36 @@ export class TreeTile extends Tile {
     );
 
     if (u && ul && l) {
-      tileset.render(10 + 1 * 32, topLeft, col, 0);
+      tileset.render({tileIndex: 10 + 1 * 32, pnt: topLeft, colors: col});
     } else {
-      tileset.render(9 + 0 * 32, topLeft, col, 0);
+      tileset.render({tileIndex: 9 + 0 * 32, pnt: topLeft, colors: col});
     }
     if (u && ur && r) {
-      tileset.render(10 + 2 * 32, topRight, barkCol2, 0);
+      tileset.render({tileIndex: 10 + 2 * 32, pnt: topRight, colors: barkCol2});
     } else {
-      tileset.render(10 + 0 * 32, topRight, col, 0);
+      tileset.render({tileIndex: 10 + 0 * 32, pnt: topRight, colors: col});
     }
     if (d && dl && l) {
-      tileset.render(10 + 2 * 32, bottomLeft, barkCol2, 0);
+      tileset.render({
+        tileIndex: 10 + 2 * 32,
+        pnt: bottomLeft,
+        colors: barkCol2,
+      });
     } else {
-      tileset.render(9 + 1 * 32, bottomLeft, barkCol1, 0);
+      tileset.render({
+        tileIndex: 9 + 1 * 32,
+        pnt: bottomLeft,
+        colors: barkCol1,
+      });
     }
     if (d && dr && r) {
-      tileset.render(10 + 1 * 32, bottomRight, col, 0);
+      tileset.render({tileIndex: 10 + 1 * 32, pnt: bottomRight, colors: col});
     } else {
-      tileset.render(10 + 3 * 32, bottomRight, barkCol2, 0);
+      tileset.render({
+        tileIndex: 10 + 3 * 32,
+        pnt: bottomRight,
+        colors: barkCol2,
+      });
     }
   }
 
