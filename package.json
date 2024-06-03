@@ -62,7 +62,7 @@
     "canvas": "^2.11.2",
     "convict": "^6.2.4",
     "dotenv": "^16.4.5",
-    "electron-squirrel-startup": "^1.0.0",
+    "electron-squirrel-startup": "^1.0.1",
     "image-js": "^0.35.5",
     "ml-regression-base": "^3.0.0",
     "ml-regression-exponential": "^2.1.2",
