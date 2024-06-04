@@ -1,7 +1,7 @@
-import Entity from './Entity';
+import Mob from './Mob';
 
 // TODO: Finish implementing player.
-export default class Player extends Entity {
+export default class Player extends Mob {
   maxStamina = 10;
   stamina = this.maxStamina;
 

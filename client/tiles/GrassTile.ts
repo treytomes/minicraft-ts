@@ -10,7 +10,7 @@ import ToolItem from '../items/ToolItem';
 import ToolType from '../ToolType';
 import {Sound} from '../system/audio/sound';
 
-export class GrassTile extends Tile {
+export default class GrassTile extends Tile {
   constructor() {
     super(new Color(0x20, 0x80, 0x20));
     this.connectsToGrass = true;

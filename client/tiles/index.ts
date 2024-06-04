@@ -1,15 +1,15 @@
 import {tiles, Tile} from './Tile';
-// export * as Tile from './Tile';
 import {WaterTile} from './WaterTile';
 import {Color, PALETTE} from '../system/display';
-import {GrassTile} from './GrassTile';
+import GrassTile from './GrassTile';
 import RockTile from './RockTile';
-import {TreeTile} from './TreeTile';
+import TreeTile from './TreeTile';
+import SandTile from './SandTile';
 
 export const getById = (tileId: number) => tiles[tileId];
 
 export const rock = new RockTile();
-export const sand = new Tile(new Color(0xa0, 0xa0, 0x40));
+export const sand = new SandTile();
 export const grass = new GrassTile();
 export const tree = new TreeTile();
 export const stairsDown = new Tile(PALETTE.get(555)[0]);

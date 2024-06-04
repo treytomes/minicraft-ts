@@ -9,7 +9,7 @@ import ToolType from '../ToolType';
 import Random from '../Random';
 import Level from '../Level';
 
-export class TreeTile extends Tile {
+export default class TreeTile extends Tile {
   constructor() {
     super(PALETTE.get(10)[0]);
     this.connectsToGrass = true;
