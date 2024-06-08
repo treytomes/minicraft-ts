@@ -6,13 +6,12 @@ import Mob from '../entities/Mob';
 import Player from '../entities/Player';
 import Item from '../items/Item';
 import ToolItem from '../items/ToolItem';
-import {Color, PALETTE, TileSet} from '../system/display';
+import {PALETTE, TileSet} from '../system/display';
 import {Tile} from './Tile';
-import * as tiles from '.';
 
 export default class SandTile extends Tile {
   constructor() {
-    super(new Color(0xa0, 0xa0, 0x40));
+    super(PALETTE.get(441)[0]);
     this.connectsToSand = true;
   }
 

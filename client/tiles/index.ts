@@ -5,6 +5,7 @@ import GrassTile from './GrassTile';
 import RockTile from './RockTile';
 import TreeTile from './TreeTile';
 import SandTile from './SandTile';
+import StairsTile from './StairsTile';
 
 export const getById = (tileId: number) => tiles[tileId];
 
@@ -12,7 +13,7 @@ export const rock = new RockTile();
 export const sand = new SandTile();
 export const grass = new GrassTile();
 export const tree = new TreeTile();
-export const stairsDown = new Tile(PALETTE.get(555)[0]);
+export const stairsDown = new StairsTile(false);
 export const ironOre = new Tile(PALETTE.get(550)[0]);
 export const goldOre = new Tile(PALETTE.get(550)[0]);
 export const gemOre = new Tile(PALETTE.get(550)[0]);
@@ -24,6 +25,6 @@ export const cactus = new Tile(new Color(0, 0xee, 0));
 export const lava = new Tile(new Color(0xff, 0x20, 0x20));
 export const infiniteFall = new Tile(PALETTE.get(0)[0]);
 export const cloudCactus = new Tile(PALETTE.get(505)[0]);
-export const stairsUp = new Tile(PALETTE.get(555)[0]);
+export const stairsUp = new StairsTile(true);
 export const hole = new Tile(PALETTE.get(0)[0]);
 export const farmland = new Tile(new Color(0x60, 0x40, 0x40));

@@ -1,7 +1,7 @@
 import Level from '../Level';
 import {Tile} from './Tile';
 import * as tiles from '../tiles';
-import {Color, PALETTE, TileSet} from '../system/display';
+import {PALETTE, TileSet} from '../system/display';
 import {Camera} from '../Camera';
 import Random from '../Random';
 import Item from '../items/Item';
@@ -12,7 +12,7 @@ import {Sound} from '../system/audio/sound';
 
 export default class GrassTile extends Tile {
   constructor() {
-    super(new Color(0x20, 0x80, 0x20));
+    super(PALETTE.get(131)[0]);
     this.connectsToGrass = true;
   }
 
