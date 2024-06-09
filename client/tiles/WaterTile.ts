@@ -1,6 +1,5 @@
 import Level from '../Level';
-import {Tile} from './Tile';
-import * as tiles from '../tiles';
+import {Tile, Tiles} from './Tile';
 import {Color, PALETTE, TileSet} from '../system/display';
 import {Camera} from '../Camera';
 import Entity from '../entities/Entity';
@@ -127,7 +126,7 @@ export class WaterTile extends Tile {
       yn += Random.nextInt(2) * 2 - 1;
     }
 
-    if (level.getTile(xn, yn).equals(tiles.hole)) {
+    if (level.getTile(xn, yn).equals(Tiles.hole)) {
       level.setTile(xn, yn, this, 0);
     }
   }

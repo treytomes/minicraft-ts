@@ -13,7 +13,8 @@ const TILE_WIDTH = 16;
 const TILE_HEIGHT = 16;
 const TILE_TICKRATE_MS = 300;
 
-export const tiles: Tile[] = [];
+export const Tiles: Record<string, Tile> = {};
+const indexedTiles: Tile[] = [];
 
 export class Tile {
   public static readonly width: number = TILE_WIDTH;
@@ -29,8 +30,8 @@ export class Tile {
   public connectsToWater = false;
 
   constructor(mapColor: Color) {
-    this.id = tiles.length;
-    tiles.push(this);
+    this.id = indexedTiles.length;
+    indexedTiles.push(this);
     this.mapColor = mapColor;
   }
 
@@ -114,5 +115,12 @@ export class Tile {
     attackDir: number
   ) {
     this.hurt(level, x, y, dmg);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  bumpedInto(level: Level, x: number, y: number, entity: Entity) {}
+
+  static getById(tileId: number) {
+    return indexedTiles[tileId];
   }
 }

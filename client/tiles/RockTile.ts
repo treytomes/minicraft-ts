@@ -179,7 +179,7 @@ export default class RockTile extends Tile {
     //       )
     //     );
     //   }
-    //   level.setTile(x, y, tiles.dirt, 0);
+    //   level.setTile(x, y, Tiles.dirt, 0);
     // } else {
     //   level.setData(x, y, damage);
     // }

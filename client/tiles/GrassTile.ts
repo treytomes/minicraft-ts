@@ -1,6 +1,5 @@
 import Level from '../Level';
-import {Tile} from './Tile';
-import * as tiles from '../tiles';
+import {Tiles, Tile} from './Tile';
 import {PALETTE, TileSet} from '../system/display';
 import {Camera} from '../Camera';
 import Random from '../Random';
@@ -98,7 +97,7 @@ export default class GrassTile extends Tile {
       yn += Random.nextInt(2) * 2 - 1;
     }
 
-    if (level.getTile(xn, yn).equals(tiles.dirt)) {
+    if (level.getTile(xn, yn).equals(Tiles.dirt)) {
       level.setTile(xn, yn, this, 0);
     }
   }
@@ -122,7 +121,7 @@ export default class GrassTile extends Tile {
       const tool = item as ToolItem;
       if (tool.type === ToolType.shovel) {
         if (player.payStamina(4 - tool.level)) {
-          level.setTile(xt, yt, tiles.dirt, 0);
+          level.setTile(xt, yt, Tiles.dirt, 0);
           Sound.monsterhurt.play();
           // if (Random.nextInt(5) === 0) {
           //   level.add(
@@ -149,7 +148,7 @@ export default class GrassTile extends Tile {
           //   );
           //   return true;
           // }
-          level.setTile(xt, yt, tiles.farmland, 0);
+          level.setTile(xt, yt, Tiles.farmland, 0);
           return true;
         }
       }

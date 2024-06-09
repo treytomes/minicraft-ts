@@ -2,6 +2,9 @@ import Game from './system/Game';
 import {GameTime} from './system/GameTime';
 import MainMenuScene from './scenes/MainMenuScene';
 import {PALETTE, clear} from './system/display';
+import './resources'; // most resources need to be defined before the tiles...
+import './tiles';
+// ...but some resources need to be defined after the tiles!
 
 export default class MinicraftGame extends Game {
   constructor(width: number, height: number) {

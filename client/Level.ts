@@ -1,6 +1,6 @@
 import LevelGen from './LevelGen';
 import * as tiles from './tiles';
-import {Tile} from './tiles/Tile';
+import {Tile, Tiles} from './tiles/Tile';
 
 const DEFAULT_WIDTH = 128;
 const DEFAULT_HEIGHT = 128;
@@ -48,9 +48,9 @@ export default class Level {
   getTile(x: number, y: number): Tile {
     if (x < 0 || y < 0 || x >= this.width || y >= this.height) {
       // TODO: Maybe this should be an infiniteFall tile?  Makes sense for a flat world?
-      return tiles.water;
+      return Tiles.water;
     }
-    return tiles.getById(this.tileData[x + y * this.width]);
+    return Tile.getById(this.tileData[x + y * this.width]);
   }
 
   setTile(x: number, y: number, tile: Tile, data: number) {

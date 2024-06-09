@@ -128,7 +128,7 @@ export default class TreeTile extends Tile {
     // 	for (let i = 0; i < count; i++) {
     // 		level.add(new ItemEntity(new ResourceItem(Resource.acorn), x * 16 + Random.nextInt(10) + 3, y * 16 + Random.nextInt(10) + 3));
     // 	}
-    // 	level.setTile(x, y, tiles.grass, 0);
+    // 	level.setTile(x, y, Tiles.grass, 0);
     // } else {
     // 	level.setData(x, y, damage);
     // }

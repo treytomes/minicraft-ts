@@ -155,7 +155,7 @@ export default class SandTile extends Tile {
       if (tool.type === ToolType.shovel) {
         if (player.payStamina(4 - tool.level)) {
           // TODO: Finish implementing SandTile.interact.
-          // level.setTile(xt, yt, tiles.dirt, 0);
+          // level.setTile(xt, yt, Tiles.dirt, 0);
           // level.add(new ItemEntity(new ResourceItem(Resource.sand), xt * 16 + Random.nextInt(10) + 3, yt * 16 + Random.nextInt(10) + 3));
           return true;
         }
