@@ -3,7 +3,7 @@ import Level from '../Level';
 import Entity from '../entities/Entity';
 import Mob from '../entities/Mob';
 import {PALETTE, TileSet} from '../system/display';
-import {Tile, Tiles} from './Tile';
+import {Tile} from './Tile';
 
 export default class CactusTile extends Tile {
   constructor() {
