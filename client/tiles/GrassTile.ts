@@ -1,6 +1,6 @@
 import Level from '../Level';
 import {Tiles, Tile} from './Tile';
-import {PALETTE, TileSet} from '../system/display';
+import {Color, PALETTE, TileSet} from '../system/display';
 import {Camera} from '../Camera';
 import Random from '../Random';
 import Item from '../items/Item';
@@ -10,8 +10,8 @@ import ToolType from '../ToolType';
 import {Sound} from '../system/audio/sound';
 
 export default class GrassTile extends Tile {
-  constructor() {
-    super(PALETTE.get(131)[0]);
+  constructor(mapColor?: Color) {
+    super(mapColor ?? PALETTE.get(131)[0]);
     this.connectsToGrass = true;
   }
 
