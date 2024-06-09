@@ -9,6 +9,7 @@ import StairsTile from './StairsTile';
 import OreTile from './OreTile';
 import {Resources} from '../resources/Resource';
 import PlantableResource from '../resources/PlantableResource';
+import DirtTile from './DirtTile';
 
 Tiles.rock = new RockTile();
 Tiles.sand = new SandTile();
@@ -18,7 +19,7 @@ Tiles.stairsDown = new StairsTile(false);
 Tiles.ironOre = new OreTile(Resources.ironOre);
 Tiles.goldOre = new OreTile(Resources.goldOre);
 Tiles.gemOre = new OreTile(Resources.gem);
-Tiles.dirt = new Tile(PALETTE.get(211)[0]);
+Tiles.dirt = new DirtTile();
 Tiles.cloud = new Tile(PALETTE.get(333)[0]);
 Tiles.water = new WaterTile();
 Tiles.flower = new Tile(PALETTE.get(414)[0]);
