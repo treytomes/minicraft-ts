@@ -29,6 +29,10 @@ export class Tile {
   public connectsToSand = false;
   public connectsToWater = false;
 
+  get connectsToLiquid() {
+    return this.connectsToWater || this.connectsToLava;
+  }
+
   constructor(mapColor: Color) {
     this.id = indexedTiles.length;
     indexedTiles.push(this);
@@ -124,6 +128,9 @@ export class Tile {
   getLightRadius(level: Level, x: number, y: number) {
     return 0;
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  steppedOn(level: Level, xt: number, yt: number, entity: Entity) {}
 
   static getById(tileId: number) {
     return indexedTiles[tileId];

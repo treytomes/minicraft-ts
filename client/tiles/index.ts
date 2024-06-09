@@ -16,6 +16,8 @@ import CactusTile from './CactusTile';
 import LavaTile from './LavaTile';
 import InfiniteFallTile from './InfiniteFallTile';
 import CloudCactusTile from './CloudCactusTile';
+import HoleTile from './HoleTile';
+import FarmTile from './FarmTile';
 
 Tiles.rock = new RockTile();
 Tiles.sand = new SandTile();
@@ -34,8 +36,8 @@ Tiles.lava = new LavaTile();
 Tiles.infiniteFall = new InfiniteFallTile();
 Tiles.cloudCactus = new CloudCactusTile();
 Tiles.stairsUp = new StairsTile(true);
-Tiles.hole = new Tile(PALETTE.get(0)[0]);
-Tiles.farmland = new Tile(PALETTE.get(211)[0]);
+Tiles.hole = new HoleTile();
+Tiles.farmland = new FarmTile();
 
 // These resources need to be explicitly defined after the tiles they use.
 
