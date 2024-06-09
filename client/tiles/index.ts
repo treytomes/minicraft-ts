@@ -13,6 +13,7 @@ import DirtTile from './DirtTile';
 import CloudTile from './CloudTile';
 import FlowerTile from './FlowerTile';
 import CactusTile from './CactusTile';
+import LavaTile from './LavaTile';
 
 Tiles.rock = new RockTile();
 Tiles.sand = new SandTile();
@@ -27,7 +28,7 @@ Tiles.cloud = new CloudTile();
 Tiles.water = new WaterTile();
 Tiles.flower = new FlowerTile();
 Tiles.cactus = new CactusTile();
-Tiles.lava = new Tile(PALETTE.get(511)[0]);
+Tiles.lava = new LavaTile();
 Tiles.infiniteFall = new Tile(PALETTE.get(0)[0]);
 Tiles.cloudCactus = new Tile(PALETTE.get(505)[0]);
 Tiles.stairsUp = new StairsTile(true);

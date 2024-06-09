@@ -120,6 +120,11 @@ export class Tile {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   bumpedInto(level: Level, x: number, y: number, entity: Entity) {}
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getLightRadius(level: Level, x: number, y: number) {
+    return 0;
+  }
+
   static getById(tileId: number) {
     return indexedTiles[tileId];
   }
