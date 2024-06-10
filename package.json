@@ -1,8 +1,8 @@
 {
   "name": "minicraft-ts",
-  "productName": "MiniCraft/TypeScript",
+  "productName": "minicraft-ts",
   "version": "1.0.0",
-  "description": "Reimagining the MiniCraft game in a TypeScript/Electron environment.",
+  "description": "Re-imagining the MiniCraft game in a TypeScript/Electron environment.",
   "main": "dist/server/server-bundle.js",
   "scripts": {
     "start": "npm-run-all build watch",
@@ -10,7 +10,10 @@
     "build": "webpack --config webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "package": "electron-forge package",
-    "make": "electron-forge make",
+    "make:linux": "electron-forge make --platform linux",
+    "make:win32": "electron-forge make --platform win32",
+    "make:darwin": "electron-forge make --platform darwin",
+    "make:all": "npm-run-all build make:linux make:win32 make:darwin",
     "lint": "gts lint",
     "prettier": "prettier .",
     "prettier:write": "prettier . --write",

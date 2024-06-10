@@ -69,6 +69,7 @@ module.exports = [
           {from: './client/public/canvas.fs', to: 'canvas.fs'},
           {from: './client/public/canvas.vs', to: 'canvas.vs'},
           {context: './client/', from: './assets/*.wav', to: '.'},
+          {context: './client/', from: './assets/*.png', to: '.'},
         ],
       }),
     ],

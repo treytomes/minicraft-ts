@@ -4,6 +4,7 @@ import MainMenuScene from './scenes/MainMenuScene';
 import {PALETTE, clear} from './system/display';
 import './resources'; // most resources need to be defined before the tiles...
 import './tiles';
+import * as img from 'image-js';
 // ...but some resources need to be defined after the tiles!
 
 export default class MinicraftGame extends Game {

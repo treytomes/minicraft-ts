@@ -124,7 +124,7 @@ export default class SpriteTestScene extends Scene {
     } else if (e.key === Keys.ArrowLeft) {
       this.player.speed = Point.unitX.multiply(PLAYER_SPEED).negate;
     } else if (e.key === Keys.ArrowRight) {
-      this.player.speed = Point.unitY.multiply(PLAYER_SPEED);
+      this.player.speed = Point.unitX.multiply(PLAYER_SPEED);
     }
 
     if (e.key === Keys.Escape) {
