@@ -1,4 +1,4 @@
-import {BrowserWindow, IpcMainInvokeEvent, ipcMain} from 'electron';
+import {BrowserWindow, ipcMain} from 'electron';
 import * as api from './api';
 import {config} from './config';
 import * as paths from './paths';
@@ -55,36 +55,7 @@ export default class Main {
   private static onReady() {
     logger.info('Hello from Electron 👋');
 
-    ipcMain.handle('sample/ping', async () => {
-      logger.debug('Calling sample/ping.');
-      return await (await api).sample.ping();
-      // await api.sample.ping();
-    });
-
-    ipcMain.handle('gfx/getTiles', async () => {
-      logger.debug('Calling gfx/getTiles.');
-      return await (await api).gfx.getTiles();
-    });
-
-    ipcMain.handle('sfx/loadWave', async (event: IpcMainInvokeEvent, path) => {
-      logger.debug(`Calling sfx/loadWave: ${path}`);
-      return await (await api).sfx.loadWave(path);
-    });
-
-    ipcMain.handle('system/config', () => {
-      return {
-        debug: config.get('debug'),
-        environment: config.get('environment'),
-      };
-    });
-
-    ipcMain.handle(
-      'system/exit',
-      async (event: IpcMainInvokeEvent, exitCode) => {
-        logger.debug(`Calling system/exit: ${exitCode}`);
-        Main.application.exit(exitCode);
-      }
-    );
+    api.register({ipcMain, application: Main.application});
 
     Main.createWindow();
   }
