@@ -1,9 +1,24 @@
 import LevelGen from './LevelGen';
+import Entity from './entities/Entity';
 import * as tiles from './tiles';
 import {Tile, Tiles} from './tiles/Tile';
 
 const DEFAULT_WIDTH = 128;
 const DEFAULT_HEIGHT = 128;
+const DEFAULT_COLOR_GRASS = 141;
+const DEFAULT_COLOR_DIRT = 322;
+const DEFAULT_COLOR_SAND = 550;
+
+type LevelProps = {
+  depth: number;
+  tileData: number[];
+  metaData: number[];
+  width?: number;
+  height?: number;
+  grassColor?: number;
+  dirtColor?: number;
+  sandColor?: number;
+};
 
 export default class Level {
   public readonly width: number;
@@ -12,37 +27,22 @@ export default class Level {
 
   private readonly tileData: number[];
   private readonly metaData: number[];
+  // private entitiesInTiles: Entity[];
 
-  public readonly grassColor = 141;
-  public readonly dirtColor = 322;
-  public readonly sandColor = 550;
+  public readonly grassColor: number;
+  public readonly dirtColor: number;
+  public readonly sandColor: number;
+  public monsterDensity = 8;
 
-  constructor(
-    depth: number,
-    width: number | undefined = undefined,
-    height: number | undefined = undefined
-  ) {
-    this.depth = depth;
-    this.width = width ?? DEFAULT_WIDTH;
-    this.height = height ?? DEFAULT_HEIGHT;
-
-    if (this.depth === -1) {
-      const data = LevelGen.createAndValidateSkyMap(this.width, this.height);
-      this.tileData = data[0];
-      this.metaData = data[1];
-    } else if (this.depth === 0) {
-      const data = LevelGen.createAndValidateTopMap(this.width, this.height);
-      this.tileData = data[0];
-      this.metaData = data[1];
-    } else {
-      const data = LevelGen.createAndValidateUndergroundMap(
-        this.width,
-        this.height,
-        this.depth
-      );
-      this.tileData = data[0];
-      this.metaData = data[1];
-    }
+  constructor(props: LevelProps) {
+    this.depth = props.depth;
+    this.tileData = props.tileData;
+    this.metaData = props.metaData;
+    this.width = props.width ?? DEFAULT_WIDTH;
+    this.height = props.height ?? DEFAULT_HEIGHT;
+    this.grassColor = props.grassColor ?? DEFAULT_COLOR_GRASS;
+    this.dirtColor = props.dirtColor ?? DEFAULT_COLOR_DIRT;
+    this.sandColor = props.sandColor ?? DEFAULT_COLOR_SAND;
   }
 
   getTile(x: number, y: number): Tile {

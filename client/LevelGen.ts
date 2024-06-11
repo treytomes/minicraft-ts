@@ -1,6 +1,9 @@
+import Level from './Level';
 import Random from './Random';
-import * as tiles from './tiles';
 import {Tiles} from './tiles/Tile';
+
+const DEFAULT_WIDTH = 128;
+const DEFAULT_HEIGHT = 128;
 
 export default class LevelGen {
   public values: Float64Array;
@@ -71,7 +74,59 @@ export default class LevelGen {
     this.values[(x & (this.w - 1)) + (y & (this.h - 1)) * this.w] = value;
   }
 
-  public static createAndValidateTopMap(w: number, h: number): number[][] {
+  public static createAndValidateMap(
+    depth: number,
+    parentLevel?: Level
+  ): Level {
+    if (depth === 1) {
+      return this.generateStairsUp(
+        this.createAndValidateSkyMap(DEFAULT_WIDTH, DEFAULT_HEIGHT),
+        parentLevel
+      );
+    } else if (depth === 0) {
+      return this.generateStairsUp(
+        this.createAndValidateTopMap(DEFAULT_WIDTH, DEFAULT_HEIGHT),
+        parentLevel
+      );
+    } else {
+      return this.generateStairsUp(
+        this.createAndValidateUndergroundMap(
+          DEFAULT_WIDTH,
+          DEFAULT_HEIGHT,
+          -depth
+        ),
+        parentLevel
+      );
+    }
+  }
+
+  /**
+   * If the new level has a level above it, ensure that you can get back up to the parent level with a nice set of stairs.
+   */
+  private static generateStairsUp(level: Level, parentLevel?: Level): Level {
+    if (!parentLevel) return level;
+
+    for (let y = 0; y < level.height; y++) {
+      for (let x = 0; x < level.width; x++) {
+        if (!parentLevel.getTile(x, y).equals(Tiles.stairsDown)) continue;
+
+        level.setTile(x, y, Tiles.stairsUp, 0);
+        const wallTile = level.depth === 0 ? Tiles.hardRock : Tiles.dirt;
+        level.setTile(x - 1, y - 1, wallTile, 0);
+        level.setTile(x + 0, y - 1, wallTile, 0);
+        level.setTile(x + 1, y - 1, wallTile, 0);
+        level.setTile(x - 1, y + 0, wallTile, 0);
+        level.setTile(x + 1, y + 0, wallTile, 0);
+        level.setTile(x - 1, y + 1, wallTile, 0);
+        level.setTile(x + 0, y + 1, wallTile, 0);
+        level.setTile(x + 1, y + 1, wallTile, 0);
+      }
+    }
+
+    return level;
+  }
+
+  public static createAndValidateTopMap(w: number, h: number): Level {
     do {
       const result = this.createTopMap(w, h);
 
@@ -86,7 +141,11 @@ export default class LevelGen {
       if (count[Tiles.tree.id & 0xff] < 100) continue;
       if (count[Tiles.stairsDown.id & 0xff] < 2) continue;
 
-      return result;
+      return new Level({
+        depth: 0,
+        tileData: result[0],
+        metaData: result[1],
+      });
       // eslint-disable-next-line no-constant-condition
     } while (true);
   }
@@ -95,7 +154,7 @@ export default class LevelGen {
     w: number,
     h: number,
     depth: number
-  ): number[][] {
+  ): Level {
     do {
       const result = this.createUndergroundMap(w, h, depth);
 
@@ -109,12 +168,17 @@ export default class LevelGen {
       if (count[(Tiles.ironOre.id & 0xff) + depth - 1] < 20) continue;
       if (depth < 3) if (count[Tiles.stairsDown.id & 0xff] < 2) continue;
 
-      return result;
+      return new Level({
+        depth: depth,
+        tileData: result[0],
+        metaData: result[1],
+        dirtColor: 444,
+      });
       // eslint-disable-next-line no-constant-condition
     } while (true);
   }
 
-  public static createAndValidateSkyMap(w: number, h: number): number[][] {
+  public static createAndValidateSkyMap(w: number, h: number): Level {
     do {
       const result = this.createSkyMap(w, h);
 
@@ -126,7 +190,12 @@ export default class LevelGen {
       if (count[Tiles.cloud.id & 0xff] < 2000) continue;
       if (count[Tiles.stairsDown.id & 0xff] < 2) continue;
 
-      return result;
+      return new Level({
+        depth: 1,
+        tileData: result[0],
+        metaData: result[1],
+        dirtColor: 444,
+      });
       // eslint-disable-next-line no-constant-condition
     } while (true);
   }

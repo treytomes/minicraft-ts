@@ -1,51 +1,79 @@
+import {Camera} from '../Camera';
 import Level from '../Level';
-import {Tile} from '../tiles/Tile';
+import LevelGen from '../LevelGen';
 import Game from '../system/Game';
 import {GameTime} from '../system/GameTime';
 import Scene from '../system/Scene';
 import {PALETTE, clear} from '../system/display';
 import {Keys} from '../system/input';
-import {ButtonUIElement, LabelUIElement} from '../system/ui';
 import {Point, Rectangle} from '../system/math';
-import {Camera} from '../Camera';
-import LevelGen from '../LevelGen';
+import {ButtonUIElement, LabelUIElement} from '../system/ui';
+import {Tile} from '../tiles';
 
 const PLAYER_SPEED = 1;
 
-export default class LevelRendererScene extends Scene {
-  private level: Level;
-  private depth = 0;
+class World {
+  private levels: Record<number, Level> = {};
+  private _currentDepth = 0;
+
+  get width() {
+    return this.levels[0].width;
+  }
+
+  get height() {
+    return this.levels[0].height;
+  }
+
+  get currentDepth() {
+    return this._currentDepth;
+  }
+
+  set currentDepth(value: number) {
+    if (
+      Object.keys(this.levels)
+        .map(x => parseInt(x))
+        .includes(value)
+    ) {
+      this._currentDepth = value;
+    } else {
+      // throw new Error(`World does not include this depth: ${value}`);
+    }
+  }
+
+  get currentLevel(): Level {
+    return this.levels[this._currentDepth];
+  }
+
+  constructor() {
+    this.levels[1] = LevelGen.createAndValidateMap(1);
+    this.levels[0] = LevelGen.createAndValidateMap(0, this.levels[1]);
+    this.levels[-1] = LevelGen.createAndValidateMap(-1, this.levels[0]);
+    this.levels[-2] = LevelGen.createAndValidateMap(-2, this.levels[-1]);
+    this.levels[-3] = LevelGen.createAndValidateMap(-3, this.levels[-2]);
+  }
+}
+
+export default class GameplayScene extends Scene {
+  private world: World;
   private camera: Camera;
   private delta = Point.zero;
 
   constructor(game: Game) {
     super(game);
 
-    this.level = LevelGen.createAndValidateMap(0);
+    this.world = new World();
 
     this.camera = new Camera(
       new Rectangle(
         0,
         0,
-        this.level.width * Tile.width - this.width,
-        this.level.height * Tile.height - this.height
+        this.world.width * Tile.width - this.width,
+        this.world.height * Tile.height - this.height
       )
     );
 
     let y = -10;
     const x = this.width - 7 * 8;
-
-    const regenButton = new ButtonUIElement(
-      this.tileset,
-      this.font,
-      'REGEN',
-      x,
-      (y += 10)
-    );
-    regenButton.onClick = () => {
-      this.level = LevelGen.createAndValidateMap(this.depth);
-    };
-    this.uiElements.push(regenButton);
 
     const upButton = new ButtonUIElement(
       this.tileset,
@@ -55,9 +83,7 @@ export default class LevelRendererScene extends Scene {
       (y += 10)
     );
     upButton.onClick = () => {
-      this.depth += 1;
-      if (this.depth > 1) this.depth = 1;
-      this.level = LevelGen.createAndValidateMap(this.depth);
+      this.world.currentDepth++;
     };
     this.uiElements.push(upButton);
 
@@ -69,9 +95,7 @@ export default class LevelRendererScene extends Scene {
       (y += 10)
     );
     downButton.onClick = () => {
-      this.depth -= 1;
-      if (this.depth < -3) this.depth = -3;
-      this.level = LevelGen.createAndValidateMap(this.depth);
+      this.world.currentDepth--;
     };
     this.uiElements.push(downButton);
 
@@ -88,7 +112,12 @@ export default class LevelRendererScene extends Scene {
     this.uiElements.push(backButton);
 
     this.uiElements.push(
-      new LabelUIElement(this.font, () => `DEPTH:${this.depth}`, 0, 0)
+      new LabelUIElement(
+        this.font,
+        () => `DEPTH:${this.world.currentDepth}`,
+        0,
+        0
+      )
     );
   }
 
@@ -101,12 +130,12 @@ export default class LevelRendererScene extends Scene {
   render(time: GameTime) {
     clear(PALETTE.get(1)[0]);
 
-    for (let y = 0; y < this.level.height; y++) {
-      for (let x = 0; x < this.level.width; x++) {
-        const tile = this.level.getTile(x, y);
+    for (let y = 0; y < this.world.currentLevel.height; y++) {
+      for (let x = 0; x < this.world.currentLevel.width; x++) {
+        const tile = this.world.currentLevel.getTile(x, y);
         tile.render(
           this.tileset,
-          this.level,
+          this.world.currentLevel,
           x * Tile.width,
           y * Tile.height,
           this.camera

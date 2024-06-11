@@ -9,14 +9,14 @@ import ToolItem from '../items/ToolItem';
 import {PALETTE, TileSet} from '../system/display';
 import {Tile} from './Tile';
 
-export default class RockTile extends Tile {
+export default class HardRockTile extends Tile {
   constructor() {
-    super(PALETTE.get(333)[0]);
+    super(PALETTE.get(222)[0]);
   }
 
   render(tileset: TileSet, level: Level, x: number, y: number, camera: Camera) {
-    const col = PALETTE.get(444, 444, 333, 333);
-    const transitionColor = PALETTE.get(111, 444, 555, level.dirtColor);
+    const col = PALETTE.get(334, 334, 223, 223);
+    const transitionColor = PALETTE.get(1, 334, 445, level.dirtColor);
 
     const tx = Math.floor(x / Tile.width);
     const ty = Math.floor(y / Tile.height);
@@ -134,7 +134,7 @@ export default class RockTile extends Tile {
   ): boolean {
     if (item instanceof ToolItem) {
       const tool = item as ToolItem;
-      if (tool.type === ToolType.pickaxe) {
+      if (tool.type === ToolType.pickaxe && tool.level === 4) {
         if (player.payStamina(4 - tool.level)) {
           this.hurt(level, xt, yt, Random.nextInt(10) + tool.level * 5 + 10);
           return true;
@@ -144,43 +144,24 @@ export default class RockTile extends Tile {
     return false;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected hurtTile(level: Level, x: number, y: number, dmg: number) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const damage = level.getData(x, y) + dmg;
-    // TODO: Finish implementing RockTile.hurt.
+    // TODO: Finish implementing HardRockTile.hurt.
+    // int damage = level.getData(x, y) + dmg;
     // level.add(new SmashParticle(x * 16 + 8, y * 16 + 8));
-    // level.add(
-    //   new TextParticle(
-    //     '' + dmg,
-    //     x * 16 + 8,
-    //     y * 16 + 8,
-    //     PALETTE.get(-1, 500, 500, 500)
-    //   )
-    // );
-    // if (damage >= 50) {
-    //   let count = Random.nextInt(4) + 1;
-    //   for (let i = 0; i < count; i++) {
-    //     level.add(
-    //       new ItemEntity(
-    //         new ResourceItem(Resource.stone),
-    //         x * 16 + Random.nextInt(10) + 3,
-    //         y * 16 + random.nextInt(10) + 3
-    //       )
-    //     );
-    //   }
-    //   count = Random.nextInt(2);
-    //   for (let i = 0; i < count; i++) {
-    //     level.add(
-    //       new ItemEntity(
-    //         new ResourceItem(Resource.coal),
-    //         x * 16 + Random.nextInt(10) + 3,
-    //         y * 16 + random.nextInt(10) + 3
-    //       )
-    //     );
-    //   }
-    //   level.setTile(x, y, Tiles.dirt, 0);
+    // level.add(new TextParticle("" + dmg, x * 16 + 8, y * 16 + 8, Color.get(-1, 500, 500, 500)));
+    // if (damage >= 200) {
+    // 	int count = random.nextInt(4) + 1;
+    // 	for (int i = 0; i < count; i++) {
+    // 		level.add(new ItemEntity(new ResourceItem(Resource.stone), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
+    // 	}
+    // 	count = random.nextInt(2);
+    // 	for (int i = 0; i < count; i++) {
+    // 		level.add(new ItemEntity(new ResourceItem(Resource.coal), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
+    // 	}
+    // 	level.setTile(x, y, Tile.dirt, 0);
     // } else {
-    //   level.setData(x, y, damage);
+    // 	level.setData(x, y, damage);
     // }
   }
 

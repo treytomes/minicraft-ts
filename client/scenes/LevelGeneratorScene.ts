@@ -1,4 +1,5 @@
 import Level from '../Level';
+import LevelGen from '../LevelGen';
 import Game from '../system/Game';
 import {GameTime} from '../system/GameTime';
 import Scene from '../system/Scene';
@@ -13,7 +14,7 @@ export default class LevelGeneratorScene extends Scene {
   constructor(game: Game) {
     super(game);
 
-    this.level = new Level(0);
+    this.level = LevelGen.createAndValidateMap(0);
     let y = -10;
     const x = this.width - 8 * 7;
 
@@ -25,7 +26,7 @@ export default class LevelGeneratorScene extends Scene {
       (y += 10)
     );
     regenButton.onClick = () => {
-      this.level = new Level(this.depth);
+      this.level = LevelGen.createAndValidateMap(this.depth);
     };
     this.uiElements.push(regenButton);
 
@@ -37,9 +38,9 @@ export default class LevelGeneratorScene extends Scene {
       (y += 10)
     );
     upButton.onClick = () => {
-      this.depth -= 1;
-      if (this.depth < -1) this.depth = -1;
-      this.level = new Level(this.depth);
+      this.depth += 1;
+      if (this.depth > 1) this.depth = 1;
+      this.level = LevelGen.createAndValidateMap(this.depth);
     };
     this.uiElements.push(upButton);
 
@@ -51,9 +52,9 @@ export default class LevelGeneratorScene extends Scene {
       (y += 10)
     );
     downButton.onClick = () => {
-      this.depth += 1;
-      if (this.depth > 3) this.depth = 3;
-      this.level = new Level(this.depth);
+      this.depth -= 1;
+      if (this.depth < -3) this.depth = -3;
+      this.level = LevelGen.createAndValidateMap(this.depth);
     };
     this.uiElements.push(downButton);
 

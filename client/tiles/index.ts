@@ -18,6 +18,7 @@ import InfiniteFallTile from './InfiniteFallTile';
 import CloudCactusTile from './CloudCactusTile';
 import HoleTile from './HoleTile';
 import FarmTile from './FarmTile';
+import HardRockTile from './HardRockTile';
 
 Tiles.rock = new RockTile();
 Tiles.sand = new SandTile();
@@ -38,6 +39,8 @@ Tiles.cloudCactus = new CloudCactusTile();
 Tiles.stairsUp = new StairsTile(true);
 Tiles.hole = new HoleTile();
 Tiles.farmland = new FarmTile();
+Tiles.farmland = new FarmTile();
+Tiles.hardRock = new HardRockTile();
 
 // These resources need to be explicitly defined after the tiles they use.
 

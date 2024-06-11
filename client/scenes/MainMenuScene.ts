@@ -7,6 +7,7 @@ import Scene from '../system/Scene';
 import {Keys} from '../system/input';
 import {ButtonUIElement} from '../system/ui';
 import SoundEffectTestScene from './SoundEffectTestScene';
+import GameplayScene from './GameplayScene';
 
 export default class MainMenuScene extends Scene {
   constructor(game: Game) {
@@ -14,17 +15,29 @@ export default class MainMenuScene extends Scene {
 
     let y = 10;
 
-    const startButton = new ButtonUIElement(
+    const newGameButton = new ButtonUIElement(
+      this.tileset,
+      this.font,
+      'NEW GAME',
+      10,
+      (y += 10)
+    );
+    newGameButton.onClick = () => {
+      this.enterScene(new GameplayScene(game));
+    };
+    this.uiElements.push(newGameButton);
+
+    const spritesButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'SPRITES',
       10,
       (y += 10)
     );
-    startButton.onClick = () => {
+    spritesButton.onClick = () => {
       this.enterScene(new SpriteTestScene(game));
     };
-    this.uiElements.push(startButton);
+    this.uiElements.push(spritesButton);
 
     const pixelsButton = new ButtonUIElement(
       this.tileset,
