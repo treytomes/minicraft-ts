@@ -1,3 +1,4 @@
+import {Camera} from '../Camera';
 import Level from '../Level';
 import {GameTime} from '../system/GameTime';
 import {TileSet} from '../system/display';
@@ -71,9 +72,10 @@ export default class Entity {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(time: GameTime): void {
+    // console.log(this.speed.multiply(time.deltaTime));
     this.position = this.position.add(this.speed.multiply(time.deltaTime));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  render(tileset: TileSet) {}
+  render(tileset: TileSet, camera: Camera) {}
 }

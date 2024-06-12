@@ -1,3 +1,4 @@
+import {Camera} from '../Camera';
 import {PALETTE, TileSet} from '../system/display';
 import Mob from './Mob';
 
@@ -31,7 +32,10 @@ export default class Player extends Mob {
     return true;
   }
 
-  render(tileset: TileSet) {
+  render(tileset: TileSet, camera: Camera) {
+    const renderPosition = camera.translate(this.position);
+    // console.log('Player position:', renderPosition);
+
     let xt = 0;
     const yt = 14;
 
@@ -50,8 +54,8 @@ export default class Player extends Mob {
       xt += 4 + ((this.walkDist >> 3) & 1) * 2;
     }
 
-    const xo = this.position.x - 8;
-    const yo = this.position.y - 11;
+    const xo = renderPosition.x - 8;
+    const yo = renderPosition.y - 11;
     // TODO: Activate this bit to hide the bottom half of the player when swimming.
     // if (isSwimming()) {
     // 	yo += 4;

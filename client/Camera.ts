@@ -1,3 +1,5 @@
+import Entity from './entities/Entity';
+import {GameTime} from './system/GameTime';
 import {Point, Rectangle} from './system/math';
 
 export class Camera {
@@ -8,14 +10,14 @@ export class Camera {
     this.bounds = bounds;
   }
 
-  move(point: Point) {
+  moveTo(point: Point) {
     this.position = point.clamp(this.bounds);
     // console.log('move:', point, this.position, this.bounds);
   }
 
   moveBy(delta: Point) {
     // console.log('moveBy:', delta, this.position, this.bounds);
-    this.move(this.position.add(delta));
+    this.moveTo(this.position.add(delta));
   }
 
   translate(point: Point): Point;
@@ -39,5 +41,15 @@ export class Camera {
       return this.translate(new Point(pointOrRectOrX, y));
     }
     throw new Error('Invalid arguments.');
+  }
+
+  follow(time: GameTime, offset: Point, entity: Entity, speed: number) {
+    const target = entity.position.subtract(offset);
+    // const delta = moveTo.subtract(this.position).normalized;
+    // this.moveBy(delta.multiply(speed * time.deltaTime));
+
+    // this.moveTo(entity.position.subtract(offset));
+
+    this.moveTo(Point.lerp(speed * time.deltaTime, this.position, target));
   }
 }

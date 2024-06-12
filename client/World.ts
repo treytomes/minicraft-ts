@@ -40,17 +40,20 @@ export default class World {
     return this.levels[this._currentDepth];
   }
 
-  constructor() {}
+  private constructor() {}
 
-  createNew() {
-    this.levels[1] = LevelGen.createAndValidateMap(1);
-    this.levels[0] = LevelGen.createAndValidateMap(0, this.levels[1]);
-    this.levels[-1] = LevelGen.createAndValidateMap(-1, this.levels[0]);
-    this.levels[-2] = LevelGen.createAndValidateMap(-2, this.levels[-1]);
-    this.levels[-3] = LevelGen.createAndValidateMap(-3, this.levels[-2]);
+  static createNew(): World {
+    const world = new World();
 
-    this.currentDepth = 0;
-    this.player = EntityFactory.spawnPlayer(this.currentLevel);
+    world.levels[1] = LevelGen.createAndValidateMap(1);
+    world.levels[0] = LevelGen.createAndValidateMap(0, world.levels[1]);
+    world.levels[-1] = LevelGen.createAndValidateMap(-1, world.levels[0]);
+    world.levels[-2] = LevelGen.createAndValidateMap(-2, world.levels[-1]);
+    world.levels[-3] = LevelGen.createAndValidateMap(-3, world.levels[-2]);
+
+    world.currentDepth = 0;
+    world.player = EntityFactory.spawnPlayer(world.currentLevel);
+    return world;
   }
 
   serialize(): WorldInfo {
@@ -73,5 +76,7 @@ export default class World {
         );
       }
     }
+
+    this.player?.render(tileset, camera);
   }
 }

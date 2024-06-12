@@ -1,3 +1,4 @@
+import {lerp} from '.';
 import Rectangle from './Rectangle';
 
 export default class Point {
@@ -51,10 +52,23 @@ export default class Point {
     return new Point(this.x * value, this.y * value);
   }
 
+  get length(): number {
+    return Math.sqrt(this.x * this.x + this.y * this.y);
+  }
+
+  get normalized(): Point {
+    const length = this.length;
+    return new Point(this.x, this.y).multiply(1 / length);
+  }
+
   clamp(bounds: Rectangle): Point {
     return new Point(
       Math.max(Math.min(this.x, bounds.right), bounds.left),
       Math.max(Math.min(this.y, bounds.bottom), bounds.top)
     );
+  }
+
+  static lerp(t: number, a: Point, b: Point): Point {
+    return new Point(lerp(t, a.x, b.x), lerp(t, a.y, b.y));
   }
 }

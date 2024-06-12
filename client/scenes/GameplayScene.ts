@@ -1,6 +1,5 @@
 import {Camera} from '../Camera';
 import World from '../World';
-import Player from '../entities/Player';
 import Game from '../system/Game';
 import {GameTime} from '../system/GameTime';
 import Scene from '../system/Scene';
@@ -10,17 +9,19 @@ import {Point, Rectangle} from '../system/math';
 import {ButtonUIElement, LabelUIElement} from '../system/ui';
 import {Tile} from '../tiles';
 
-const PLAYER_SPEED = 1;
+const PLAYER_SPEED = 0.05;
 
 export default class GameplayScene extends Scene {
   private world: World;
   private camera: Camera;
-  private delta = Point.zero;
+  private cameraOffset: Point;
 
   constructor(game: Game) {
     super(game);
 
-    this.world = new World();
+    this.world = World.createNew();
+
+    this.cameraOffset = new Point(this.width, this.height).multiply(0.5);
 
     this.camera = new Camera(
       new Rectangle(
@@ -30,6 +31,7 @@ export default class GameplayScene extends Scene {
         this.world.height * Tile.height - this.height
       )
     );
+    this.camera.moveTo(this.world.player!.position.subtract(this.cameraOffset));
 
     let y = -10;
     const x = this.width - 7 * 8;
@@ -95,7 +97,15 @@ export default class GameplayScene extends Scene {
 
   update(time: GameTime) {
     super.update(time);
-    this.camera.moveBy(this.delta);
+    if (this.world.player) {
+      this.world.player.update(time);
+      this.camera.follow(
+        time,
+        this.cameraOffset,
+        this.world.player,
+        PLAYER_SPEED / 32
+      );
+    }
     Tile.updateTicks(time);
   }
 
@@ -110,27 +120,23 @@ export default class GameplayScene extends Scene {
   onKeyDown(e: KeyboardEvent) {
     super.onKeyDown(e);
 
+    if (this.world.player) {
+      switch (e.key) {
+        case Keys.ArrowUp:
+          this.world.player.speed = Point.unitY.multiply(PLAYER_SPEED).negate;
+          break;
+        case Keys.ArrowDown:
+          this.world.player.speed = Point.unitY.multiply(PLAYER_SPEED);
+          break;
+        case Keys.ArrowLeft:
+          this.world.player.speed = Point.unitX.multiply(PLAYER_SPEED).negate;
+          break;
+        case Keys.ArrowRight:
+          this.world.player.speed = Point.unitX.multiply(PLAYER_SPEED);
+          break;
+      }
+    }
     switch (e.key) {
-      case Keys.ArrowUp:
-        this.delta = Point.unitX
-          .multiply(this.delta.x)
-          .add(Point.unitY.multiply(PLAYER_SPEED).negate);
-        break;
-      case Keys.ArrowDown:
-        this.delta = Point.unitX
-          .multiply(this.delta.x)
-          .add(Point.unitY.multiply(PLAYER_SPEED));
-        break;
-      case Keys.ArrowLeft:
-        this.delta = Point.unitY
-          .multiply(this.delta.y)
-          .add(Point.unitX.multiply(PLAYER_SPEED).negate);
-        break;
-      case Keys.ArrowRight:
-        this.delta = Point.unitY
-          .multiply(this.delta.y)
-          .add(Point.unitX.multiply(PLAYER_SPEED));
-        break;
       case Keys.Escape:
         this.exitScene();
         break;
@@ -140,16 +146,22 @@ export default class GameplayScene extends Scene {
   onKeyUp(e: KeyboardEvent) {
     super.onKeyUp(e);
 
+    if (!this.world.player) return;
+
     switch (e.key) {
       case Keys.ArrowUp:
       case Keys.ArrowDown:
         // 0 the y-axis
-        this.delta = Point.unitX.multiply(this.delta.x);
+        this.world.player.speed = Point.unitX.multiply(
+          this.world.player.speed.x
+        );
         break;
       case Keys.ArrowLeft:
       case Keys.ArrowRight:
         // 0 the x-axis
-        this.delta = Point.unitY.multiply(this.delta.y);
+        this.world.player.speed = Point.unitY.multiply(
+          this.world.player.speed.y
+        );
         break;
     }
   }

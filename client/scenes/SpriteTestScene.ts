@@ -1,3 +1,4 @@
+import {Camera} from '../Camera';
 import Entity from '../entities/Entity';
 import Player from '../entities/Player';
 import Game from '../system/Game';
@@ -5,7 +6,7 @@ import {GameTime} from '../system/GameTime';
 import Scene from '../system/Scene';
 import {PALETTE, clear} from '../system/display';
 import {Keys, MouseEventProxy} from '../system/input';
-import {Point} from '../system/math';
+import {Point, Rectangle} from '../system/math';
 import {
   ButtonUIElement,
   LabelUIElement,
@@ -16,6 +17,7 @@ export default class SpriteTestScene extends Scene {
   private readonly player: Entity;
   private selectedEntity?: Entity = undefined;
   private dragStart?: Point = undefined;
+  private camera = new Camera(new Rectangle(0, 0, 0, 0));
 
   constructor(game: Game) {
     super(game);
@@ -116,7 +118,7 @@ export default class SpriteTestScene extends Scene {
       }
     }
 
-    this.player.render(this.tileset);
+    this.player.render(this.tileset, this.camera);
     super.render(time);
   }
 
