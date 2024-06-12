@@ -2,7 +2,7 @@ import Level from '../Level';
 import {Tiles, Tile} from './Tile';
 import {Color, PALETTE, TileSet} from '../system/display';
 import {Camera} from '../Camera';
-import Random from '../Random';
+import Random from '../system/math/Random';
 import Item from '../items/Item';
 import Player from '../entities/Player';
 import ToolItem from '../items/ToolItem';

@@ -1,6 +1,6 @@
 import {Camera} from '../Camera';
 import Level from '../Level';
-import Random from '../Random';
+import Random from '../system/math/Random';
 import ToolType from '../ToolType';
 import Entity from '../entities/Entity';
 import Player from '../entities/Player';

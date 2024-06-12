@@ -1,5 +1,5 @@
 import Entity from '../entities/Entity';
-import Random from '../Random';
+import Random from '../system/math/Random';
 import ToolType from '../ToolType';
 import Item from './Item';
 import {Font, PALETTE, TileSet} from '../system/display';

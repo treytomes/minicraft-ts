@@ -1,5 +1,6 @@
 import {Camera} from '../Camera';
 import World from '../World';
+import Player from '../entities/Player';
 import Game from '../system/Game';
 import {GameTime} from '../system/GameTime';
 import Scene from '../system/Scene';
@@ -101,18 +102,7 @@ export default class GameplayScene extends Scene {
   render(time: GameTime) {
     clear(PALETTE.get(1)[0]);
 
-    for (let y = 0; y < this.world.currentLevel.height; y++) {
-      for (let x = 0; x < this.world.currentLevel.width; x++) {
-        const tile = this.world.currentLevel.getTile(x, y);
-        tile.render(
-          this.tileset,
-          this.world.currentLevel,
-          x * Tile.width,
-          y * Tile.height,
-          this.camera
-        );
-      }
-    }
+    this.world.render(this.tileset, this.camera);
 
     super.render(time);
   }

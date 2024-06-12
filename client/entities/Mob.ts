@@ -1,4 +1,3 @@
-import {PALETTE} from '../system/display';
 import Entity from './Entity';
 
 // TODO: Finish implementing Mob.
@@ -6,6 +5,10 @@ export default class Mob extends Entity {
   public maxHealth = 10;
   public health = this.maxHealth;
   public hurtTime = 0;
+
+  constructor(x: number, y: number) {
+    super(x, y);
+  }
 
   heal(heal: number) {
     if (this.hurtTime > 0) return;

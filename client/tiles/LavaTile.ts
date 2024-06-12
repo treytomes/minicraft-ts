@@ -1,6 +1,6 @@
 import {Camera} from '../Camera';
 import Level from '../Level';
-import Random from '../Random';
+import Random from '../system/math/Random';
 import Entity from '../entities/Entity';
 import {PALETTE, TileSet} from '../system/display';
 import {Tile, Tiles} from './Tile';

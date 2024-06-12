@@ -1,18 +1,59 @@
 import Level from '../Level';
-import {Sprite, TileSet} from '../system/display';
+import {GameTime} from '../system/GameTime';
+import {TileSet} from '../system/display';
+import {Point, Rectangle} from '../system/math';
 import {Tile} from '../tiles/Tile';
 import Mob from './Mob';
 
 // TODO: Finish implementing Entity.
-export default class Entity extends Sprite {
+export default class Entity {
   level: Level | undefined;
 
-  constructor(tileset: TileSet, xt: number, yt: number, colors: number[]) {
-    super(tileset, xt, yt, colors, 2);
+  /**
+   * The entity is rendered centered on this position.
+   */
+  position: Point;
+
+  speed: Point;
+  size: Point;
+
+  get bounds() {
+    return new Rectangle(
+      this.position.x - this.size.x / 2,
+      this.position.y - this.size.y / 2,
+      this.size.x,
+      this.size.y
+    );
   }
 
   get canSwim() {
     return false;
+  }
+
+  constructor(x: number, y: number) {
+    this.position = new Point(x, y);
+    this.size = new Point(16, 16);
+    this.speed = Point.zero;
+  }
+
+  moveTo(point: Point): void;
+  moveTo(x: number, y: number): void;
+  moveTo(xOrPoint: number | Point, y?: number) {
+    if (xOrPoint instanceof Point) {
+      this.position = xOrPoint;
+      return;
+    }
+    this.position = new Point(xOrPoint, y!);
+  }
+
+  moveBy(point: Point): void;
+  moveBy(x: number, y: number): void;
+  moveBy(xOrPoint: number | Point, y?: number) {
+    if (xOrPoint instanceof Point) {
+      this.position = xOrPoint;
+      return;
+    }
+    this.position = new Point(this.position.x + xOrPoint, this.position.y + y!);
   }
 
   hurt(mob: Mob, dmg: number, attackDir: number): void;
@@ -27,4 +68,12 @@ export default class Entity extends Sprite {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     dmg?: number
   ) {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  update(time: GameTime): void {
+    this.position = this.position.add(this.speed.multiply(time.deltaTime));
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  render(tileset: TileSet) {}
 }

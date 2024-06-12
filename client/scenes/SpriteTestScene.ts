@@ -1,4 +1,5 @@
 import Entity from '../entities/Entity';
+import Player from '../entities/Player';
 import Game from '../system/Game';
 import {GameTime} from '../system/GameTime';
 import Scene from '../system/Scene';
@@ -12,15 +13,14 @@ import {
 } from '../system/ui';
 
 export default class SpriteTestScene extends Scene {
-  public readonly player: Entity;
-  public isPlayerSelected = false;
+  private readonly player: Entity;
+  private selectedEntity?: Entity = undefined;
+  private dragStart?: Point = undefined;
 
   constructor(game: Game) {
     super(game);
 
-    this.player = new Entity(this.tileset, 0, 14, [-1, 100, 220, 532]);
-    this.player.moveTo(50, 50);
-    this.sprites.push(this.player);
+    this.player = new Player(50, 50);
 
     this.uiElements.push(
       new LabelUIElement(
@@ -91,14 +91,19 @@ export default class SpriteTestScene extends Scene {
     return parseInt(localStorage.getItem('counter') ?? '0');
   }
 
+  update(time: GameTime): void {
+    this.player.update(time);
+    super.update(time);
+  }
+
   render(time: GameTime) {
     clear(PALETTE.get(1)[0]);
 
     // Render a giant tree.
     const grassColor = 141;
-    const col = PALETTE.get(10, 30, 151, grassColor);
-    const barkCol1 = PALETTE.get(10, 30, 430, grassColor);
-    const barkCol2 = PALETTE.get(10, 30, 320, grassColor);
+    // const col = PALETTE.get(10, 30, 151, grassColor);
+    // const barkCol1 = PALETTE.get(10, 30, 430, grassColor);
+    // const barkCol2 = PALETTE.get(10, 30, 320, grassColor);
     const colors = PALETTE.get(10, 30, 320, grassColor);
     for (let j = 3, x = 150; j <= 10; j++, x += 8) {
       for (let k = 21, y = 150; k <= 28; k++, y += 8) {
@@ -110,6 +115,8 @@ export default class SpriteTestScene extends Scene {
         });
       }
     }
+
+    this.player.render(this.tileset);
     super.render(time);
   }
 
@@ -152,12 +159,12 @@ export default class SpriteTestScene extends Scene {
   onMouseMove(e: MouseEventProxy) {
     super.onMouseMove(e);
 
-    if (this.isPlayerSelected) {
-      const bounds = this.player.bounds;
-      this.player.moveTo(
-        e.clientX - bounds.width / 2,
-        e.clientY - bounds.height / 2
+    if (this.selectedEntity && this.dragStart) {
+      this.selectedEntity.moveBy(
+        e.clientX - this.dragStart.x,
+        e.clientY - this.dragStart.y
       );
+      this.dragStart = new Point(e.clientX, e.clientY);
     }
   }
 
@@ -167,11 +174,9 @@ export default class SpriteTestScene extends Scene {
     // Is the left mouse button pressed?
     if (e.button === 0) {
       // Is the mouse hovering over the player sprite?
-      if (
-        this.player.bounds.contains(e.clientX, e.clientY) &&
-        !this.isPlayerSelected
-      ) {
-        this.isPlayerSelected = true;
+      if (this.player.bounds.contains(e.clientX, e.clientY)) {
+        this.selectedEntity = this.player;
+        this.dragStart = new Point(e.clientX, e.clientY);
       }
     }
   }
@@ -180,9 +185,8 @@ export default class SpriteTestScene extends Scene {
     super.onMouseUp(e);
 
     if (e.button === 0) {
-      if (this.isPlayerSelected) {
-        this.isPlayerSelected = false;
-      }
+      this.selectedEntity = undefined;
+      this.dragStart = undefined;
     }
   }
 }

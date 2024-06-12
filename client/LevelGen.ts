@@ -1,5 +1,5 @@
 import Level from './Level';
-import Random from './Random';
+import Random from './system/math/Random';
 import {Tiles} from './tiles/Tile';
 
 const DEFAULT_WIDTH = 128;

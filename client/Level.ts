@@ -1,6 +1,3 @@
-import LevelGen from './LevelGen';
-import Entity from './entities/Entity';
-import * as tiles from './tiles';
 import {Tile, Tiles} from './tiles/Tile';
 import {LevelInfo} from '../shared/models/level-info';
 

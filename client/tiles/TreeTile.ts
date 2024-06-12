@@ -6,7 +6,7 @@ import Player from '../entities/Player';
 import Item from '../items/Item';
 import ToolItem from '../items/ToolItem';
 import ToolType from '../ToolType';
-import Random from '../Random';
+import Random from '../system/math/Random';
 import Level from '../Level';
 
 export default class TreeTile extends Tile {
