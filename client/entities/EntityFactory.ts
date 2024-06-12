@@ -3,6 +3,7 @@ import Random from '../system/math/Random';
 import {Point} from '../system/math';
 import {Tile, Tiles} from '../tiles/Tile';
 import Player from './Player';
+import World from '../World';
 
 export default class EntityFactory {
   private static findSpawnPoint(level: Level): Point {
@@ -22,8 +23,10 @@ export default class EntityFactory {
     return spawnPoint;
   }
 
-  static spawnPlayer(level: Level): Player {
-    const spawnPoint = this.findSpawnPoint(level);
-    return new Player(spawnPoint.x, spawnPoint.y);
+  static spawnPlayer(world: World): Player {
+    const spawnPoint = this.findSpawnPoint(world.currentLevel);
+    world.player = new Player(spawnPoint.x, spawnPoint.y);
+    world.currentLevel.add(world.player);
+    return world.player;
   }
 }

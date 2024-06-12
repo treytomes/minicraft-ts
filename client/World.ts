@@ -52,7 +52,7 @@ export default class World {
     world.levels[-3] = LevelGen.createAndValidateMap(-3, world.levels[-2]);
 
     world.currentDepth = 0;
-    world.player = EntityFactory.spawnPlayer(world.currentLevel);
+    EntityFactory.spawnPlayer(world);
     return world;
   }
 
@@ -64,19 +64,6 @@ export default class World {
   }
 
   render(tileset: TileSet, camera: Camera) {
-    for (let y = 0; y < this.currentLevel.height; y++) {
-      for (let x = 0; x < this.currentLevel.width; x++) {
-        const tile = this.currentLevel.getTile(x, y);
-        tile.render(
-          tileset,
-          this.currentLevel,
-          x * Tile.width,
-          y * Tile.height,
-          camera
-        );
-      }
-    }
-
-    this.player?.render(tileset, camera);
+    this.currentLevel.render(tileset, camera);
   }
 }

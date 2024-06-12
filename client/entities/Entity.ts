@@ -9,6 +9,7 @@ import Mob from './Mob';
 // TODO: Finish implementing Entity.
 export default class Entity {
   level: Level | undefined;
+  removed = false;
 
   /**
    * The entity is rendered centered on this position.
@@ -35,6 +36,10 @@ export default class Entity {
     this.position = new Point(x, y);
     this.size = new Point(16, 16);
     this.speed = Point.zero;
+  }
+
+  remove() {
+    this.removed = true;
   }
 
   moveTo(point: Point): void;
