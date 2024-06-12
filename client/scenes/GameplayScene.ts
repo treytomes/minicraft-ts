@@ -69,6 +69,19 @@ export default class GameplayScene extends Scene {
     };
     this.uiElements.push(backButton);
 
+    const saveButton = new ButtonUIElement(
+      this.tileset,
+      this.font,
+      'SAVE',
+      x,
+      (y += 10)
+    );
+    saveButton.onClick = async () => {
+      const savePath = await window.api.file.save(this.world.serialize());
+      console.log(`Saved to ${JSON.stringify(savePath)}`);
+    };
+    this.uiElements.push(saveButton);
+
     this.uiElements.push(
       new LabelUIElement(
         this.font,

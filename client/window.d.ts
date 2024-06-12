@@ -8,6 +8,9 @@ declare global {
       gfx: {
         getTiles: () => TileInfo;
       };
+      file: {
+        save: (world: WorldInfo) => string;
+      };
       sample: {
         ping: () => string;
       };

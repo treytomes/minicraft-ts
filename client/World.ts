@@ -1,5 +1,6 @@
 import Level from './Level';
 import LevelGen from './LevelGen';
+import {WorldInfo} from '../shared/models/world-info';
 
 export default class World {
   private levels: Record<number, Level> = {};
@@ -39,5 +40,12 @@ export default class World {
     this.levels[-1] = LevelGen.createAndValidateMap(-1, this.levels[0]);
     this.levels[-2] = LevelGen.createAndValidateMap(-2, this.levels[-1]);
     this.levels[-3] = LevelGen.createAndValidateMap(-3, this.levels[-2]);
+  }
+
+  serialize(): WorldInfo {
+    return {
+      levels: Object.values(this.levels).map(x => x.serialize()),
+      currentDepth: this._currentDepth,
+    };
   }
 }

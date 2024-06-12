@@ -2,6 +2,7 @@ import LevelGen from './LevelGen';
 import Entity from './entities/Entity';
 import * as tiles from './tiles';
 import {Tile, Tiles} from './tiles/Tile';
+import {LevelInfo} from '../shared/models/level-info';
 
 const DEFAULT_WIDTH = 128;
 const DEFAULT_HEIGHT = 128;
@@ -43,6 +44,20 @@ export default class Level {
     this.grassColor = props.grassColor ?? DEFAULT_COLOR_GRASS;
     this.dirtColor = props.dirtColor ?? DEFAULT_COLOR_DIRT;
     this.sandColor = props.sandColor ?? DEFAULT_COLOR_SAND;
+  }
+
+  serialize(): LevelInfo {
+    return {
+      depth: this.depth,
+      tileData: this.tileData,
+      metaData: this.metaData,
+      width: this.width,
+      height: this.height,
+      grassColor: this.grassColor,
+      dirtColor: this.dirtColor,
+      sandColor: this.sandColor,
+      monsterDensity: this.monsterDensity,
+    };
   }
 
   getTile(x: number, y: number): Tile {

@@ -36,6 +36,7 @@
     "commitlint",
     "conventionalcommits",
     "dataurl",
+    "datestamp",
     "Gameplay",
     "hardrock",
     "lerp",
