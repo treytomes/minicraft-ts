@@ -3,6 +3,7 @@ import {LevelInfo} from '../shared/models/level-info';
 import {TileSet} from './system/display';
 import {Camera} from './Camera';
 import Entity from './entities/Entity';
+import {GameTime} from './system/GameTime';
 
 const DEFAULT_WIDTH = 128;
 const DEFAULT_HEIGHT = 128;
@@ -129,6 +130,12 @@ export default class Level {
     // TODO: Only render entities that are on-screen.
     for (let n = 0; n < this.entities.length; n++) {
       this.entities[n].render(tileset, camera);
+    }
+  }
+
+  update(time: GameTime) {
+    for (let n = 0; n < this.entities.length; n++) {
+      this.entities[n].update(time);
     }
   }
 }

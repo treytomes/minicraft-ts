@@ -97,8 +97,8 @@ export default class GameplayScene extends Scene {
 
   update(time: GameTime) {
     super.update(time);
+    this.world.update(time);
     if (this.world.player) {
-      this.world.player.update(time);
       this.camera.follow(
         time,
         this.cameraOffset,

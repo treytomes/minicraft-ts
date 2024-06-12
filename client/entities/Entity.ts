@@ -1,4 +1,5 @@
 import {Camera} from '../Camera';
+import {Direction} from '../Direction';
 import Level from '../Level';
 import {GameTime} from '../system/GameTime';
 import {TileSet} from '../system/display';
@@ -18,6 +19,12 @@ export default class Entity {
 
   speed: Point;
   size: Point;
+  dir = Direction.South;
+  /**
+   * Updated for every pixel the entity moves.
+   * This is really only used to help track the current animation frame.
+   */
+  walkDist = 0;
 
   get bounds() {
     return new Rectangle(
@@ -55,11 +62,23 @@ export default class Entity {
   moveBy(point: Point): void;
   moveBy(x: number, y: number): void;
   moveBy(xOrPoint: number | Point, y?: number) {
-    if (xOrPoint instanceof Point) {
-      this.position = xOrPoint;
+    if (!(xOrPoint instanceof Point)) {
+      this.moveBy(new Point(xOrPoint, y!));
       return;
     }
-    this.position = new Point(this.position.x + xOrPoint, this.position.y + y!);
+    const delta = xOrPoint;
+    const length = delta.length;
+
+    if (length !== 0) {
+      this.walkDist += xOrPoint.length;
+      if (delta.x < 0) this.dir = Direction.West;
+      if (delta.x > 0) this.dir = Direction.East;
+      if (delta.y < 0) this.dir = Direction.North;
+      if (delta.y > 0) this.dir = Direction.South;
+    }
+
+    this.walkDist += delta.length;
+    this.moveTo(this.position.add(delta));
   }
 
   hurt(mob: Mob, dmg: number, attackDir: number): void;
@@ -78,7 +97,7 @@ export default class Entity {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(time: GameTime): void {
     // console.log(this.speed.multiply(time.deltaTime));
-    this.position = this.position.add(this.speed.multiply(time.deltaTime));
+    this.moveBy(this.speed.multiply(time.deltaTime));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

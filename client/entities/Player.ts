@@ -1,4 +1,5 @@
 import {Camera} from '../Camera';
+import {Direction} from '../Direction';
 import {PALETTE, TileSet} from '../system/display';
 import Mob from './Mob';
 
@@ -9,18 +10,6 @@ export default class Player extends Mob {
 
   // TODO: This should get toggled when the entity bumps into a liquid tile.
   isSwimming = false;
-
-  /**
-   * This is really only used to help track the current animation frame.
-   */
-  walkDist = 0;
-
-  // TODO: This should really be an enum.
-  // if (xa < 0) dir = 2;
-  // if (xa > 0) dir = 3;
-  // if (ya < 0) dir = 1;
-  // if (ya > 0) dir = 0;
-  dir = 0;
 
   constructor(x: number, y: number) {
     super(x, y);
@@ -42,13 +31,13 @@ export default class Player extends Mob {
     let flip1 = (this.walkDist >> 3) & 1;
     let flip2 = (this.walkDist >> 3) & 1;
 
-    if (this.dir === 1) {
+    if (this.dir === Direction.North) {
       xt += 2;
     }
-    if (this.dir > 1) {
+    if (this.dir === Direction.East || this.dir === Direction.West) {
       flip1 = 0;
       flip2 = (this.walkDist >> 4) & 1;
-      if (this.dir === 2) {
+      if (this.dir === Direction.West) {
         flip1 = 1;
       }
       xt += 4 + ((this.walkDist >> 3) & 1) * 2;

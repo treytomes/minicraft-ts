@@ -6,6 +6,7 @@ import EntityFactory from './entities/EntityFactory';
 import {Camera} from './Camera';
 import {TileSet} from './system/display';
 import {Tile} from './tiles';
+import {GameTime} from './system/GameTime';
 
 export default class World {
   private levels: Record<number, Level> = {};
@@ -65,5 +66,9 @@ export default class World {
 
   render(tileset: TileSet, camera: Camera) {
     this.currentLevel.render(tileset, camera);
+  }
+
+  update(time: GameTime) {
+    this.currentLevel.update(time);
   }
 }
