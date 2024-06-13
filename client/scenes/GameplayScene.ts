@@ -123,16 +123,28 @@ export default class GameplayScene extends Scene {
     if (this.world.player) {
       switch (e.key) {
         case Keys.ArrowUp:
-          this.world.player.speed = Point.unitY.multiply(PLAYER_SPEED).negate;
+          this.world.player.speed = new Point(
+            this.world.player.speed.x,
+            -PLAYER_SPEED
+          );
           break;
         case Keys.ArrowDown:
-          this.world.player.speed = Point.unitY.multiply(PLAYER_SPEED);
+          this.world.player.speed = new Point(
+            this.world.player.speed.x,
+            PLAYER_SPEED
+          );
           break;
         case Keys.ArrowLeft:
-          this.world.player.speed = Point.unitX.multiply(PLAYER_SPEED).negate;
+          this.world.player.speed = new Point(
+            -PLAYER_SPEED,
+            this.world.player.speed.y
+          );
           break;
         case Keys.ArrowRight:
-          this.world.player.speed = Point.unitX.multiply(PLAYER_SPEED);
+          this.world.player.speed = new Point(
+            PLAYER_SPEED,
+            this.world.player.speed.y
+          );
           break;
       }
     }
@@ -152,14 +164,17 @@ export default class GameplayScene extends Scene {
       case Keys.ArrowUp:
       case Keys.ArrowDown:
         // 0 the y-axis
-        this.world.player.speed = Point.unitX.multiply(
-          this.world.player.speed.x
+        this.world.player.speed = this.world.player.speed = new Point(
+          this.world.player.speed.x,
+          0
         );
+
         break;
       case Keys.ArrowLeft:
       case Keys.ArrowRight:
         // 0 the x-axis
-        this.world.player.speed = Point.unitY.multiply(
+        this.world.player.speed = this.world.player.speed = new Point(
+          0,
           this.world.player.speed.y
         );
         break;

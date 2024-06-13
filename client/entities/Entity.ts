@@ -107,9 +107,7 @@ export default class Entity {
       if (isBlocked) break;
     }
 
-    if (isBlocked) {
-      this.speed = Point.zero;
-    } else {
+    if (!isBlocked) {
       const xt = Math.floor(this.position.x / Tile.width);
       const yt = Math.floor(this.position.y / Tile.height);
       level.getTile(xt, yt).steppedOn(level, xt, yt, this);
@@ -132,8 +130,10 @@ export default class Entity {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(time: GameTime, level: Level): void {
-    this.tickTime++; // += time.deltaTime;
-    this.moveBy(level, this.speed.multiply(time.deltaTime));
+    this.tickTime += time.deltaTime;
+    const delta = this.speed.multiply(time.deltaTime);
+    this.moveBy(level, delta.x, 0);
+    this.moveBy(level, 0, delta.y);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
