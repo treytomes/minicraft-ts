@@ -135,7 +135,7 @@ export default class Level {
 
   update(time: GameTime) {
     for (let n = 0; n < this.entities.length; n++) {
-      this.entities[n].update(time);
+      this.entities[n].update(time, this);
     }
   }
 }

@@ -27,17 +27,17 @@ export default class MainMenuScene extends Scene {
     };
     this.uiElements.push(newGameButton);
 
-    const spritesButton = new ButtonUIElement(
-      this.tileset,
-      this.font,
-      'SPRITES',
-      10,
-      (y += 10)
-    );
-    spritesButton.onClick = () => {
-      this.enterScene(new SpriteTestScene(game));
-    };
-    this.uiElements.push(spritesButton);
+    // const spritesButton = new ButtonUIElement(
+    //   this.tileset,
+    //   this.font,
+    //   'SPRITES',
+    //   10,
+    //   (y += 10)
+    // );
+    // spritesButton.onClick = () => {
+    //   this.enterScene(new SpriteTestScene(game));
+    // };
+    // this.uiElements.push(spritesButton);
 
     const pixelsButton = new ButtonUIElement(
       this.tileset,

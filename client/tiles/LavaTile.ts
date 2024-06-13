@@ -4,9 +4,10 @@ import Random from '../system/math/Random';
 import Entity from '../entities/Entity';
 import {PALETTE, TileSet} from '../system/display';
 import {Tile, Tiles} from './Tile';
+import LiquidTile from './LiquidTile';
 
 // TODO: LavaTile and WaterTile should inherit from LiquidTile.
-export default class LavaTile extends Tile {
+export default class LavaTile extends LiquidTile {
   constructor() {
     super(PALETTE.get(511)[0]);
     this.connectsToSand = true;

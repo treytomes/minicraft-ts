@@ -8,8 +8,9 @@ export default class Player extends Mob {
   maxStamina = 10;
   stamina = this.maxStamina;
 
-  // TODO: This should get toggled when the entity bumps into a liquid tile.
-  isSwimming = false;
+  get canSwim() {
+    return true;
+  }
 
   constructor(x: number, y: number) {
     super(x, y);
@@ -44,17 +45,32 @@ export default class Player extends Mob {
     }
 
     const xo = renderPosition.x - 8;
-    const yo = renderPosition.y - 11;
-    // TODO: Activate this bit to hide the bottom half of the player when swimming.
-    // if (isSwimming()) {
-    // 	yo += 4;
-    // 	int waterColor = Color.get(-1, -1, 115, 335);
-    // 	if (tickTime / 8 % 2 == 0) {
-    // 		waterColor = Color.get(-1, 335, 5, 115);
-    // 	}
-    // 	screen.render(xo + 0, yo + 3, 5 + 13 * 32, waterColor, 0);
-    // 	screen.render(xo + 8, yo + 3, 5 + 13 * 32, waterColor, 1);
-    // }
+    let yo = renderPosition.y - 11;
+
+    // Draw ripples around the entity while swimming.
+    if (this.isSwimming) {
+      yo += 4;
+
+      let waterColor = PALETTE.get(-1, -1, 115, 335);
+      if ((this.tickTime >> 3) % 2 === 0) {
+        waterColor = PALETTE.get(-1, 335, 5, 115);
+      }
+
+      tileset.render({
+        x: xo + 0,
+        y: yo + 3,
+        tileIndex: 5 + 13 * 32,
+        colors: waterColor,
+        bits: 0,
+      });
+      tileset.render({
+        x: xo + 8,
+        y: yo + 3,
+        tileIndex: 5 + 13 * 32,
+        colors: waterColor,
+        bits: 1,
+      });
+    }
 
     // // TODO: Implement this when attackDir and attackItem are ready to go.
     // if (attackTime > 0 && attackDir == 1) {

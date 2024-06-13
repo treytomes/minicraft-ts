@@ -4,8 +4,9 @@ import {Color, PALETTE, TileSet} from '../system/display';
 import {Camera} from '../Camera';
 import Entity from '../entities/Entity';
 import Random from '../system/math/Random';
+import LiquidTile from './LiquidTile';
 
-export class WaterTile extends Tile {
+export class WaterTile extends LiquidTile {
   constructor() {
     super(PALETTE.get(3)[0]);
     this.connectsToSand = true;

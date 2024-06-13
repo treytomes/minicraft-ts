@@ -12,6 +12,11 @@ export default class Entity {
   level: Level | undefined;
   removed = false;
 
+  // TODO: This should get toggled when the entity bumps into a liquid tile.
+  isSwimming = false;
+
+  tickTime = 0;
+
   /**
    * The entity is rendered centered on this position.
    */
@@ -59,15 +64,18 @@ export default class Entity {
     this.position = new Point(xOrPoint, y!);
   }
 
-  moveBy(point: Point): void;
-  moveBy(x: number, y: number): void;
-  moveBy(xOrPoint: number | Point, y?: number) {
+  moveBy(level: Level, point: Point): void;
+  moveBy(level: Level, x: number, y: number): void;
+  moveBy(level: Level, xOrPoint: number | Point, y?: number) {
     if (!(xOrPoint instanceof Point)) {
-      this.moveBy(new Point(xOrPoint, y!));
+      this.moveBy(level, new Point(xOrPoint, y!));
       return;
     }
     const delta = xOrPoint;
     const length = delta.length;
+
+    // This will get toggled to true if the entity steps on a liquid tile.
+    this.isSwimming = false;
 
     if (length !== 0) {
       this.walkDist += xOrPoint.length;
@@ -77,8 +85,36 @@ export default class Entity {
       if (delta.y > 0) this.dir = Direction.South;
     }
 
-    this.walkDist += delta.length;
-    this.moveTo(this.position.add(delta));
+    const xto0 = Math.floor(this.bounds.left / 16);
+    const yto0 = Math.floor(this.bounds.top / 16);
+    const xto1 = Math.floor(this.bounds.right / 16);
+    const yto1 = Math.floor(this.bounds.bottom / 16);
+
+    const xt0 = Math.floor((this.bounds.left + delta.x) / 16);
+    const yt0 = Math.floor((this.bounds.top + delta.y) / 16);
+    const xt1 = Math.floor((this.bounds.right + delta.x) / 16);
+    const yt1 = Math.floor((this.bounds.bottom + delta.y) / 16);
+    let isBlocked = false;
+    for (let yt = yt0; yt <= yt1; yt++) {
+      for (let xt = xt0; xt <= xt1; xt++) {
+        if (xt >= xto0 && xt <= xto1 && yt >= yto0 && yt <= yto1) continue;
+        level.getTile(xt, yt).bumpedInto(level, xt, yt, this);
+        if (!level.getTile(xt, yt).mayPass(level, xt, yt, this)) {
+          isBlocked = true;
+          break;
+        }
+      }
+      if (isBlocked) break;
+    }
+
+    if (isBlocked) {
+      this.speed = Point.zero;
+    } else {
+      const xt = Math.floor(this.position.x / Tile.width);
+      const yt = Math.floor(this.position.y / Tile.height);
+      level.getTile(xt, yt).steppedOn(level, xt, yt, this);
+      this.moveTo(this.position.add(delta));
+    }
   }
 
   hurt(mob: Mob, dmg: number, attackDir: number): void;
@@ -95,9 +131,9 @@ export default class Entity {
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  update(time: GameTime): void {
-    // console.log(this.speed.multiply(time.deltaTime));
-    this.moveBy(this.speed.multiply(time.deltaTime));
+  update(time: GameTime, level: Level): void {
+    this.tickTime++; // += time.deltaTime;
+    this.moveBy(level, this.speed.multiply(time.deltaTime));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -94,7 +94,7 @@ export default class SpriteTestScene extends Scene {
   }
 
   update(time: GameTime): void {
-    this.player.update(time);
+    // this.player.update(time);
     super.update(time);
   }
 
@@ -162,10 +162,10 @@ export default class SpriteTestScene extends Scene {
     super.onMouseMove(e);
 
     if (this.selectedEntity && this.dragStart) {
-      this.selectedEntity.moveBy(
-        e.clientX - this.dragStart.x,
-        e.clientY - this.dragStart.y
-      );
+      // this.selectedEntity.moveBy(
+      //   e.clientX - this.dragStart.x,
+      //   e.clientY - this.dragStart.y
+      // );
       this.dragStart = new Point(e.clientX, e.clientY);
     }
   }
