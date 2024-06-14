@@ -6,8 +6,8 @@ export default class Mob extends Entity {
   public health = this.maxHealth;
   public hurtTime = 0;
 
-  constructor(x: number, y: number) {
-    super(x, y);
+  constructor() {
+    super();
   }
 
   heal(heal: number) {

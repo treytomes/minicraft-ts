@@ -5,6 +5,7 @@ import {GameTime} from '../system/GameTime';
 import {TileSet} from '../system/display';
 import {Point, Rectangle} from '../system/math';
 import {Tile} from '../tiles/Tile';
+import ItemEntity from './ItemEntity';
 import Mob from './Mob';
 
 // TODO: Finish implementing Entity.
@@ -44,15 +45,28 @@ export default class Entity {
     return false;
   }
 
-  constructor(x: number, y: number) {
-    this.position = new Point(x, y);
-    this.size = new Point(16, 16);
+  constructor() {
+    this.position = Point.zero;
+
+    // TODO: I changed this from 16 to 12.  Make sure it doesn't break stuff.
+    this.size = new Point(12, 12);
     this.speed = Point.zero;
   }
 
   remove() {
     this.removed = true;
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  blocks(e: Entity): boolean {
+    return false;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected touchedBy(entity: Entity): void {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  touchItem(itemEntity: ItemEntity) {}
 
   moveTo(point: Point): void;
   moveTo(x: number, y: number): void;
@@ -129,7 +143,7 @@ export default class Entity {
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  update(time: GameTime, level: Level): void {
+  update(time: GameTime, level: Level) {
     this.tickTime += time.deltaTime;
     const delta = this.speed.multiply(time.deltaTime);
     this.moveBy(level, delta.x, 0);

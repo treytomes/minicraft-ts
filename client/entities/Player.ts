@@ -1,19 +1,39 @@
 import {Camera} from '../Camera';
 import {Direction} from '../Direction';
+import Inventory from '../Inventory';
+import FurnitureItem from '../items/FurnitureItem';
+import Item from '../items/Item';
+import PowerGloveItem from '../items/PowerGloveItem';
 import {PALETTE, TileSet} from '../system/display';
+import ItemEntity from './ItemEntity';
 import Mob from './Mob';
 
 // TODO: Finish implementing player.
 export default class Player extends Mob {
   maxStamina = 10;
   stamina = this.maxStamina;
+  staminaRecharge = 0;
+  staminaRechargeDelay = 0;
+  score = 0;
+  invulnerableTime = 0;
+
+  inventory = new Inventory();
+  attackItem?: Item;
+  activeItem?: Item;
+
+  private attackTime = 0;
+  private attackDir = Direction.Undefined;
+  private onStairDelay = 0;
 
   get canSwim() {
     return true;
   }
 
-  constructor(x: number, y: number) {
-    super(x, y);
+  constructor() {
+    super();
+
+    // this.inventory.add(new FurnitureItem(new Workbench()));
+    this.inventory.add(new PowerGloveItem());
   }
 
   payStamina(cost: number): boolean {
@@ -24,7 +44,6 @@ export default class Player extends Mob {
 
   render(tileset: TileSet, camera: Camera) {
     const renderPosition = camera.translate(this.position);
-    // console.log('Player position:', renderPosition);
 
     let xt = 0;
     const yt = 14;
@@ -181,5 +200,10 @@ export default class Player extends Mob {
     // 	furniture.y = yo;
     // 	furniture.render(screen);
     // }
+  }
+
+  touchItem(itemEntity: ItemEntity) {
+    itemEntity.take(this);
+    this.inventory.add(itemEntity.item);
   }
 }

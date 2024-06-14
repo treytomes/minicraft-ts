@@ -164,6 +164,7 @@ export default class Level {
 
     // Tick a random number of tiles.
     for (let i = 0; i < (this.width * this.height) / 50; i++) {
+      // TODO: I think I might rather tick every time every frame, but I'm not sure.
       const xt = Random.nextInt(this.width);
       const yt = Random.nextInt(this.height);
       this.getTile(xt, yt).tick(this, xt, yt);

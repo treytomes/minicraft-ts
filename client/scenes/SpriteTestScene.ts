@@ -22,7 +22,8 @@ export default class SpriteTestScene extends Scene {
   constructor(game: Game) {
     super(game);
 
-    this.player = new Player(50, 50);
+    this.player = new Player();
+    this.player.moveTo(50, 50);
 
     this.uiElements.push(
       new LabelUIElement(

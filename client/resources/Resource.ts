@@ -9,14 +9,14 @@ export class Resource {
   public readonly name: string;
 
   // TODO: What should I call this?  tileIndex, icon, etc?
-  public readonly sprite: number;
+  public readonly icon: number;
   public readonly color: Color[];
 
-  constructor(name: string, sprite: number, color: Color[]) {
+  constructor(name: string, icon: number, color: Color[]) {
     if (name.length > 6)
       throw new Error('Name cannot be longer than six characters!');
     this.name = name;
-    this.sprite = sprite;
+    this.icon = icon;
     this.color = color;
   }
 

@@ -25,7 +25,8 @@ export default class EntityFactory {
 
   static spawnPlayer(world: World): Player {
     const spawnPoint = this.findSpawnPoint(world.currentLevel);
-    world.player = new Player(spawnPoint.x, spawnPoint.y);
+    world.player = new Player();
+    world.player.moveTo(spawnPoint);
     world.currentLevel.add(world.player);
     return world.player;
   }
