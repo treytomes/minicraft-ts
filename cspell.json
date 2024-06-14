@@ -51,7 +51,8 @@
     "Snyk",
     "Swrd",
     "TICKRATE",
-    "tileset"
+    "tileset",
+    "viewbox"
   ],
   "flagWords": []
 }

@@ -119,9 +119,9 @@ export default class Level {
   }
 
   render(tileset: TileSet, camera: Camera) {
-    // TODO: Only render tiles that are on-screen.
-    for (let y = 0; y < this.height; y++) {
-      for (let x = 0; x < this.width; x++) {
+    const viewbox = camera.viewbox;
+    for (let y = viewbox.top >> 4; y <= (viewbox.bottom >> 4) + 1; y++) {
+      for (let x = viewbox.left >> 4; x <= (viewbox.right >> 4) + 1; x++) {
         const tile = this.getTile(x, y);
         tile.render(tileset, this, x * Tile.width, y * Tile.height, camera);
       }

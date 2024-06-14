@@ -60,7 +60,6 @@ module.exports = [
       path: path.resolve(__dirname, 'dist/client'),
     },
     plugins: [
-      // TODO: client web assets need to be copied to dist/client.
       new CopyPlugin({
         patterns: [
           {from: './client/assets/favicon.ico', to: 'favicon.ico'},

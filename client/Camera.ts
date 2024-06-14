@@ -1,10 +1,20 @@
 import Entity from './entities/Entity';
 import {GameTime} from './system/GameTime';
+import {getHeight, getWidth} from './system/display';
 import {Point, Rectangle} from './system/math';
 
 export class Camera {
   private position = Point.zero;
   private bounds: Rectangle;
+
+  get viewbox() {
+    return new Rectangle(
+      this.position.x,
+      this.position.y,
+      getWidth(),
+      getHeight()
+    );
+  }
 
   constructor(bounds: Rectangle) {
     this.bounds = bounds;
