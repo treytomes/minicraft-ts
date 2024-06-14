@@ -4,6 +4,7 @@ import {TileSet} from './system/display';
 import {Camera} from './Camera';
 import Entity from './entities/Entity';
 import {GameTime} from './system/GameTime';
+import Random from './system/math/Random';
 
 const DEFAULT_WIDTH = 128;
 const DEFAULT_HEIGHT = 128;
@@ -87,6 +88,25 @@ export default class Level {
     this.metaData[x + y * this.width] = data;
   }
 
+  getEntities(x0: number, y0: number, x1: number, y1: number): Entity[] {
+    const result: Entity[] = [];
+    const xt0 = (x0 >> 4) - 1;
+    const yt0 = (y0 >> 4) - 1;
+    const xt1 = (x1 >> 4) + 1;
+    const yt1 = (y1 >> 4) + 1;
+    for (let y = yt0; y <= yt1; y++) {
+      for (let x = xt0; x <= xt1; x++) {
+        if (x < 0 || y < 0 || x >= this.width || y >= this.height) continue;
+        const entities = this.entitiesInTiles[x + y * this.width];
+        for (let i = 0; i < entities.length; i++) {
+          const e = entities[i];
+          if (e.bounds.intersects(x0, y0, x1, y1)) result.push(e);
+        }
+      }
+    }
+    return result;
+  }
+
   add(e: Entity) {
     e.removed = false;
     this.entities.push(e);
@@ -127,15 +147,48 @@ export default class Level {
       }
     }
 
-    // TODO: Only render entities that are on-screen.
-    for (let n = 0; n < this.entities.length; n++) {
-      this.entities[n].render(tileset, camera);
+    const entities = this.getEntities(
+      viewbox.left,
+      viewbox.top,
+      viewbox.right,
+      viewbox.bottom
+    );
+    for (let n = 0; n < entities.length; n++) {
+      entities[n].render(tileset, camera);
     }
   }
 
   update(time: GameTime) {
-    for (let n = 0; n < this.entities.length; n++) {
-      this.entities[n].update(time, this);
+    // TODO: Attempt to spawn a new mob?
+    // trySpawn(1);
+
+    // Tick a random number of tiles.
+    for (let i = 0; i < (this.width * this.height) / 50; i++) {
+      const xt = Random.nextInt(this.width);
+      const yt = Random.nextInt(this.height);
+      this.getTile(xt, yt).tick(this, xt, yt);
+    }
+
+    for (let i = 0; i < this.entities.length; i++) {
+      const e = this.entities[i];
+      const xto = e.position.x >> 4;
+      const yto = e.position.y >> 4;
+
+      e.update(time, this);
+
+      if (e.removed) {
+        this.entities.splice(i, 1);
+        i--;
+        this.removeEntity(xto, yto, e);
+      } else {
+        const xt = e.position.x >> 4;
+        const yt = e.position.y >> 4;
+
+        if (xto !== xt || yto !== yt) {
+          this.removeEntity(xto, yto, e);
+          this.insertEntity(xt, yt, e);
+        }
+      }
     }
   }
 }

@@ -13,58 +13,34 @@ export default class Rectangle {
     this.height = height;
   }
 
-  /**
-   * @returns {Rectangle}
-   */
   static get zero(): Rectangle {
     return new Rectangle(0, 0, 0, 0);
   }
 
-  /**
-   * @returns {number}
-   */
   get left(): number {
     return this.x;
   }
 
-  /**
-   * @returns {number}
-   */
   get right(): number {
     return this.x + this.width - 1;
   }
 
-  /**
-   * @returns {number}
-   */
   get top(): number {
     return this.y;
   }
 
-  /**
-   * @returns {number}
-   */
   get bottom(): number {
     return this.y + this.height - 1;
   }
 
-  /**
-   * @returns {number}
-   */
   get centerX(): number {
     return Math.floor((this.left + this.right) / 2);
   }
 
-  /**
-   * @returns {number}
-   */
   get centerY(): number {
     return Math.floor((this.top + this.bottom) / 2);
   }
 
-  /**
-   * @returns {boolean}
-   */
   contains(x: number, y: number): boolean {
     return (
       isInRange(x, this.left, this.right + 1) &&
@@ -72,9 +48,26 @@ export default class Rectangle {
     );
   }
 
-  /**
-   * @returns {Rectangle}
-   */
+  intersects(x0: number, y0: number, x1: number, y1: number): boolean;
+  intersects(r: Rectangle): boolean;
+  intersects(
+    x0OrRect: number | Rectangle,
+    y0?: number,
+    x1?: number,
+    y1?: number
+  ): boolean {
+    if (x0OrRect instanceof Rectangle) {
+      const r = x0OrRect;
+      return this.intersects(r.left, r.top, r.right, r.bottom);
+    }
+    return !(
+      this.right < x0OrRect ||
+      this.bottom < y0! ||
+      this.left > x1! ||
+      this.top > y1!
+    );
+  }
+
   scale(n: number): Rectangle {
     return new Rectangle(
       this.x + this.width * n,
@@ -84,9 +77,6 @@ export default class Rectangle {
     );
   }
 
-  /**
-   * @returns {Rectangle}
-   */
   resize(w: number, h: number): Rectangle {
     return new Rectangle(this.x, this.y, w, h);
   }
