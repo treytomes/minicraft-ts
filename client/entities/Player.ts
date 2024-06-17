@@ -9,7 +9,6 @@ import {GameTime} from '../system/GameTime';
 import {Sound} from '../system/audio/sound';
 import {PALETTE, TileSet} from '../system/display';
 import Random from '../system/math/Random';
-import {Tiles} from '../tiles/Tile';
 import Entity from './Entity';
 import ItemEntity from './ItemEntity';
 import Mob from './Mob';
@@ -41,6 +40,7 @@ export default class Player extends Mob {
 
     // this.inventory.add(new FurnitureItem(new Workbench()));
     this.inventory.add(new PowerGloveItem());
+    // this.activeItem = new PowerGloveItem();
   }
 
   payStamina(cost: number): boolean {
@@ -255,8 +255,11 @@ export default class Player extends Mob {
     const entities = level.getEntities(x0, y0, x1, y1);
     for (let i = 0; i < entities.length; i++) {
       const e = entities[i];
-      if (e !== this)
-        if (e.interact(this, this.activeItem, this.attackDir)) return true;
+      if (e !== this) {
+        if (e.interact(this, this.activeItem, this.attackDir)) {
+          return true;
+        }
+      }
     }
     return false;
   }
@@ -308,6 +311,7 @@ export default class Player extends Mob {
     this.invulnerableTime = 30 * hurtFactor;
   }
 
+  // TODO: I feel like this function could be simplified.
   attack(level: Level) {
     this.walkDist += 8;
     this.attackDir = this.dir;
@@ -327,8 +331,9 @@ export default class Player extends Mob {
           this.position.x + 8,
           this.position.y + range + yo
         )
-      )
+      ) {
         done = true;
+      }
       if (
         this.dir === Direction.North &&
         this.interactRegion(
@@ -338,8 +343,9 @@ export default class Player extends Mob {
           this.position.x + 8,
           this.position.y - 4 + yo
         )
-      )
+      ) {
         done = true;
+      }
       if (
         this.dir === Direction.East &&
         this.interactRegion(
@@ -349,8 +355,9 @@ export default class Player extends Mob {
           this.position.x + range,
           this.position.y + 8 + yo
         )
-      )
+      ) {
         done = true;
+      }
       if (
         this.dir === Direction.West &&
         this.interactRegion(
@@ -360,19 +367,26 @@ export default class Player extends Mob {
           this.position.x - 4,
           this.position.y + 8 + yo
         )
-      )
+      ) {
         done = true;
+      }
       if (done) return;
 
       let xt = this.position.x >> 4;
       let yt = (this.position.y + yo) >> 4;
       const r = 12;
-      if (this.attackDir === Direction.South)
+      if (this.attackDir === Direction.South) {
         yt = (this.position.y + r + yo) >> 4;
-      if (this.attackDir === Direction.North)
+      }
+      if (this.attackDir === Direction.North) {
         yt = (this.position.y - r + yo) >> 4;
-      if (this.attackDir === Direction.West) xt = (this.position.x - r) >> 4;
-      if (this.attackDir === Direction.East) xt = (this.position.x + r) >> 4;
+      }
+      if (this.attackDir === Direction.West) {
+        xt = (this.position.x - r) >> 4;
+      }
+      if (this.attackDir === Direction.East) {
+        xt = (this.position.x + r) >> 4;
+      }
 
       if (xt >= 0 && yt >= 0 && xt < level.width && yt < level.height) {
         if (
@@ -443,13 +457,18 @@ export default class Player extends Mob {
       let xt = this.position.x >> 4;
       let yt = (this.position.y + yo) >> 4;
       const r = 12;
-      if (this.attackDir === Direction.South)
+      if (this.attackDir === Direction.South) {
         yt = (this.position.y + r + yo) >> 4;
-      if (this.attackDir === Direction.North)
+      }
+      if (this.attackDir === Direction.North) {
         yt = (this.position.y - r + yo) >> 4;
-      if (this.attackDir === Direction.West) xt = (this.position.x - r) >> 4;
-      if (this.attackDir === Direction.East) xt = (this.position.x + r) >> 4;
-
+      }
+      if (this.attackDir === Direction.West) {
+        xt = (this.position.x - r) >> 4;
+      }
+      if (this.attackDir === Direction.East) {
+        xt = (this.position.x + r) >> 4;
+      }
       if (xt >= 0 && yt >= 0 && xt < level.width && yt < level.height) {
         level
           .getTile(xt, yt)
@@ -524,6 +543,7 @@ export default class Player extends Mob {
   }
 
   update(time: GameTime, level: Level) {
+    // TODO: Is the invulnerability timer depleting fast enough?
     if (this.invulnerableTime > 0) this.invulnerableTime -= time.deltaTime;
 
     // TODO: Enable this when we're ready for level transitions.
@@ -552,20 +572,20 @@ export default class Player extends Mob {
 
     if (this.staminaRechargeDelay > 0) {
       // console.log('staminaRechargeDelay', this.staminaRechargeDelay);
-      this.staminaRechargeDelay -= time.deltaTime * staminaFactor * 4;
+      this.staminaRechargeDelay -= time.deltaTime * staminaFactor * 6;
     } else {
       // console.log('staminaRechargeDelay is done.', this.staminaRechargeDelay);
     }
 
     if (this.staminaRechargeDelay <= 0) {
-      this.staminaRecharge += time.deltaTime * staminaFactor * 8;
+      this.staminaRecharge += time.deltaTime * staminaFactor * 10;
       if (this.isSwimming) {
         this.staminaRecharge = 0;
       }
       while (this.staminaRecharge > 10) {
         this.staminaRecharge -= 10;
         if (this.stamina < this.maxStamina)
-          this.stamina += time.deltaTime * staminaFactor * 8;
+          this.stamina += time.deltaTime * staminaFactor * 10;
       }
       // console.log('staminaRecharge', this.staminaRecharge);
       // console.log('stamina', this.stamina);
@@ -575,7 +595,7 @@ export default class Player extends Mob {
     // console.log('isSwimming:', this.isSwimming);
     // console.log('tickTime:', this.tickTime);
     if (this.isSwimming) {
-      this.speed = this.speed.multiply(0.75);
+      this.currentSpeed = this.currentSpeed.multiply(0.75);
 
       // && this.tickTime % 60 === 0) {
       // console.log('swim check');
@@ -590,7 +610,7 @@ export default class Player extends Mob {
       // && this.staminaRechargeDelay % 2 === 0) {
       // The basic idea seems to be to slow down the player when stamina runs out.
       // TODO: Make sure this happens.
-      this.speed = this.speed.multiply(0.5);
+      this.currentSpeed = this.currentSpeed.multiply(0.5);
       // this.moveBy(this.xa, this.ya);
     }
 

@@ -3,7 +3,6 @@ import Level from '../Level';
 import {GameTime} from '../system/GameTime';
 import {Sound} from '../system/audio/sound';
 import {PALETTE} from '../system/display';
-import {Point} from '../system/math';
 import {Tile} from '../tiles';
 import Entity from './Entity';
 import {TextParticle} from './particles';

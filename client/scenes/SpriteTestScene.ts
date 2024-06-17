@@ -126,15 +126,18 @@ export default class SpriteTestScene extends Scene {
   onKeyDown(e: KeyboardEvent) {
     super.onKeyDown(e);
 
-    const PLAYER_SPEED = 0.05;
     if (e.key === Keys.ArrowUp) {
-      this.player.speed = Point.unitY.multiply(PLAYER_SPEED).negate;
+      this.player.currentSpeed = Point.unitY.multiply(
+        this.player.maxSpeed
+      ).negate;
     } else if (e.key === Keys.ArrowDown) {
-      this.player.speed = Point.unitY.multiply(PLAYER_SPEED);
+      this.player.currentSpeed = Point.unitY.multiply(this.player.maxSpeed);
     } else if (e.key === Keys.ArrowLeft) {
-      this.player.speed = Point.unitX.multiply(PLAYER_SPEED).negate;
+      this.player.currentSpeed = Point.unitX.multiply(
+        this.player.maxSpeed
+      ).negate;
     } else if (e.key === Keys.ArrowRight) {
-      this.player.speed = Point.unitX.multiply(PLAYER_SPEED);
+      this.player.currentSpeed = Point.unitX.multiply(this.player.maxSpeed);
     }
 
     if (e.key === Keys.Escape) {
@@ -149,12 +152,16 @@ export default class SpriteTestScene extends Scene {
       case Keys.ArrowUp:
       case Keys.ArrowDown:
         // 0 the y-axis
-        this.player.speed = Point.unitX.multiply(this.player.speed.x);
+        this.player.currentSpeed = Point.unitX.multiply(
+          this.player.currentSpeed.x
+        );
         break;
       case Keys.ArrowLeft:
       case Keys.ArrowRight:
         // 0 the x-axis
-        this.player.speed = Point.unitY.multiply(this.player.speed.y);
+        this.player.currentSpeed = Point.unitY.multiply(
+          this.player.currentSpeed.y
+        );
         break;
     }
   }

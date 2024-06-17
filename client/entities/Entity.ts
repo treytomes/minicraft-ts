@@ -25,7 +25,9 @@ export default class Entity {
    */
   position: Point;
 
-  speed: Point;
+  maxSpeed = 0.05;
+
+  currentSpeed: Point;
   size: Point;
   dir = Direction.South;
   /**
@@ -52,7 +54,7 @@ export default class Entity {
 
     // TODO: I changed this from 16 to 12.  Make sure it doesn't break stuff.
     this.size = new Point(12, 12);
-    this.speed = Point.zero;
+    this.currentSpeed = Point.zero;
   }
 
   remove() {
@@ -158,7 +160,7 @@ export default class Entity {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(time: GameTime, level: Level) {
     this.tickTime += time.deltaTime;
-    const delta = this.speed.multiply(time.deltaTime);
+    const delta = this.currentSpeed.multiply(time.deltaTime);
     this.moveBy(level, delta.x, 0);
     this.moveBy(level, 0, delta.y);
   }

@@ -13,8 +13,6 @@ import {
 } from '../system/ui';
 import {Tile} from '../tiles';
 
-const PLAYER_SPEED = 0.05;
-
 export default class GameplayScene extends Scene {
   private world: World;
   private camera: Camera;
@@ -131,7 +129,7 @@ export default class GameplayScene extends Scene {
         time,
         this.cameraOffset,
         this.world.player,
-        PLAYER_SPEED / 32
+        this.world.player.maxSpeed / 32
       );
     }
     Tile.updateTicks(time);
@@ -148,32 +146,39 @@ export default class GameplayScene extends Scene {
   onKeyDown(e: KeyboardEvent) {
     super.onKeyDown(e);
 
+    // TODO: GetInputAxis --> Direction --> Vector.
+
     if (this.world.player) {
       switch (e.key) {
         case Keys.ArrowUp:
-          this.world.player.speed = new Point(
-            this.world.player.speed.x,
-            -PLAYER_SPEED
+          this.world.player.currentSpeed = new Point(
+            this.world.player.currentSpeed.x,
+            -this.world.player.maxSpeed
           );
           break;
         case Keys.ArrowDown:
-          this.world.player.speed = new Point(
-            this.world.player.speed.x,
-            PLAYER_SPEED
+          this.world.player.currentSpeed = new Point(
+            this.world.player.currentSpeed.x,
+            this.world.player.maxSpeed
           );
           break;
         case Keys.ArrowLeft:
-          this.world.player.speed = new Point(
-            -PLAYER_SPEED,
-            this.world.player.speed.y
+          this.world.player.currentSpeed = new Point(
+            -this.world.player.maxSpeed,
+            this.world.player.currentSpeed.y
           );
           break;
         case Keys.ArrowRight:
-          this.world.player.speed = new Point(
-            PLAYER_SPEED,
-            this.world.player.speed.y
+          this.world.player.currentSpeed = new Point(
+            this.world.player.maxSpeed,
+            this.world.player.currentSpeed.y
           );
           break;
+        case Keys.Space:
+          this.world.player.tryAttack(this.world.currentLevel);
+          break;
+        default:
+          console.log('You pressed: ', e.key);
       }
     }
     switch (e.key) {
@@ -192,8 +197,8 @@ export default class GameplayScene extends Scene {
       case Keys.ArrowUp:
       case Keys.ArrowDown:
         // 0 the y-axis
-        this.world.player.speed = this.world.player.speed = new Point(
-          this.world.player.speed.x,
+        this.world.player.currentSpeed = new Point(
+          this.world.player.currentSpeed.x,
           0
         );
 
@@ -201,9 +206,9 @@ export default class GameplayScene extends Scene {
       case Keys.ArrowLeft:
       case Keys.ArrowRight:
         // 0 the x-axis
-        this.world.player.speed = this.world.player.speed = new Point(
+        this.world.player.currentSpeed = new Point(
           0,
-          this.world.player.speed.y
+          this.world.player.currentSpeed.y
         );
         break;
     }
