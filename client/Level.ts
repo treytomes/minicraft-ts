@@ -84,7 +84,7 @@ export default class Level {
   }
 
   getData(x: number, y: number) {
-    return this.metaData[x + y * this.width];
+    return this.metaData[x + y * this.width] ?? 0;
   }
 
   setData(x: number, y: number, data: number) {
@@ -174,7 +174,7 @@ export default class Level {
       // TODO: I think I might rather tick every time every frame, but I'm not sure.
       const xt = Random.nextInt(this.width);
       const yt = Random.nextInt(this.height);
-      this.getTile(xt, yt).tick(this, xt, yt);
+      this.getTile(xt, yt).tick(time, this, xt, yt);
     }
 
     for (let i = 0; i < this.entities.length; i++) {
