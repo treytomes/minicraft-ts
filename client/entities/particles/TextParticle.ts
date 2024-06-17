@@ -44,7 +44,7 @@ export default class TextParticle extends Particle {
       this.za *= -time.deltaTime / 64;
       this.xa *= time.deltaTime / 32;
       this.ya *= time.deltaTime / 32;
-      console.log(-time.deltaTime / 64, time.deltaTime / 48);
+      // console.log(-time.deltaTime / 64, time.deltaTime / 48);
     }
     // this.za -= 0.15;
     this.za -= time.deltaTime / 128;

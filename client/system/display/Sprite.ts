@@ -4,6 +4,8 @@ import Color from './Color';
 import {PALETTE} from './palette';
 import TileSet from './TileSet';
 
+// TODO: Sprite no longer serves a purpose in this engine.
+
 /**
  * A colored group of tiles that can move around.
  */

@@ -1,4 +1,3 @@
-import {totalmem} from 'os';
 import Item from './items/Item';
 import ResourceItem from './items/ResourceItem';
 import {Resource} from './resources';

@@ -1,6 +1,8 @@
 import {lerp} from '.';
 import Rectangle from './Rectangle';
 
+// TODO: Point enforces integers, Vector can include floats.
+
 export default class Point {
   readonly x: number;
   readonly y: number;
