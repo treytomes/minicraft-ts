@@ -134,6 +134,32 @@ export default class Entity {
       if (isBlocked) break;
     }
 
+    const wasInside = level.getEntities(
+      this.bounds.left,
+      this.bounds.top,
+      this.bounds.right,
+      this.bounds.bottom
+    );
+    const isInside = level.getEntities(
+      this.bounds.left + delta.x,
+      this.bounds.top + delta.y,
+      this.bounds.right + delta.x,
+      this.bounds.bottom + delta.y
+    );
+    for (let i = 0; i < isInside.length; i++) {
+      const e = isInside[i];
+      if (e === this) continue;
+
+      e.touchedBy(this);
+
+      if (wasInside.includes(e)) continue;
+      // Only consider blocks for newly collided entities.
+
+      if (e.blocks(this)) {
+        isBlocked = true;
+      }
+    }
+
     if (!isBlocked) {
       const xt = Math.floor(this.position.x / Tile.width);
       const yt = Math.floor(this.position.y / Tile.height);
