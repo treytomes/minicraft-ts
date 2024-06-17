@@ -6,7 +6,11 @@ import Scene from '../system/Scene';
 import {PALETTE, clear} from '../system/display';
 import {Keys} from '../system/input';
 import {Point, Rectangle} from '../system/math';
-import {ButtonUIElement, LabelUIElement} from '../system/ui';
+import {
+  ButtonUIElement,
+  LabelUIElement,
+  ProgressMeterUIElement,
+} from '../system/ui';
 import {Tile} from '../tiles';
 
 const PLAYER_SPEED = 0.05;
@@ -93,6 +97,30 @@ export default class GameplayScene extends Scene {
         0
       )
     );
+
+    const healthMeter = new ProgressMeterUIElement(
+      0,
+      this.height - 16,
+      10,
+      0 + 12 * 32,
+      this.tileset,
+      PALETTE.get(0, 200, 500, 533),
+      PALETTE.get(0, 100, 0, 0),
+      () => this.world.player?.health ?? 0
+    );
+    this.uiElements.push(healthMeter);
+
+    const staminaMeter = new ProgressMeterUIElement(
+      0,
+      this.height - 8,
+      10,
+      1 + 12 * 32,
+      this.tileset,
+      PALETTE.get(0, 220, 550, 553),
+      PALETTE.get(0, 110, 0, 0),
+      () => this.world.player?.stamina ?? 0
+    );
+    this.uiElements.push(staminaMeter);
   }
 
   update(time: GameTime) {

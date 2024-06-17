@@ -5,6 +5,7 @@ import {Camera} from './Camera';
 import Entity from './entities/Entity';
 import {GameTime} from './system/GameTime';
 import Random from './system/math/Random';
+import Player from './entities/Player';
 
 const DEFAULT_WIDTH = 128;
 const DEFAULT_HEIGHT = 128;
@@ -32,6 +33,8 @@ export default class Level {
   public readonly dirtColor: number;
   public readonly sandColor: number;
   public monsterDensity = 8;
+
+  player?: Player;
 
   private readonly tileData: number[];
   private readonly metaData: number[];
@@ -108,12 +111,16 @@ export default class Level {
   }
 
   add(e: Entity) {
+    if (e instanceof Player) this.player = e;
+
     e.removed = false;
     this.entities.push(e);
     this.insertEntity(e.position.x / Tile.width, e.position.y / Tile.height, e);
   }
 
   remove(e: Entity) {
+    if (e instanceof Player) this.player = undefined;
+
     const index = this.entities.indexOf(e);
     if (index < 0) return;
     this.entities.splice(index, 1);

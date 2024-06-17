@@ -92,6 +92,6 @@ export default class OreTile extends Tile {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   bumpedInto(level: Level, x: number, y: number, entity: Entity) {
-    entity.hurt(this, x, y, 3);
+    entity.hurt(level, this, x, y, 3);
   }
 }

@@ -1,16 +1,18 @@
 import {Camera} from '../Camera';
 import {Direction} from '../Direction';
 import Level from '../Level';
+import Item from '../items/Item';
 import {GameTime} from '../system/GameTime';
 import {TileSet} from '../system/display';
 import {Point, Rectangle} from '../system/math';
 import {Tile} from '../tiles/Tile';
 import ItemEntity from './ItemEntity';
 import Mob from './Mob';
+import Player from './Player';
 
 // TODO: Finish implementing Entity.
 export default class Entity {
-  level: Level | undefined;
+  // level: Level | undefined;
   removed = false;
 
   // TODO: This should get toggled when the entity bumps into a liquid tile.
@@ -63,7 +65,16 @@ export default class Entity {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected touchedBy(entity: Entity): void {}
+  onUsed(player: Player, attackDir: Direction): boolean {
+    return false;
+  }
+
+  interact(player: Player, item: Item, attackDir: Direction): boolean {
+    return item.interact(player, this, attackDir);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  touchedBy(entity: Entity): void {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   touchItem(itemEntity: ItemEntity) {}
@@ -129,9 +140,11 @@ export default class Entity {
     }
   }
 
-  hurt(mob: Mob, dmg: number, attackDir: number): void;
-  hurt(tile: Tile, x: number, y: number, dmg: number): void;
+  hurt(level: Level, mob: Mob, dmg: number, attackDir: number): void;
+  hurt(level: Level, tile: Tile, x: number, y: number, dmg: number): void;
   hurt(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    level: Level,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     mobOrTile: Mob | Tile,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

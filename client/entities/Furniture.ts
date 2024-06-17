@@ -78,7 +78,7 @@ export default class Furniture extends Entity {
     return true;
   }
 
-  protected touchedBy(entity: Entity) {
+  public touchedBy(entity: Entity) {
     if (entity instanceof Player && this.pushTime === 0) {
       this.pushDir = (entity as Player).dir;
       this.pushTime = 10;

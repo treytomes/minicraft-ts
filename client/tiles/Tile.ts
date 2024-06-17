@@ -8,6 +8,7 @@ import Entity from '../entities/Entity';
 import Mob from '../entities/Mob';
 import Item from '../items/Item';
 import Player from '../entities/Player';
+import {Direction} from '../Direction';
 
 const TILE_WIDTH = 16;
 const TILE_HEIGHT = 16;
@@ -131,6 +132,21 @@ export class Tile {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   steppedOn(level: Level, xt: number, yt: number, entity: Entity) {}
+
+  use(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    level: Level,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    xt: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    yt: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    player: Player,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    attackDir: Direction
+  ): boolean {
+    return false;
+  }
 
   static getById(tileId: number) {
     return indexedTiles[tileId];
