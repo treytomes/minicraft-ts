@@ -39,11 +39,11 @@ export default class ItemEntity extends Entity {
     this.ya = Random.nextGaussian() * 0.2;
     this.za = Random.nextFloat() * 0.7 + 1;
 
-    this.lifeTime = 60 * 10 + Random.nextInt(60);
+    this.lifeTime = 3000 + Random.nextInt(3000);
   }
 
   update(time: GameTime, level: Level) {
-    this.time++;
+    this.time += time.deltaTime;
     if (this.time >= this.lifeTime) {
       this.remove();
       return;
@@ -53,11 +53,13 @@ export default class ItemEntity extends Entity {
     this.zz += this.za;
     if (this.zz < 0) {
       this.zz = 0;
-      this.za *= -0.5;
-      this.xa *= 0.6;
-      this.ya *= 0.6;
+
+      this.za *= -time.deltaTime / 64;
+      this.xa *= time.deltaTime / 32;
+      this.ya *= time.deltaTime / 32;
     }
-    this.za -= 0.15;
+    this.za -= time.deltaTime / 128;
+
     const ox = this.position.x;
     const oy = this.position.y;
     const nx = Math.floor(this.xx);
@@ -70,7 +72,7 @@ export default class ItemEntity extends Entity {
     this.xx += gotX - expectedX;
     this.yy += gotY - expectedY;
 
-    if (this.hurtTime > 0) this.hurtTime--;
+    if (this.hurtTime > 0) this.hurtTime -= time.deltaTime;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -79,8 +81,9 @@ export default class ItemEntity extends Entity {
   }
 
   render(tileset: TileSet, camera: Camera) {
-    if (this.time >= this.lifeTime - 6 * 20) {
-      if ((this.time / 6) % 2 === 0) return;
+    if (this.time >= this.lifeTime / 3) {
+      // Blink the item as it near death.
+      if ((this.time >> 3) % 2 === 0) return;
     }
 
     const renderPosition = camera.translate(
