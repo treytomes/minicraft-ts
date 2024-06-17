@@ -5,6 +5,7 @@ import {Camera} from '../Camera';
 import Entity from '../entities/Entity';
 import Random from '../system/math/Random';
 import LiquidTile from './LiquidTile';
+import {GameTime} from '../system/GameTime';
 
 export class WaterTile extends LiquidTile {
   constructor() {
@@ -117,7 +118,7 @@ export class WaterTile extends LiquidTile {
     return e.canSwim;
   }
 
-  tick(level: Level, xt: number, yt: number) {
+  tick(time: GameTime, level: Level, xt: number, yt: number) {
     let xn = xt;
     let yn = yt;
 

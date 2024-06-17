@@ -1,10 +1,16 @@
 import {Camera} from '../Camera';
 import Level from '../Level';
+import ToolType from '../ToolType';
+import ItemEntity from '../entities/ItemEntity';
 import Player from '../entities/Player';
 import Item from '../items/Item';
+import ResourceItem from '../items/ResourceItem';
 import ToolItem from '../items/ToolItem';
+import {Resources} from '../resources/Resource';
+import {Sound} from '../system/audio/sound';
 import {PALETTE, TileSet} from '../system/display';
-import {Tile} from './Tile';
+import Random from '../system/math/Random';
+import {Tile, Tiles} from './Tile';
 
 export default class DirtTile extends Tile {
   constructor() {
@@ -43,23 +49,28 @@ export default class DirtTile extends Tile {
     attackDir: number
   ): boolean {
     if (item instanceof ToolItem) {
-      // TODO: Finish implementing DirtTile.interact.
-      // const tool = item as ToolItem;
-      // if (tool.type === ToolType.shovel) {
-      // 	if (player.payStamina(4 - tool.level)) {
-      // 		level.setTile(xt, yt, Tiles.hole, 0);
-      // 		level.add(new ItemEntity(new ResourceItem(Resource.dirt), xt * 16 + Random.nextInt(10) + 3, yt * 16 + Random.nextInt(10) + 3));
-      // 		Sound.monsterHurt.play();
-      // 		return true;
-      // 	}
-      // }
-      // if (tool.type === ToolType.hoe) {
-      // 	if (player.payStamina(4 - tool.level)) {
-      // 		level.setTile(xt, yt, Tile.farmland, 0);
-      // 		Sound.monsterHurt.play();
-      // 		return true;
-      // 	}
-      // }
+      const tool = item as ToolItem;
+      if (tool.type === ToolType.shovel) {
+        if (player.payStamina(4 - tool.level)) {
+          level.setTile(xt, yt, Tiles.hole, 0);
+          level.add(
+            new ItemEntity(
+              new ResourceItem(Resources.dirt),
+              xt * 16 + Random.nextInt(10) + 3,
+              yt * 16 + Random.nextInt(10) + 3
+            )
+          );
+          Sound.monsterhurt.play();
+          return true;
+        }
+      }
+      if (tool.type === ToolType.hoe) {
+        if (player.payStamina(4 - tool.level)) {
+          level.setTile(xt, yt, Tiles.farmland, 0);
+          Sound.monsterhurt.play();
+          return true;
+        }
+      }
     }
     return false;
   }

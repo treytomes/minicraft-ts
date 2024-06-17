@@ -5,8 +5,9 @@ import Entity from '../entities/Entity';
 import {PALETTE, TileSet} from '../system/display';
 import {Tile, Tiles} from './Tile';
 import LiquidTile from './LiquidTile';
+import {GameTime} from '../system/GameTime';
 
-// TODO: LavaTile and WaterTile should inherit from LiquidTile.
+// TODO: LavaTile should hurt anything that steps on it.
 export default class LavaTile extends LiquidTile {
   constructor() {
     super(PALETTE.get(511)[0]);
@@ -118,7 +119,8 @@ export default class LavaTile extends LiquidTile {
     return e.canSwim;
   }
 
-  tick(level: Level, xt: number, yt: number) {
+  // TODO: Move this to LiquidTile.
+  tick(time: GameTime, level: Level, xt: number, yt: number) {
     let xn = xt;
     let yn = yt;
 

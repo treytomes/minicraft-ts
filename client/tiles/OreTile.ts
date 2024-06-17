@@ -2,12 +2,16 @@ import {Camera} from '../Camera';
 import Level from '../Level';
 import ToolType from '../ToolType';
 import Entity from '../entities/Entity';
+import ItemEntity from '../entities/ItemEntity';
 import Player from '../entities/Player';
+import {SmashParticle, TextParticle} from '../entities/particles';
 import Item from '../items/Item';
+import ResourceItem from '../items/ResourceItem';
 import ToolItem from '../items/ToolItem';
 import {Resource} from '../resources/Resource';
 import {PALETTE, TileSet} from '../system/display';
-import {Tile} from './Tile';
+import Random from '../system/math/Random';
+import {Tile, Tiles} from './Tile';
 
 export default class OreTile extends Tile {
   private toDrop: Resource;
@@ -70,24 +74,36 @@ export default class OreTile extends Tile {
     return false;
   }
 
-  // TODO: Finish implementing OreTile.hurtTile.
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected hurtTile(level: Level, x: number, y: number, dmg: number) {
-    // const damage = level.getData(x, y) + 1;
-    // level.add(new SmashParticle(x * 16 + 8, y * 16 + 8));
-    // level.add(new TextParticle("" + dmg, x * 16 + 8, y * 16 + 8, Color.get(-1, 500, 500, 500)));
-    // if (dmg > 0) {
-    // 	let count = Random.nextInt(2);
-    // 	if (damage >= Random.nextInt(10) + 3) {
-    // 		level.setTile(x, y, Tile.dirt, 0);
-    // 		count += 2;
-    // 	} else {
-    // 		level.setData(x, y, damage);
-    // 	}
-    // 	for (int i = 0; i < count; i++) {
-    // 		level.add(new ItemEntity(new ResourceItem(toDrop), x * 16 + Random.nextInt(10) + 3, y * 16 + Random.nextInt(10) + 3));
-    // 	}
-    // }
+    const damage = level.getData(x, y) + 1;
+    level.add(new SmashParticle(x * 16 + 8, y * 16 + 8));
+    level.add(
+      new TextParticle(
+        '' + dmg,
+        x * 16 + 8,
+        y * 16 + 8,
+        PALETTE.get(-1, 500, 500, 500)
+      )
+    );
+    if (dmg > 0) {
+      let count = Random.nextInt(2);
+      if (damage >= Random.nextInt(10) + 3) {
+        level.setTile(x, y, Tiles.dirt, 0);
+        count += 2;
+      } else {
+        level.setData(x, y, damage);
+      }
+      for (let i = 0; i < count; i++) {
+        level.add(
+          new ItemEntity(
+            new ResourceItem(this.toDrop),
+            x * 16 + Random.nextInt(10) + 3,
+            y * 16 + Random.nextInt(10) + 3
+          )
+        );
+      }
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -8,6 +8,10 @@ import Player from '../entities/Player';
 import ToolItem from '../items/ToolItem';
 import ToolType from '../ToolType';
 import {Sound} from '../system/audio/sound';
+import ItemEntity from '../entities/ItemEntity';
+import ResourceItem from '../items/ResourceItem';
+import {Resources} from '../resources/Resource';
+import {GameTime} from '../system/GameTime';
 
 export default class GrassTile extends Tile {
   constructor(mapColor?: Color) {
@@ -85,7 +89,8 @@ export default class GrassTile extends Tile {
       });
   }
 
-  tick(level: Level, xt: number, yt: number) {
+  tick(time: GameTime, level: Level, xt: number, yt: number) {
+    // TODO: This should be based on time somehow.
     if (Random.nextInt(40) !== 0) return;
 
     let xn = xt;
@@ -117,37 +122,36 @@ export default class GrassTile extends Tile {
     attackDir: number
   ) {
     if (item instanceof ToolItem) {
-      // TODO: Finish implementing grass interaction logic.
       const tool = item as ToolItem;
       if (tool.type === ToolType.shovel) {
         if (player.payStamina(4 - tool.level)) {
           level.setTile(xt, yt, Tiles.dirt, 0);
           Sound.monsterhurt.play();
-          // if (Random.nextInt(5) === 0) {
-          //   level.add(
-          //     new ItemEntity(
-          //       new ResourceItem(Resource.seeds),
-          //       xt * 16 + Random.nextInt(10) + 3,
-          //       yt * 16 + Random.nextInt(10) + 3
-          //     )
-          //   );
-          //   return true;
-          // }
+          if (Random.nextInt(5) === 0) {
+            level.add(
+              new ItemEntity(
+                new ResourceItem(Resources.seeds),
+                xt * 16 + Random.nextInt(10) + 3,
+                yt * 16 + Random.nextInt(10) + 3
+              )
+            );
+            return true;
+          }
         }
       }
       if (tool.type === ToolType.hoe) {
         if (player.payStamina(4 - tool.level)) {
           Sound.monsterhurt.play();
-          // if (Random.nextInt(5) === 0) {
-          //   level.add(
-          //     new ItemEntity(
-          //       new ResourceItem(Resource.seeds),
-          //       xt * 16 + Random.nextInt(10) + 3,
-          //       yt * 16 + Random.nextInt(10) + 3
-          //     )
-          //   );
-          //   return true;
-          // }
+          if (Random.nextInt(5) === 0) {
+            level.add(
+              new ItemEntity(
+                new ResourceItem(Resources.seeds),
+                xt * 16 + Random.nextInt(10) + 3,
+                yt * 16 + Random.nextInt(10) + 3
+              )
+            );
+            return true;
+          }
           level.setTile(xt, yt, Tiles.farmland, 0);
           return true;
         }

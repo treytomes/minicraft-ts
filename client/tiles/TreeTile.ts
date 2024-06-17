@@ -1,4 +1,4 @@
-import {Tile} from './Tile';
+import {Tile, Tiles} from './Tile';
 import {PALETTE, TileSet} from '../system/display';
 import {Camera} from '../Camera';
 import Entity from '../entities/Entity';
@@ -8,6 +8,11 @@ import ToolItem from '../items/ToolItem';
 import ToolType from '../ToolType';
 import Random from '../system/math/Random';
 import Level from '../Level';
+import ItemEntity from '../entities/ItemEntity';
+import ResourceItem from '../items/ResourceItem';
+import {SmashParticle, TextParticle} from '../entities/particles';
+import {Resources} from '../resources/Resource';
+import {GameTime} from '../system/GameTime';
 
 export default class TreeTile extends Tile {
   constructor() {
@@ -75,10 +80,11 @@ export default class TreeTile extends Tile {
     }
   }
 
-  tick(level: Level, xt: number, yt: number) {
+  tick(time: GameTime, level: Level, xt: number, yt: number) {
     const damage = level.getData(xt, yt);
     if (damage > 0) {
-      level.setData(xt, yt, damage - 1);
+      console.log('Damage:', damage, '-->', damage - time.deltaTime / 32);
+      level.setData(xt, yt, damage - time.deltaTime / 32);
     }
   }
 
@@ -110,27 +116,53 @@ export default class TreeTile extends Tile {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected hurtTile(level: Level, x: number, y: number, dmg: number) {
-    // {
-    // 	const count = Random.nextInt(10) == 0 ? 1 : 0;
-    // 	for (let i = 0; i < count; i++) {
-    // 		level.add(new ItemEntity(new ResourceItem(Resource.apple), x * 16 + Random.nextInt(10) + 3, y * 16 + Random.nextInt(10) + 3));
-    // 	}
-    // }
-    // const damage = level.getData(x, y) + dmg;
-    // level.add(new SmashParticle(x * 16 + 8, y * 16 + 8));
-    // level.add(new TextParticle("" + dmg, x * 16 + 8, y * 16 + 8, PALETTE.get(-1, 500, 500, 500)));
-    // if (damage >= 20) {
-    // 	const count = Random.nextInt(2) + 1;
-    // 	for (let i = 0; i < count; i++) {
-    // 		level.add(new ItemEntity(new ResourceItem(Resource.wood), x * 16 + Random.nextInt(10) + 3, y * 16 + Random.nextInt(10) + 3));
-    // 	}
-    // 	count = Random.nextInt(Random.nextInt(4) + 1);
-    // 	for (let i = 0; i < count; i++) {
-    // 		level.add(new ItemEntity(new ResourceItem(Resource.acorn), x * 16 + Random.nextInt(10) + 3, y * 16 + Random.nextInt(10) + 3));
-    // 	}
-    // 	level.setTile(x, y, Tiles.grass, 0);
-    // } else {
-    // 	level.setData(x, y, damage);
-    // }
+    {
+      const count = Random.nextInt(10) === 0 ? 1 : 0;
+      for (let i = 0; i < count; i++) {
+        level.add(
+          new ItemEntity(
+            new ResourceItem(Resources.apple),
+            x * 16 + Random.nextInt(10) + 3,
+            y * 16 + Random.nextInt(10) + 3
+          )
+        );
+      }
+    }
+    const damage = level.getData(x, y) + dmg;
+    level.add(new SmashParticle(x * 16 + 8, y * 16 + 8));
+    level.add(
+      new TextParticle(
+        '' + dmg,
+        x * 16 + 8,
+        y * 16 + 8,
+        PALETTE.get(-1, 500, 500, 500)
+      )
+    );
+    // TODO: Literals should be properties.
+    if (damage >= 20) {
+      let count = Random.nextInt(2) + 1;
+      for (let i = 0; i < count; i++) {
+        level.add(
+          new ItemEntity(
+            new ResourceItem(Resources.wood),
+            x * 16 + Random.nextInt(10) + 3,
+            y * 16 + Random.nextInt(10) + 3
+          )
+        );
+      }
+      count = Random.nextInt(Random.nextInt(4) + 1);
+      for (let i = 0; i < count; i++) {
+        level.add(
+          new ItemEntity(
+            new ResourceItem(Resources.acorn),
+            x * 16 + Random.nextInt(10) + 3,
+            y * 16 + Random.nextInt(10) + 3
+          )
+        );
+      }
+      level.setTile(x, y, Tiles.grass, 0);
+    } else {
+      level.setData(x, y, damage);
+    }
   }
 }

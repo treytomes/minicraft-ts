@@ -1,12 +1,16 @@
 import {Camera} from '../Camera';
 import Level from '../Level';
 import ToolType from '../ToolType';
+import ItemEntity from '../entities/ItemEntity';
 import Player from '../entities/Player';
 import Item from '../items/Item';
+import ResourceItem from '../items/ResourceItem';
 import ToolItem from '../items/ToolItem';
+import {Resources} from '../resources/Resource';
 import {PALETTE, TileSet} from '../system/display';
+import Random from '../system/math/Random';
 import GrassTile from './GrassTile';
-import {Tile} from './Tile';
+import {Tile, Tiles} from './Tile';
 
 export default class FlowerTile extends GrassTile {
   constructor() {
@@ -71,10 +75,21 @@ export default class FlowerTile extends GrassTile {
       const tool = item as ToolItem;
       if (tool.type === ToolType.shovel) {
         if (player.payStamina(4 - tool.level)) {
-          // TODO: Finish implementing FlowerTile.interact
-          // level.add(new ItemEntity(new ResourceItem(Resources.flower), x * 16 + Random.nextInt(10) + 3, y * 16 + Random.nextInt(10) + 3));
-          // level.add(new ItemEntity(new ResourceItem(Resources.flower), x * 16 + Random.nextInt(10) + 3, y * 16 + Random.nextInt(10) + 3));
-          // level.setTile(x, y, Tiles.grass, 0);
+          level.add(
+            new ItemEntity(
+              new ResourceItem(Resources.flower),
+              xt * 16 + Random.nextInt(10) + 3,
+              yt * 16 + Random.nextInt(10) + 3
+            )
+          );
+          level.add(
+            new ItemEntity(
+              new ResourceItem(Resources.flower),
+              xt * 16 + Random.nextInt(10) + 3,
+              yt * 16 + Random.nextInt(10) + 3
+            )
+          );
+          level.setTile(xt, yt, Tiles.grass, 0);
           return true;
         }
       }
@@ -84,11 +99,16 @@ export default class FlowerTile extends GrassTile {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected hurtTile(level: Level, x: number, y: number, dmg: number) {
-    // TODO: Finish implementing FlowerTile.hurtTile.
-    // const count = Random.nextInt(2) + 1;
-    // for (int i = 0; i < count; i++) {
-    // 	level.add(new ItemEntity(new ResourceItem(Resources.flower), x * 16 + Random.nextInt(10) + 3, y * 16 + Random.nextInt(10) + 3));
-    // }
-    // level.setTile(x, y, Tiles.grass, 0);
+    const count = Random.nextInt(2) + 1;
+    for (let i = 0; i < count; i++) {
+      level.add(
+        new ItemEntity(
+          new ResourceItem(Resources.flower),
+          x * 16 + Random.nextInt(10) + 3,
+          y * 16 + Random.nextInt(10) + 3
+        )
+      );
+    }
+    level.setTile(x, y, Tiles.grass, 0);
   }
 }

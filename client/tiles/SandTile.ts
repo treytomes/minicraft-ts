@@ -2,12 +2,17 @@ import {Camera} from '../Camera';
 import Level from '../Level';
 import ToolType from '../ToolType';
 import Entity from '../entities/Entity';
+import ItemEntity from '../entities/ItemEntity';
 import Mob from '../entities/Mob';
 import Player from '../entities/Player';
 import Item from '../items/Item';
+import ResourceItem from '../items/ResourceItem';
 import ToolItem from '../items/ToolItem';
+import {Resources} from '../resources/Resource';
+import {GameTime} from '../system/GameTime';
 import {PALETTE, TileSet} from '../system/display';
-import {Tile} from './Tile';
+import Random from '../system/math/Random';
+import {Tile, Tiles} from './Tile';
 
 export default class SandTile extends Tile {
   constructor() {
@@ -130,9 +135,9 @@ export default class SandTile extends Tile {
     }
   }
 
-  tick(level: Level, xt: number, yt: number) {
+  tick(time: GameTime, level: Level, xt: number, yt: number) {
     const d = level.getData(xt, yt);
-    if (d > 0) level.setData(xt, yt, d - 1);
+    if (d > 0) level.setData(xt, yt, d - time.deltaTime);
   }
 
   steppedOn(level: Level, x: number, y: number, entity: Entity) {
@@ -154,9 +159,14 @@ export default class SandTile extends Tile {
       const tool = item as ToolItem;
       if (tool.type === ToolType.shovel) {
         if (player.payStamina(4 - tool.level)) {
-          // TODO: Finish implementing SandTile.interact.
-          // level.setTile(xt, yt, Tiles.dirt, 0);
-          // level.add(new ItemEntity(new ResourceItem(Resource.sand), xt * 16 + Random.nextInt(10) + 3, yt * 16 + Random.nextInt(10) + 3));
+          level.setTile(xt, yt, Tiles.dirt, 0);
+          level.add(
+            new ItemEntity(
+              new ResourceItem(Resources.sand),
+              xt * 16 + Random.nextInt(10) + 3,
+              yt * 16 + Random.nextInt(10) + 3
+            )
+          );
           return true;
         }
       }

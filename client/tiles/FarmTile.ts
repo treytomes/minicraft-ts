@@ -8,6 +8,7 @@ import Item from '../items/Item';
 import ToolItem from '../items/ToolItem';
 import {PALETTE, TileSet} from '../system/display';
 import {Tile, Tiles} from './Tile';
+import {GameTime} from '../system/GameTime';
 
 export default class FarmTile extends Tile {
   constructor() {
@@ -58,10 +59,10 @@ export default class FarmTile extends Tile {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  tick(level: Level, xt: number, yt: number) {
+  tick(time: GameTime, level: Level, xt: number, yt: number) {
     const age = level.getData(xt, yt);
     if (age < 5) {
-      level.setData(xt, yt, age + 1);
+      level.setData(xt, yt, age + time.deltaTime);
     }
   }
 

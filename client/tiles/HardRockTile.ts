@@ -7,7 +7,12 @@ import Player from '../entities/Player';
 import Item from '../items/Item';
 import ToolItem from '../items/ToolItem';
 import {PALETTE, TileSet} from '../system/display';
-import {Tile} from './Tile';
+import {Tile, Tiles} from './Tile';
+import {SmashParticle, TextParticle} from '../entities/particles';
+import ItemEntity from '../entities/ItemEntity';
+import ResourceItem from '../items/ResourceItem';
+import {Resources} from '../resources/Resource';
+import {GameTime} from '../system/GameTime';
 
 export default class HardRockTile extends Tile {
   constructor() {
@@ -146,27 +151,45 @@ export default class HardRockTile extends Tile {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected hurtTile(level: Level, x: number, y: number, dmg: number) {
-    // TODO: Finish implementing HardRockTile.hurt.
-    // int damage = level.getData(x, y) + dmg;
-    // level.add(new SmashParticle(x * 16 + 8, y * 16 + 8));
-    // level.add(new TextParticle("" + dmg, x * 16 + 8, y * 16 + 8, Color.get(-1, 500, 500, 500)));
-    // if (damage >= 200) {
-    // 	int count = random.nextInt(4) + 1;
-    // 	for (int i = 0; i < count; i++) {
-    // 		level.add(new ItemEntity(new ResourceItem(Resource.stone), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
-    // 	}
-    // 	count = random.nextInt(2);
-    // 	for (int i = 0; i < count; i++) {
-    // 		level.add(new ItemEntity(new ResourceItem(Resource.coal), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
-    // 	}
-    // 	level.setTile(x, y, Tile.dirt, 0);
-    // } else {
-    // 	level.setData(x, y, damage);
-    // }
+    const damage = level.getData(x, y) + dmg;
+    level.add(new SmashParticle(x * 16 + 8, y * 16 + 8));
+    level.add(
+      new TextParticle(
+        '' + dmg,
+        x * 16 + 8,
+        y * 16 + 8,
+        PALETTE.get(-1, 500, 500, 500)
+      )
+    );
+    if (damage >= 200) {
+      let count = Random.nextInt(4) + 1;
+      for (let i = 0; i < count; i++) {
+        level.add(
+          new ItemEntity(
+            new ResourceItem(Resources.stone),
+            x * 16 + Random.nextInt(10) + 3,
+            y * 16 + Random.nextInt(10) + 3
+          )
+        );
+      }
+      count = Random.nextInt(2);
+      for (let i = 0; i < count; i++) {
+        level.add(
+          new ItemEntity(
+            new ResourceItem(Resources.coal),
+            x * 16 + Random.nextInt(10) + 3,
+            y * 16 + Random.nextInt(10) + 3
+          )
+        );
+      }
+      level.setTile(x, y, Tiles.dirt, 0);
+    } else {
+      level.setData(x, y, damage);
+    }
   }
 
-  tick(level: Level, xt: number, yt: number) {
+  tick(time: GameTime, level: Level, xt: number, yt: number) {
     const damage = level.getData(xt, yt);
-    if (damage > 0) level.setData(xt, yt, damage - 1);
+    if (damage > 0) level.setData(xt, yt, damage - time.deltaTime);
   }
 }

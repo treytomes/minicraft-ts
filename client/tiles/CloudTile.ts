@@ -2,10 +2,14 @@ import {Camera} from '../Camera';
 import Level from '../Level';
 import ToolType from '../ToolType';
 import Entity from '../entities/Entity';
+import ItemEntity from '../entities/ItemEntity';
 import Player from '../entities/Player';
 import Item from '../items/Item';
+import ResourceItem from '../items/ResourceItem';
 import ToolItem from '../items/ToolItem';
+import {Resources} from '../resources/Resource';
 import {PALETTE, TileSet} from '../system/display';
+import Random from '../system/math/Random';
 import {Tile, Tiles} from './Tile';
 
 export default class CloudTile extends Tile {
@@ -133,16 +137,21 @@ export default class CloudTile extends Tile {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     attackDir: number
   ): boolean {
-    // TODO: Finish implementing CloudTile.interact.
     if (item instanceof ToolItem) {
       const tool = item as ToolItem;
       if (tool.type === ToolType.shovel) {
         if (player.payStamina(5)) {
-          // level.setTile(xt, yt, Tile.infiniteFall, 0);
-          // const count = Random.nextInt(2) + 1;
-          // for (int i = 0; i < count; i++) {
-          // 	level.add(new ItemEntity(new ResourceItem(Resource.cloud), xt * 16 + Random.nextInt(10) + 3, yt * 16 + Random.nextInt(10) + 3));
-          // }
+          level.setTile(xt, yt, Tiles.infiniteFall, 0);
+          const count = Random.nextInt(2) + 1;
+          for (let i = 0; i < count; i++) {
+            level.add(
+              new ItemEntity(
+                new ResourceItem(Resources.cloud),
+                xt * 16 + Random.nextInt(10) + 3,
+                yt * 16 + Random.nextInt(10) + 3
+              )
+            );
+          }
           return true;
         }
       }

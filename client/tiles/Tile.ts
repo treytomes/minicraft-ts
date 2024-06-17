@@ -60,7 +60,7 @@ export class Tile {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  tick(level: Level, xt: number, yt: number) {}
+  tick(time: GameTime, level: Level, xt: number, yt: number) {}
 
   equals(tile: Tile) {
     return tile && tile.id === this.id;
@@ -119,7 +119,7 @@ export class Tile {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     attackDir: number
   ) {
-    this.hurt(level, x, y, dmg);
+    this.hurtTile(level, x, y, dmg);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
