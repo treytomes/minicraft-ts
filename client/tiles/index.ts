@@ -77,13 +77,13 @@ Resources.sand = new PlantableResource(
   Tiles.sand,
   [Tiles.grass, Tiles.dirt]
 );
-// Resources.cactusFlower = new PlantableResource(
-//   'Cactus',
-//   4 + 4 * 32,
-//   PALETTE.get(-1, 10, 40, 50),
-//   Tiles.cactusSapling,
-//   [Tiles.sand]
-// );
+Resources.cactusFlower = new PlantableResource(
+  'Cactus',
+  4 + 4 * 32,
+  PALETTE.get(-1, 10, 40, 50),
+  Tiles.cactusSapling,
+  [Tiles.sand]
+);
 Resources.seeds = new PlantableResource(
   'Seeds',
   5 + 4 * 32,
