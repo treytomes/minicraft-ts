@@ -19,28 +19,32 @@ import CloudCactusTile from './CloudCactusTile';
 import HoleTile from './HoleTile';
 import FarmTile from './FarmTile';
 import HardRockTile from './HardRockTile';
+import {SaplingTile} from './SaplingTile';
+import WheatTile from './WheatTile';
 
-Tiles.rock = new RockTile();
-Tiles.sand = new SandTile();
 Tiles.grass = new GrassTile();
+Tiles.rock = new RockTile();
+Tiles.water = new WaterTile();
+Tiles.flower = new FlowerTile();
 Tiles.tree = new TreeTile();
+Tiles.dirt = new DirtTile();
+Tiles.sand = new SandTile();
+Tiles.cactus = new CactusTile();
+Tiles.hole = new HoleTile();
+Tiles.treeSapling = new SaplingTile(Tiles.grass, Tiles.tree);
+Tiles.cactusSapling = new SaplingTile(Tiles.sand, Tiles.cactus);
+Tiles.farmland = new FarmTile();
+Tiles.wheat = new WheatTile();
+Tiles.lava = new LavaTile();
 Tiles.stairsDown = new StairsTile(false);
+Tiles.stairsUp = new StairsTile(true);
+Tiles.infiniteFall = new InfiniteFallTile();
+Tiles.cloud = new CloudTile();
+Tiles.hardRock = new HardRockTile();
 Tiles.ironOre = new OreTile(Resources.ironOre);
 Tiles.goldOre = new OreTile(Resources.goldOre);
 Tiles.gemOre = new OreTile(Resources.gem);
-Tiles.dirt = new DirtTile();
-Tiles.cloud = new CloudTile();
-Tiles.water = new WaterTile();
-Tiles.flower = new FlowerTile();
-Tiles.cactus = new CactusTile();
-Tiles.lava = new LavaTile();
-Tiles.infiniteFall = new InfiniteFallTile();
 Tiles.cloudCactus = new CloudCactusTile();
-Tiles.stairsUp = new StairsTile(true);
-Tiles.hole = new HoleTile();
-Tiles.farmland = new FarmTile();
-Tiles.farmland = new FarmTile();
-Tiles.hardRock = new HardRockTile();
 
 // These resources need to be explicitly defined after the tiles they use.
 
@@ -51,14 +55,14 @@ Resources.flower = new PlantableResource(
   Tiles.flower,
   [Tiles.grass]
 );
-// TODO: Finish implementing the tile types, then finish implementing the plantable resource types.
-// Resources.acorn = new PlantableResource(
-//   'Acorn',
-//   3 + 4 * 32,
-//   PALETTE.get(-1, 100, 531, 320),
-//   Tiles.treeSapling,
-//   [Tiles.grass]
-// );
+
+Resources.acorn = new PlantableResource(
+  'Acorn',
+  3 + 4 * 32,
+  PALETTE.get(-1, 100, 531, 320),
+  Tiles.treeSapling,
+  [Tiles.grass]
+);
 Resources.dirt = new PlantableResource(
   'Dirt',
   2 + 4 * 32,
@@ -80,12 +84,12 @@ Resources.sand = new PlantableResource(
 //   Tiles.cactusSapling,
 //   [Tiles.sand]
 // );
-// Resources.seeds = new PlantableResource(
-//   'Seeds',
-//   5 + 4 * 32,
-//   PALETTE.get(-1, 10, 40, 50),
-//   Tiles.wheat,
-//   [Tiles.farmland]
-// );
+Resources.seeds = new PlantableResource(
+  'Seeds',
+  5 + 4 * 32,
+  PALETTE.get(-1, 10, 40, 50),
+  Tiles.wheat,
+  [Tiles.farmland]
+);
 
 export {Tile};
