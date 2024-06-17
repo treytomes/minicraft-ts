@@ -3,6 +3,7 @@ import Level from '../Level';
 import {GameTime} from '../system/GameTime';
 import {Sound} from '../system/audio/sound';
 import {PALETTE} from '../system/display';
+import {Point} from '../system/math';
 import {Tile} from '../tiles';
 import Entity from './Entity';
 import {TextParticle} from './particles';
@@ -86,7 +87,38 @@ export default class Mob extends Entity {
   }
 
   update(time: GameTime, level: Level): void {
+    const restoreDir = this.xKnockback !== 0 || this.yKnockback !== 0;
+    const dir = this.dir;
+
+    const knockbackDelta = time.deltaTime / 32;
+
+    if (this.xKnockback < 0) {
+      this.moveBy(level, -knockbackDelta, 0);
+      this.xKnockback += knockbackDelta;
+      if (this.xKnockback > 0) this.xKnockback = 0;
+    }
+    if (this.xKnockback > 0) {
+      this.moveBy(level, knockbackDelta, 0);
+      this.xKnockback -= knockbackDelta;
+      if (this.xKnockback < 0) this.xKnockback = 0;
+    }
+    if (this.yKnockback < 0) {
+      this.moveBy(level, 0, -knockbackDelta);
+      this.yKnockback += knockbackDelta;
+      if (this.yKnockback > 0) this.yKnockback = 0;
+    }
+    if (this.yKnockback > 0) {
+      this.moveBy(level, 0, knockbackDelta);
+      this.yKnockback -= knockbackDelta;
+      if (this.yKnockback < 0) this.yKnockback = 0;
+    }
+
     super.update(time, level);
+
+    if (restoreDir) {
+      // console.log('restore', dir, this.dir);
+      this.dir = dir;
+    }
 
     // TODO: This should be handled by the lava tile's steppedOn event.
     // if (level.getTile(x >> 4, y >> 4) == Tile.lava) {
