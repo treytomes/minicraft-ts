@@ -46,19 +46,19 @@ export default class ProgressMeterUIElement extends UIElement {
 
     for (let n = 0; n < this.maxValue; n++) {
       if (n < value) {
-        this.tileset.render(
-          this.tileIndex,
-          this.bounds.x + n * this.tileset.tileWidth,
-          this.bounds.y,
-          this.onColor
-        );
+        this.tileset.render({
+          tileIndex: this.tileIndex,
+          x: this.bounds.x + n * this.tileset.tileWidth,
+          y: this.bounds.y,
+          colors: this.onColor,
+        });
       } else {
-        this.tileset.render(
-          this.tileIndex,
-          this.bounds.x + n * this.tileset.tileWidth,
-          this.bounds.y,
-          this.offColor
-        );
+        this.tileset.render({
+          tileIndex: this.tileIndex,
+          x: this.bounds.x + n * this.tileset.tileWidth,
+          y: this.bounds.y,
+          colors: this.offColor,
+        });
       }
     }
   }

@@ -30,16 +30,31 @@
     "**/*.wav"
   ],
   "words": [
+    "Blockable",
+    "bossdeath",
     "Bresenham's",
     "Codacy",
     "commitlint",
     "conventionalcommits",
+    "dataurl",
+    "datestamp",
+    "Gameplay",
+    "hardrock",
+    "Knockback",
     "lerp",
     "LEVELGEN",
     "Minicraft",
+    "monsterhurt",
+    "pino",
+    "playerhurt",
     "REGEN",
+    "Shvl",
+    "SNES",
     "Snyk",
-    "tileset"
+    "Swrd",
+    "TICKRATE",
+    "tileset",
+    "viewbox"
   ],
   "flagWords": []
 }

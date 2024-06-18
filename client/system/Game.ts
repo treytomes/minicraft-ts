@@ -3,6 +3,7 @@ import {Font, Sprite, TileSet, createContext} from './display';
 import {GameTime} from './GameTime';
 import {MouseEventProxy} from './input';
 import Scene from './Scene';
+import * as img from 'image-js';
 
 export default class Game {
   private _width: number;
@@ -50,7 +51,17 @@ export default class Game {
    */
   async loadContent() {
     await createContext(this._width, this._height);
-    const image = new Image(await window.api.gfx.getTiles());
+
+    const ICONS_PATH = 'assets/icons.png';
+    const imgData = await img.Image.load(ICONS_PATH);
+    const image = new Image({
+      components: imgData.components,
+      data: Array.from(imgData.data),
+      height: imgData.height,
+      width: imgData.width,
+    });
+    // const image = new Image(await window.api.gfx.getTiles());
+
     this._tileset = new TileSet(image, 8, 8);
     this._font = new Font(this._tileset);
     this._mouseCursor = new Sprite(this.tileset, 0, 29, [-1, 1, 112, 445], 1);

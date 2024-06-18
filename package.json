@@ -2,7 +2,7 @@
   "name": "minicraft-ts",
   "productName": "minicraft-ts",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Re-imagining the MiniCraft game in a TypeScript/Electron environment.",
   "main": "dist/server/server-bundle.js",
   "scripts": {
     "start": "npm-run-all build watch",
@@ -10,7 +10,10 @@
     "build": "webpack --config webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "package": "electron-forge package",
-    "make": "electron-forge make",
+    "make:linux": "electron-forge make --platform linux",
+    "make:win32": "electron-forge make --platform win32",
+    "make:darwin": "electron-forge make --platform darwin",
+    "make:all": "npm-run-all build make:linux make:win32 make:darwin",
     "lint": "gts lint",
     "prettier": "prettier .",
     "prettier:write": "prettier . --write",
@@ -59,13 +62,16 @@
   "license": "MIT",
   "dependencies": {
     "@types/convict": "^6.1.6",
+    "@types/pino": "^7.0.5",
     "canvas": "^2.11.2",
     "convict": "^6.2.4",
+    "dataurl": "^0.1.0",
     "dotenv": "^16.4.5",
     "electron-squirrel-startup": "^1.0.0",
     "image-js": "^0.35.5",
     "ml-regression-base": "^3.0.0",
     "ml-regression-exponential": "^2.1.2",
+    "pino": "^9.1.0",
     "webpack": "^5.91.0"
   },
   "lint-staged": {

@@ -3,8 +3,9 @@ import {config} from './config';
 
 import Main from './main';
 import {app, BrowserWindow} from 'electron';
+import logger from './logger';
 
-console.log('Environment:', config.get('environment'));
-console.log('Debug:', config.get('debug'));
+logger.info('Environment:', config.get('environment'));
+logger.info('Debug:', config.get('debug'));
 
 Main.main(app, BrowserWindow);

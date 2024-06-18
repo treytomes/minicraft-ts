@@ -95,3 +95,6 @@ dist
 dist/**
 
 .cspellcache
+
+# Save game data.
+saves

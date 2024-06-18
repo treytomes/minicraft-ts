@@ -2,9 +2,12 @@ import LevelGeneratorScene from './LevelGeneratorScene';
 import LevelRendererScene from './LevelRendererScene';
 import PixelsTestScene from './PixelsTestScene';
 import SpriteTestScene from './SpriteTestScene';
-import Game from './system/Game';
-import Scene from './system/Scene';
-import {ButtonUIElement} from './system/ui';
+import Game from '../system/Game';
+import Scene from '../system/Scene';
+import {Keys} from '../system/input';
+import {ButtonUIElement} from '../system/ui';
+import SoundEffectTestScene from './SoundEffectTestScene';
+import GameplayScene from './GameplayScene';
 
 export default class MainMenuScene extends Scene {
   constructor(game: Game) {
@@ -12,17 +15,29 @@ export default class MainMenuScene extends Scene {
 
     let y = 10;
 
-    const startButton = new ButtonUIElement(
+    const newGameButton = new ButtonUIElement(
       this.tileset,
       this.font,
-      'SPRITES',
+      'NEW GAME',
       10,
       (y += 10)
     );
-    startButton.onClick = () => {
-      this.enterScene(new SpriteTestScene(game));
+    newGameButton.onClick = () => {
+      this.enterScene(new GameplayScene(game));
     };
-    this.uiElements.push(startButton);
+    this.uiElements.push(newGameButton);
+
+    // const spritesButton = new ButtonUIElement(
+    //   this.tileset,
+    //   this.font,
+    //   'SPRITES',
+    //   10,
+    //   (y += 10)
+    // );
+    // spritesButton.onClick = () => {
+    //   this.enterScene(new SpriteTestScene(game));
+    // };
+    // this.uiElements.push(spritesButton);
 
     const pixelsButton = new ButtonUIElement(
       this.tileset,
@@ -60,6 +75,18 @@ export default class MainMenuScene extends Scene {
     };
     this.uiElements.push(levelRendererButton);
 
+    const sfxTestButton = new ButtonUIElement(
+      this.tileset,
+      this.font,
+      'SFX',
+      10,
+      (y += 10)
+    );
+    sfxTestButton.onClick = () => {
+      this.enterScene(new SoundEffectTestScene(game));
+    };
+    this.uiElements.push(sfxTestButton);
+
     const exitButton = new ButtonUIElement(
       this.tileset,
       this.font,
@@ -71,5 +98,15 @@ export default class MainMenuScene extends Scene {
       this.exitScene();
     };
     this.uiElements.push(exitButton);
+  }
+
+  onKeyDown(e: KeyboardEvent) {
+    super.onKeyDown(e);
+
+    switch (e.key) {
+      case Keys.Escape:
+        this.exitScene();
+        break;
+    }
   }
 }

@@ -8,8 +8,14 @@ declare global {
       gfx: {
         getTiles: () => TileInfo;
       };
+      file: {
+        save: (world: WorldInfo) => string;
+      };
       sample: {
         ping: () => string;
+      };
+      sfx: {
+        loadWave: (path: string) => string;
       };
       system: {
         config: () => string;

@@ -1,15 +1,28 @@
 import {getHeight, getWidth, setPixel} from './index';
 import Image from './Image';
 import Color from './Color';
+import {Point} from '../math';
 
 export const BIT_MIRROR_X = 0x01;
 export const BIT_MIRROR_Y = 0x02;
 
-/**
- * @property {number} tileWidth Tile width.
- * @property {number} tileHeight Tile height.
- * @property {number} tilesPerRow Number of tiles per row.
- */
+type RenderPropsWithXY = {
+  tileIndex: number;
+  x: number;
+  y: number;
+  colors: Color[];
+  bits?: number;
+};
+
+type RenderPropsWithPoint = {
+  tileIndex: number;
+  pnt: Point;
+  colors: Color[];
+  bits?: number;
+};
+
+type RenderProps = RenderPropsWithXY | RenderPropsWithPoint;
+
 export default class TileSet {
   tiles: number[][];
 
@@ -50,48 +63,106 @@ export default class TileSet {
     }
   }
 
-  /**
-   *
-   * @param {number} tileIndex Index into the tileset.
-   * @param {number} x X-position to draw at.
-   * @param {number} y Y-position to draw at.
-   * @param {number[]} colors An array of 4 numbers that represents the color of the tile.  -1 is transparent.
-   * @param {number} bits Bit flags to apply to the rendering, used to flip on the x or y axis.
-   */
-  render(tileIndex: number, x: number, y: number, colors: Color[], bits = 0) {
+  render(props: RenderProps) {
+    const tileIndex = props.tileIndex;
+    const colors = props.colors;
+    const bits = props.bits ?? 0;
+
+    const x = Math.floor(
+      (props as RenderPropsWithXY)?.x ?? (props as RenderPropsWithPoint)?.pnt.x
+    );
+
+    const y = Math.floor(
+      (props as RenderPropsWithXY).y ?? (props as RenderPropsWithPoint)?.pnt.y
+    );
+
     const mirrorX = (bits & BIT_MIRROR_X) > 0;
     const mirrorY = (bits & BIT_MIRROR_Y) > 0;
 
-    x = Math.floor(x);
-    y = Math.floor(y);
     const tile = this.tiles[tileIndex];
-    let index = 0;
+
     for (let yd = 0; yd < this.tileHeight; yd++) {
-      let ys = y + yd;
-      if (mirrorY) ys = y + (this.tileHeight - yd - 1);
-      if (ys < 0) {
-        index += this.tileWidth;
+      if (yd + y < 0 || yd + y >= getHeight()) {
         continue;
       }
-      if (ys >= getHeight()) break;
+
+      let ys = yd;
+      if (mirrorY) ys = this.tileHeight - 1 - yd;
 
       for (let xd = 0; xd < this.tileWidth; xd++) {
-        let xs = x + xd;
-        if (mirrorX) xs = x + (this.tileWidth - xd - 1);
-        if (xs < 0) {
-          index++;
+        if (xd + x < 0 || xd + x >= getWidth()) {
           continue;
         }
-        if (xs >= getWidth()) {
-          const remaining = this.tileWidth - xd;
-          index += remaining;
-          break;
-        }
 
-        const v = tile[index++];
+        let xs = xd;
+        if (mirrorX) xs = this.tileWidth - 1 - xd;
+
+        const index = ys * this.tileWidth + xs;
+        const v = tile[index];
         const c = colors[v];
-        if (c) setPixel(xs, ys, c);
+        if (c) setPixel(xd + x, yd + y, c);
       }
     }
   }
+
+  // render_v1(tileIndex: number, pnt: Point, colors: Color[], bits: number): void;
+  // render_v1(tileIndex: number, pnt: Point, colors: Color[]): void;
+  // render_v1(
+  //   tileIndex: number,
+  //   x: number,
+  //   y: number,
+  //   colors: Color[],
+  //   bits: number
+  // ): void;
+  // render_v1(tileIndex: number, x: number, y: number, colors: Color[]): void;
+  // render_v1(
+  //   tileIndex: number,
+  //   xOrPnt: number | Point,
+  //   yOrColors: number | Color[],
+  //   colorsOrBits: Color[] | number = 0,
+  //   bits: number | undefined = 0
+  // ) {
+  //   if (xOrPnt instanceof Point) {
+  //     this.render(
+  //       tileIndex,
+  //       xOrPnt.x,
+  //       xOrPnt.y,
+  //       yOrColors as Color[],
+  //       colorsOrBits as number
+  //     );
+  //     return;
+  //   }
+
+  //   const mirrorX = (bits & BIT_MIRROR_X) > 0;
+  //   const mirrorY = (bits & BIT_MIRROR_Y) > 0;
+
+  //   const x = Math.floor(xOrPnt);
+  //   const y = Math.floor(yOrColors as number);
+  //   const colors = colorsOrBits as Color[];
+
+  //   const tile = this.tiles[tileIndex];
+
+  //   for (let yd = 0; yd < this.tileHeight; yd++) {
+  //     if (yd + y < 0 || yd + y >= getHeight()) {
+  //       continue;
+  //     }
+
+  //     let ys = yd;
+  //     if (mirrorY) ys = this.tileHeight - 1 - yd;
+
+  //     for (let xd = 0; xd < this.tileWidth; xd++) {
+  //       if (xd + x < 0 || xd + x >= getWidth()) {
+  //         continue;
+  //       }
+
+  //       let xs = xd;
+  //       if (mirrorX) xs = this.tileWidth - 1 - xd;
+
+  //       const index = ys * this.tileWidth + xs;
+  //       const v = tile[index];
+  //       const c = colors[v];
+  //       if (c) setPixel(xd + x, yd + y, c);
+  //     }
+  //   }
+  // }
 }
