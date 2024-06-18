@@ -83,7 +83,7 @@ export default class TreeTile extends Tile {
   tick(time: GameTime, level: Level, xt: number, yt: number) {
     const damage = level.getData(xt, yt);
     if (damage > 0) {
-      console.log('Damage:', damage, '-->', damage - time.deltaTime / 32);
+      // console.log('Damage:', damage, '-->', damage - time.deltaTime / 32);
       level.setData(xt, yt, damage - time.deltaTime / 32);
     }
   }

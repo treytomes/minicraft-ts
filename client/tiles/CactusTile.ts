@@ -88,6 +88,6 @@ export default class CactusTile extends Tile {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   tick(time: GameTime, level: Level, xt: number, yt: number) {
     const damage = level.getData(xt, yt);
-    if (damage > 0) level.setData(xt, yt, damage - time.deltaTime);
+    if (damage > 0) level.setData(xt, yt, damage - time.deltaTime / 32);
   }
 }

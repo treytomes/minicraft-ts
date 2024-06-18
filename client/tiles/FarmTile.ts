@@ -62,7 +62,7 @@ export default class FarmTile extends Tile {
   tick(time: GameTime, level: Level, xt: number, yt: number) {
     const age = level.getData(xt, yt);
     if (age < 5) {
-      level.setData(xt, yt, age + time.deltaTime);
+      level.setData(xt, yt, age + time.deltaTime / 32);
     }
   }
 

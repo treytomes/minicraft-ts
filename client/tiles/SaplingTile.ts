@@ -30,7 +30,7 @@ export class SaplingTile extends Tile {
   }
 
   tick(time: GameTime, level: Level, xt: number, yt: number) {
-    const age = level.getData(xt, yt) + 1;
+    const age = level.getData(xt, yt) + time.deltaTime / 32;
     if (age > 100) {
       level.setTile(xt, yt, this.growsTo, 0);
     } else {

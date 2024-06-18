@@ -137,7 +137,7 @@ export default class SandTile extends Tile {
 
   tick(time: GameTime, level: Level, xt: number, yt: number) {
     const d = level.getData(xt, yt);
-    if (d > 0) level.setData(xt, yt, d - time.deltaTime);
+    if (d > 0) level.setData(xt, yt, d - time.deltaTime / 32);
   }
 
   steppedOn(level: Level, x: number, y: number, entity: Entity) {
