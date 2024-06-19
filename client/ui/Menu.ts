@@ -9,6 +9,95 @@ export default class Menu {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   render(tileset: TileSet) {}
 
+  renderFrame(
+    tileset: TileSet,
+    title: string,
+    x0: number,
+    y0: number,
+    x1: number,
+    y1: number
+  ) {
+    for (let y = y0; y <= y1; y++) {
+      for (let x = x0; x <= x1; x++) {
+        if (x === x0 && y === y0)
+          tileset.render({
+            x: x * 8,
+            y: y * 8,
+            tileIndex: 0 + 13 * 32,
+            colors: PALETTE.get(-1, 1, 5, 445),
+            bits: 0,
+          });
+        else if (x === x1 && y === y0)
+          tileset.render({
+            x: x * 8,
+            y: y * 8,
+            tileIndex: 0 + 13 * 32,
+            colors: PALETTE.get(-1, 1, 5, 445),
+            bits: 1,
+          });
+        else if (x === x0 && y === y1)
+          tileset.render({
+            x: x * 8,
+            y: y * 8,
+            tileIndex: 0 + 13 * 32,
+            colors: PALETTE.get(-1, 1, 5, 445),
+            bits: 2,
+          });
+        else if (x === x1 && y === y1)
+          tileset.render({
+            x: x * 8,
+            y: y * 8,
+            tileIndex: 0 + 13 * 32,
+            colors: PALETTE.get(-1, 1, 5, 445),
+            bits: 3,
+          });
+        else if (y === y0)
+          tileset.render({
+            x: x * 8,
+            y: y * 8,
+            tileIndex: 1 + 13 * 32,
+            colors: PALETTE.get(-1, 1, 5, 445),
+            bits: 0,
+          });
+        else if (y === y1)
+          tileset.render({
+            x: x * 8,
+            y: y * 8,
+            tileIndex: 1 + 13 * 32,
+            colors: PALETTE.get(-1, 1, 5, 445),
+            bits: 2,
+          });
+        else if (x === x0)
+          tileset.render({
+            x: x * 8,
+            y: y * 8,
+            tileIndex: 2 + 13 * 32,
+            colors: PALETTE.get(-1, 1, 5, 445),
+            bits: 0,
+          });
+        else if (x === x1)
+          tileset.render({
+            x: x * 8,
+            y: y * 8,
+            tileIndex: 2 + 13 * 32,
+            colors: PALETTE.get(-1, 1, 5, 445),
+            bits: 1,
+          });
+        else
+          tileset.render({
+            x: x * 8,
+            y: y * 8,
+            tileIndex: 2 + 13 * 32,
+            colors: PALETTE.get(5, 5, 5, 5),
+            bits: 1,
+          });
+      }
+    }
+
+    const font = new Font(tileset);
+    font.render(title, x0 * 8 + 8, y0 * 8, PALETTE.get(5, 5, 5, 550));
+  }
+
   renderItemList(
     tileset: TileSet,
     xo: number,

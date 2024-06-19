@@ -10,13 +10,16 @@ import {
   ButtonUIElement,
   LabelUIElement,
   ProgressMeterUIElement,
+  UIElement,
 } from '../system/ui';
 import {Tile} from '../tiles';
+import WindowFrame from '../ui/WindowFrame';
 
 export default class GameplayScene extends Scene {
   private world: World;
   private camera: Camera;
   private cameraOffset: Point;
+  private modal?: UIElement;
 
   constructor(game: Game) {
     super(game);
@@ -123,16 +126,18 @@ export default class GameplayScene extends Scene {
 
   update(time: GameTime) {
     super.update(time);
-    this.world.update(time);
-    if (this.world.player) {
-      this.camera.follow(
-        time,
-        this.cameraOffset,
-        this.world.player,
-        this.world.player.maxSpeed / 32
-      );
+    if (!this.modal) {
+      this.world.update(time);
+      if (this.world.player) {
+        this.camera.follow(
+          time,
+          this.cameraOffset,
+          this.world.player,
+          this.world.player.maxSpeed / 32
+        );
+      }
+      Tile.updateTicks(time);
     }
-    Tile.updateTicks(time);
   }
 
   render(time: GameTime) {
@@ -176,6 +181,20 @@ export default class GameplayScene extends Scene {
           break;
         case Keys.Space:
           this.world.player.tryAttack(this.world.currentLevel);
+          break;
+        case Keys.Tab:
+          if (this.modal) {
+            const index = this.uiElements.indexOf(this.modal);
+            this.uiElements.splice(index, 1);
+            this.modal = undefined;
+          } else {
+            this.modal = new WindowFrame(
+              this.tileset,
+              'INVENTORY',
+              new Rectangle(1 * 8, 1 * 8, 16 * 8, 24 * 8)
+            );
+            this.uiElements.push(this.modal);
+          }
           break;
         default:
           console.log('You pressed: ', e.key);
