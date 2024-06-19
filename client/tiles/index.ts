@@ -22,6 +22,8 @@ import HardRockTile from './HardRockTile';
 import {SaplingTile} from './SaplingTile';
 import WheatTile from './WheatTile';
 
+// TODO: I've given it some though, and these tiles need well-defined id numbers.
+
 Tiles.grass = new GrassTile();
 Tiles.rock = new RockTile();
 Tiles.water = new WaterTile();

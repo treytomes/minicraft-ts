@@ -41,7 +41,8 @@ export default class ResourceItem extends Item {
     });
   }
 
-  renderInventory(tileset: TileSet, font: Font, x: number, y: number) {
+  renderInventory(tileset: TileSet, x: number, y: number) {
+    const font = new Font(tileset);
     tileset.render({
       x,
       y,

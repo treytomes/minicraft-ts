@@ -49,6 +49,10 @@ export default class Entity {
     return false;
   }
 
+  get lightRadius() {
+    return 0;
+  }
+
   constructor() {
     this.position = Point.zero;
 
@@ -80,6 +84,11 @@ export default class Entity {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   touchItem(itemEntity: ItemEntity) {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  use(player: Player, attackDir: Direction): boolean {
+    return false;
+  }
 
   moveTo(point: Point): void;
   moveTo(x: number, y: number): void;

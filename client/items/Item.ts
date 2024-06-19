@@ -2,10 +2,11 @@ import Entity from '../entities/Entity';
 import ItemEntity from '../entities/ItemEntity';
 import Level from '../Level';
 import Player from '../entities/Player';
-import {Color, Font, PALETTE, TileSet} from '../system/display';
+import {Color, PALETTE, TileSet} from '../system/display';
 import {Tile} from '../tiles/Tile';
+import ListItem from '../ui/ListItem';
 
-export default class Item {
+export default class Item implements ListItem {
   get color(): Color[] {
     return PALETTE.get(0, 0, 0, 0);
   }
@@ -30,7 +31,7 @@ export default class Item {
   onTake(itemEntity: ItemEntity) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  renderInventory(tileset: TileSet, font: Font, x: number, y: number) {}
+  renderInventory(tileset: TileSet, x: number, y: number) {}
 
   // TODO: Should attackDir be an enum?
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

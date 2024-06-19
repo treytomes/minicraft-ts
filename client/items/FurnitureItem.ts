@@ -1,5 +1,5 @@
 import Level from '../Level';
-import Furniture from '../entities/Furniture';
+import Furniture from '../entities/furniture/Furniture';
 import Player from '../entities/Player';
 import {Color, Font, PALETTE, TileSet} from '../system/display';
 import {Tile} from '../tiles';
@@ -35,19 +35,16 @@ export default class FurnitureItem extends Item {
   }
 
   // TODO: Should font and tileset be globally provided values?  This just screams "Dependency Injection".
-  renderInventory(tileset: TileSet, font: Font, x: number, y: number) {
+  renderInventory(tileset: TileSet, x: number, y: number) {
+    const font = new Font(tileset);
     tileset.render({x, y, tileIndex: this.icon, colors: this.color});
     font.render(this.furniture.name, x + 8, y, PALETTE.get(-1, 555, 555, 555));
   }
 
   interactOn(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     tile: Tile,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     level: Level,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     xt: number,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     yt: number,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     player: Player,

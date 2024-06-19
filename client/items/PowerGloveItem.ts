@@ -1,5 +1,5 @@
 import Entity from '../entities/Entity';
-import Furniture from '../entities/Furniture';
+import Furniture from '../entities/furniture/Furniture';
 import Player from '../entities/Player';
 import {Color, Font, PALETTE, TileSet} from '../system/display';
 import Item from './Item';
@@ -21,7 +21,8 @@ export default class PowerGloveItem extends Item {
     tileset.render({x, y, tileIndex: this.icon, colors: this.color});
   }
 
-  renderInventory(tileset: TileSet, font: Font, x: number, y: number) {
+  renderInventory(tileset: TileSet, x: number, y: number) {
+    const font = new Font(tileset);
     tileset.render({x, y, tileIndex: this.icon, colors: this.color});
     font.render(this.name, x + 8, y, PALETTE.get(-1, 555, 555, 555));
   }
