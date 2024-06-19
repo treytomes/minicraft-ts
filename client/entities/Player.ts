@@ -477,7 +477,7 @@ export default class Player extends Mob {
     }
   }
 
-  use(level: Level): boolean {
+  onUse(level: Level): boolean {
     const yo = -2;
     if (
       this.dir === Direction.South &&
@@ -632,8 +632,8 @@ export default class Player extends Mob {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   tryUse(level: Level) {
     // TODO: Implement this when it's time to implement the UI windows.
-    // if (!this.use(level)) {
-    //   game.setMenu(new InventoryMenu(this));
-    // }
+    if (!this.onUse(level)) {
+      //   game.setMenu(new InventoryMenu(this));
+    }
   }
 }
