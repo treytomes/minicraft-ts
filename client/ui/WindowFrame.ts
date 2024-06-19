@@ -1,38 +1,56 @@
 import {GameTime} from '../system/GameTime';
 import {Font, PALETTE, TileSet} from '../system/display';
-import {Rectangle} from '../system/math';
-import {UIElement} from '../system/ui';
+import {Point, Rectangle} from '../system/math';
+import {LabelUIElement, UIElement} from '../system/ui';
+
+const BACKGROUND_COLOR = 5;
+const BORDER_COLORS = PALETTE.get(-1, 1, BACKGROUND_COLOR, 445);
+const BACKGROUND_COLORS = PALETTE.get(
+  BACKGROUND_COLOR,
+  BACKGROUND_COLOR,
+  BACKGROUND_COLOR,
+  BACKGROUND_COLOR
+);
+const TEXT_COLORS = PALETTE.get(
+  BACKGROUND_COLOR,
+  BACKGROUND_COLOR,
+  BACKGROUND_COLOR,
+  550
+);
 
 export default class WindowFrame extends UIElement {
-  private readonly tileset: TileSet;
+  protected readonly tileset: TileSet;
   private readonly title: string;
+  private readonly titleLabel: LabelUIElement;
 
-  constructor(tileset: TileSet, title: string, bounds: Rectangle) {
-    super(bounds.x, bounds.y, bounds.width, bounds.height);
+  constructor(
+    tileset: TileSet,
+    title: string,
+    bounds: Rectangle,
+    parent?: UIElement
+  ) {
+    super(bounds, parent);
     this.tileset = tileset;
     this.title = title;
+
+    const font = new Font(this.tileset);
+    this.titleLabel = new LabelUIElement(
+      font,
+      this.title,
+      this.tileset.tileWidth,
+      0,
+      this
+    );
+    this.titleLabel.colors = TEXT_COLORS;
+    this.children.push(this.titleLabel);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   render(time: GameTime) {
-    const x0 = Math.floor(this.bounds.left / this.tileset.tileWidth);
-    const x1 = Math.floor(this.bounds.right / this.tileset.tileWidth);
-    const y0 = Math.floor(this.bounds.top / this.tileset.tileHeight);
-    const y1 = Math.floor(this.bounds.bottom / this.tileset.tileHeight);
-    const BACKGROUND_COLOR = 5;
-    const BORDER_COLORS = PALETTE.get(-1, 1, BACKGROUND_COLOR, 445);
-    const BACKGROUND_COLORS = PALETTE.get(
-      BACKGROUND_COLOR,
-      BACKGROUND_COLOR,
-      BACKGROUND_COLOR,
-      BACKGROUND_COLOR
-    );
-    const TEXT_COLORS = PALETTE.get(
-      BACKGROUND_COLOR,
-      BACKGROUND_COLOR,
-      BACKGROUND_COLOR,
-      550
-    );
+    const x0 = Math.floor(this.absoluteBounds.left / this.tileset.tileWidth);
+    const x1 = Math.floor(this.absoluteBounds.right / this.tileset.tileWidth);
+    const y0 = Math.floor(this.absoluteBounds.top / this.tileset.tileHeight);
+    const y1 = Math.floor(this.absoluteBounds.bottom / this.tileset.tileHeight);
 
     for (let y = y0; y <= y1; y++) {
       for (let x = x0; x <= x1; x++) {
@@ -111,7 +129,6 @@ export default class WindowFrame extends UIElement {
       }
     }
 
-    const font = new Font(this.tileset);
-    font.render(this.title, x0 * 8 + 8, y0 * 8, TEXT_COLORS);
+    super.render(time);
   }
 }

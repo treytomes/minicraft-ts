@@ -13,7 +13,7 @@ import {
   UIElement,
 } from '../system/ui';
 import {Tile} from '../tiles';
-import WindowFrame from '../ui/WindowFrame';
+import Menu from '../ui/Menu';
 
 export default class GameplayScene extends Scene {
   private world: World;
@@ -186,13 +186,16 @@ export default class GameplayScene extends Scene {
           if (this.modal) {
             const index = this.uiElements.indexOf(this.modal);
             this.uiElements.splice(index, 1);
+            this.modal.loseKeyboardFocus();
             this.modal = undefined;
           } else {
-            this.modal = new WindowFrame(
+            this.modal = new Menu(
+              this.world.player.inventory.items,
               this.tileset,
               'INVENTORY',
               new Rectangle(1 * 8, 1 * 8, 16 * 8, 24 * 8)
             );
+            this.modal.acquireKeyboardFocus();
             this.uiElements.push(this.modal);
           }
           break;

@@ -2,6 +2,7 @@ import {PALETTE} from '../display/palette';
 import UIElement from './UIElement';
 import {Color, Font} from '../display';
 import {GameTime} from '../GameTime';
+import {Rectangle} from '../math';
 
 /**
  * A Label that can be positioned anywhere on the screen.
@@ -20,10 +21,11 @@ export default class LabelUIElement extends UIElement {
     font: Font,
     text: string | number | (() => string),
     x: number,
-    y: number
+    y: number,
+    parent?: UIElement
   ) {
     const len = (typeof text === 'function' ? text() : text.toString()).length;
-    super(x, y, font.width * len, font.height);
+    super(new Rectangle(x, y, font.width * len, font.height), parent);
 
     this.font = font;
     this.text = text;
@@ -41,9 +43,11 @@ export default class LabelUIElement extends UIElement {
     }
     this.font.render(
       text?.toString() ?? 'null',
-      this.bounds.x,
-      this.bounds.y,
+      this.absoluteBounds.x,
+      this.absoluteBounds.y,
       this.colors
     );
+
+    // console.log('label:', text, this.bounds);
   }
 }

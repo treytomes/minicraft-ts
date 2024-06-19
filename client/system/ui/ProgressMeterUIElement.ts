@@ -1,6 +1,7 @@
 import {GameTime} from '../GameTime';
 import Color from '../display/Color';
 import TileSet from '../display/TileSet';
+import {Rectangle} from '../math';
 import UIElement from './UIElement';
 
 export default class ProgressMeterUIElement extends UIElement {
@@ -20,9 +21,13 @@ export default class ProgressMeterUIElement extends UIElement {
     tileset: TileSet,
     onColor: Color[],
     offColor: Color[],
-    currentValue: number | (() => number) | undefined = undefined
+    currentValue: number | (() => number) | undefined = undefined,
+    parent?: UIElement
   ) {
-    super(x, y, tileset.tileWidth * maxValue, tileset.tileHeight);
+    super(
+      new Rectangle(x, y, tileset.tileWidth * maxValue, tileset.tileHeight),
+      parent
+    );
     this.tileset = tileset;
     this.maxValue = maxValue;
     if (currentValue) {
@@ -48,15 +53,15 @@ export default class ProgressMeterUIElement extends UIElement {
       if (n < value) {
         this.tileset.render({
           tileIndex: this.tileIndex,
-          x: this.bounds.x + n * this.tileset.tileWidth,
-          y: this.bounds.y,
+          x: this.absoluteBounds.x + n * this.tileset.tileWidth,
+          y: this.absoluteBounds.y,
           colors: this.onColor,
         });
       } else {
         this.tileset.render({
           tileIndex: this.tileIndex,
-          x: this.bounds.x + n * this.tileset.tileWidth,
-          y: this.bounds.y,
+          x: this.absoluteBounds.x + n * this.tileset.tileWidth,
+          y: this.absoluteBounds.y,
           colors: this.offColor,
         });
       }

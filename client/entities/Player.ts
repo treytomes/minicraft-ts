@@ -12,6 +12,7 @@ import Random from '../system/math/Random';
 import Entity from './Entity';
 import ItemEntity from './ItemEntity';
 import Mob from './Mob';
+import Workbench from './furniture/Workbench';
 import {TextParticle} from './particles';
 
 // TODO: Finish implementing player.
@@ -38,7 +39,7 @@ export default class Player extends Mob {
   constructor() {
     super();
 
-    // this.inventory.add(new FurnitureItem(new Workbench()));
+    this.inventory.add(new FurnitureItem(new Workbench()));
     this.inventory.add(new PowerGloveItem());
     // this.activeItem = new PowerGloveItem();
   }

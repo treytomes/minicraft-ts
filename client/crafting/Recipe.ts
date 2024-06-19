@@ -3,9 +3,9 @@ import Item from '../items/Item';
 import ResourceItem from '../items/ResourceItem';
 import {Resource} from '../resources';
 import {Font, PALETTE, TileSet} from '../system/display';
-import ListItem from '../ui/ListItem';
+import IListableItem from '../ui/IListableItem';
 
-export default abstract class Recipe implements ListItem {
+export default abstract class Recipe implements IListableItem {
   costs: Item[] = [];
   canCraft = false;
   resultTemplate: Item;

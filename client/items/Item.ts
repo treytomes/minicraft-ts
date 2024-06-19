@@ -4,9 +4,9 @@ import Level from '../Level';
 import Player from '../entities/Player';
 import {Color, PALETTE, TileSet} from '../system/display';
 import {Tile} from '../tiles/Tile';
-import ListItem from '../ui/ListItem';
+import IListableItem from '../ui/IListableItem';
 
-export default class Item implements ListItem {
+export default class Item implements IListableItem {
   get color(): Color[] {
     return PALETTE.get(0, 0, 0, 0);
   }

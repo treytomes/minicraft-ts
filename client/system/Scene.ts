@@ -54,17 +54,21 @@ export default class Scene {
   }
 
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  onKeyDown(e: KeyboardEvent) {}
+  onKeyDown(e: KeyboardEvent) {
+    UIElement.KEYBOARD_FOCUS?.onKeyDown(e);
+  }
 
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  onKeyUp(e: KeyboardEvent) {}
+  onKeyUp(e: KeyboardEvent) {
+    UIElement.KEYBOARD_FOCUS?.onKeyUp(e);
+  }
 
   onMouseMove(e: MouseEventProxy) {
     UIElement.MOUSE_HOVER = undefined;
     for (let n = 0; n < this.uiElements.length; n++) {
       const uiElement = this.uiElements[n];
       // console.log(uiElement.bounds, e.clientX, e.clientY);
-      if (uiElement.bounds.contains(e.clientX, e.clientY)) {
+      if (uiElement.absoluteBounds.contains(e.clientX, e.clientY)) {
         uiElement.onMouseMove(e);
         break;
       }
