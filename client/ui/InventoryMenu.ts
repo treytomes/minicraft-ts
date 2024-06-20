@@ -25,6 +25,8 @@ export default class InventoryMenu extends Menu {
       player.inventory.add(player.activeItem, 0);
       player.activeItem = undefined;
     }
+
+    this.acquireKeyboardFocus();
   }
 
   onKeyUp(e: KeyboardEvent) {
@@ -32,6 +34,10 @@ export default class InventoryMenu extends Menu {
       case Keys.Enter:
         this.player.activeItem = this.selectedItem as Item;
         this.player.inventory.remove(this.player.activeItem);
+        this.close();
+        break;
+      case Keys.Tab:
+        this.close();
         break;
     }
 

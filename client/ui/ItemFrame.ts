@@ -1,9 +1,10 @@
+import Item from '../items/Item';
 import {GameTime} from '../system/GameTime';
-import {Font, PALETTE, TileSet} from '../system/display';
+import {PALETTE, TileSet} from '../system/display';
 import {Rectangle} from '../system/math';
-import {LabelUIElement, UIElement} from '../system/ui';
+import UIElement from '../system/ui/UIElement';
 
-const BACKGROUND_COLOR = 5;
+const BACKGROUND_COLOR = 0;
 const BORDER_COLORS = PALETTE.get(-1, 1, BACKGROUND_COLOR, 445);
 const BACKGROUND_COLORS = PALETTE.get(
   BACKGROUND_COLOR,
@@ -11,41 +12,29 @@ const BACKGROUND_COLORS = PALETTE.get(
   BACKGROUND_COLOR,
   BACKGROUND_COLOR
 );
-const TEXT_COLORS = PALETTE.get(
-  BACKGROUND_COLOR,
-  BACKGROUND_COLOR,
-  BACKGROUND_COLOR,
-  550
-);
 
-export default class WindowFrame extends UIElement {
-  protected readonly tileset: TileSet;
-  private readonly title: string;
-  private readonly titleLabel: LabelUIElement;
+export default class ItemFrame extends UIElement {
+  private tileset: TileSet;
+  private item: (Item | undefined) | (() => Item | undefined);
 
   constructor(
     tileset: TileSet,
-    title: string,
-    bounds: Rectangle,
-    parent?: UIElement
+    item: (Item | undefined) | (() => Item | undefined),
+    parent: UIElement
   ) {
-    super(bounds, parent);
-    this.tileset = tileset;
-    this.title = title;
-
-    const font = new Font(this.tileset);
-    this.titleLabel = new LabelUIElement(
-      font,
-      this.title,
-      this.tileset.tileWidth,
-      0,
-      this
+    super(
+      new Rectangle(
+        (parent.bounds.width - tileset.tileWidth * 2) >> 1,
+        parent.bounds.height - tileset.tileWidth * 2,
+        tileset.tileWidth * 2,
+        tileset.tileHeight * 2
+      ),
+      parent
     );
-    this.titleLabel.colors = TEXT_COLORS;
-    this.children.push(this.titleLabel);
+    this.tileset = tileset;
+    this.item = item;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   render(time: GameTime) {
     const x0 = Math.floor(this.absoluteBounds.left / this.tileset.tileWidth);
     const x1 = Math.floor(this.absoluteBounds.right / this.tileset.tileWidth);
@@ -127,6 +116,18 @@ export default class WindowFrame extends UIElement {
             bits: 1,
           });
       }
+    }
+
+    let item = this.item;
+    if (typeof this.item === 'function') {
+      item = this.item();
+    }
+    if (item) {
+      (item as Item).renderIcon(
+        this.tileset,
+        this.absoluteBounds.x + 4,
+        this.absoluteBounds.y + 4
+      );
     }
 
     super.render(time);

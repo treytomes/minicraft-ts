@@ -25,47 +25,52 @@ export default class SpriteTestScene extends Scene {
     this.player = new Player();
     this.player.moveTo(50, 50);
 
-    this.uiElements.push(
-      new LabelUIElement(
-        this.font,
-        () =>
-          `X:${Math.floor(this.player.position.x)},Y:${Math.floor(this.player.position.y)}`,
-        0,
-        0
-      )
+    new LabelUIElement(
+      this.font,
+      () =>
+        `X:${Math.floor(this.player.position.x)},Y:${Math.floor(this.player.position.y)}`,
+      0,
+      0,
+      this.uiRoot
     );
-    this.uiElements.push(
-      new LabelUIElement(
-        this.font,
-        () => `Counter:${this.getCounterValue()}`,
-        20,
-        20
-      )
+    new LabelUIElement(
+      this.font,
+      () => `Counter:${this.getCounterValue()}`,
+      20,
+      20,
+      this.uiRoot
     );
 
-    const upButton = new ButtonUIElement(this.tileset, this.font, 'Up', 10, 10);
+    const upButton = new ButtonUIElement(
+      this.tileset,
+      this.font,
+      'Up',
+      10,
+      10,
+      this.uiRoot
+    );
     upButton.onClick = () => {
       let counter = this.getCounterValue();
       counter++;
       localStorage.setItem('counter', counter.toString());
     };
-    this.uiElements.push(upButton);
 
     const downButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'Down',
       40,
-      10
+      10,
+      this.uiRoot
     );
     downButton.onClick = () => {
       let counter = this.getCounterValue();
       counter--;
       localStorage.setItem('counter', counter.toString());
     };
-    this.uiElements.push(downButton);
 
-    const healthMeter = new ProgressMeterUIElement(
+    // health
+    new ProgressMeterUIElement(
       0,
       this.height - 16,
       10,
@@ -73,11 +78,12 @@ export default class SpriteTestScene extends Scene {
       this.tileset,
       PALETTE.get(0, 200, 500, 533),
       PALETTE.get(0, 100, 0, 0),
-      this.getCounterValue
+      this.getCounterValue,
+      this.uiRoot
     );
-    this.uiElements.push(healthMeter);
 
-    const staminaMeter = new ProgressMeterUIElement(
+    // stamina
+    new ProgressMeterUIElement(
       0,
       this.height - 8,
       10,
@@ -85,9 +91,9 @@ export default class SpriteTestScene extends Scene {
       this.tileset,
       PALETTE.get(0, 220, 550, 553),
       PALETTE.get(0, 110, 0, 0),
-      this.getCounterValue
+      this.getCounterValue,
+      this.uiRoot
     );
-    this.uiElements.push(staminaMeter);
   }
 
   getCounterValue(): number {

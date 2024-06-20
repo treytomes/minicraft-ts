@@ -26,13 +26,13 @@ export default class SoundEffectTestScene extends Scene {
         this.font,
         key.toUpperCase(),
         10,
-        (y += 10)
+        (y += 10),
+        this.uiRoot
       );
       btn.disableClickSound = true;
       btn.onClick = () => {
         sfx[key].play();
       };
-      this.uiElements.push(btn);
     }
 
     y += 10;
@@ -42,12 +42,12 @@ export default class SoundEffectTestScene extends Scene {
       this.font,
       '< BACK',
       10,
-      (y += 10)
+      (y += 10),
+      this.uiRoot
     );
     backButton.onClick = () => {
       this.exitScene();
     };
-    this.uiElements.push(backButton);
   }
 
   onKeyDown(e: KeyboardEvent) {

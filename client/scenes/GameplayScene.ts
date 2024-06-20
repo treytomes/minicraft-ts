@@ -14,7 +14,7 @@ import {
 } from '../system/ui';
 import {Tile} from '../tiles';
 import InventoryMenu from '../ui/InventoryMenu';
-import Menu from '../ui/Menu';
+import ItemFrame from '../ui/ItemFrame';
 
 export default class GameplayScene extends Scene {
   private world: World;
@@ -47,36 +47,36 @@ export default class GameplayScene extends Scene {
       this.font,
       'UP',
       x,
-      (y += 10)
+      (y += 10),
+      this.uiRoot
     );
     upButton.onClick = () => {
       this.world.currentDepth++;
     };
-    this.uiElements.push(upButton);
 
     const downButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'DOWN',
       x,
-      (y += 10)
+      (y += 10),
+      this.uiRoot
     );
     downButton.onClick = () => {
       this.world.currentDepth--;
     };
-    this.uiElements.push(downButton);
 
     const backButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'BACK',
       x,
-      (y += 10)
+      (y += 10),
+      this.uiRoot
     );
     backButton.onClick = () => {
       this.exitScene();
     };
-    this.uiElements.push(backButton);
 
     const saveButton = new ButtonUIElement(
       this.tileset,
@@ -89,18 +89,17 @@ export default class GameplayScene extends Scene {
       const savePath = await window.api.file.save(this.world.serialize());
       console.log(`Saved to ${JSON.stringify(savePath)}`);
     };
-    this.uiElements.push(saveButton);
 
-    this.uiElements.push(
-      new LabelUIElement(
-        this.font,
-        () => `DEPTH:${this.world.currentDepth}`,
-        0,
-        0
-      )
+    new LabelUIElement(
+      this.font,
+      () => `DEPTH:${this.world.currentDepth}`,
+      0,
+      0,
+      this.uiRoot
     );
 
-    const healthMeter = new ProgressMeterUIElement(
+    // Health Meter
+    new ProgressMeterUIElement(
       0,
       this.height - 16,
       10,
@@ -108,11 +107,12 @@ export default class GameplayScene extends Scene {
       this.tileset,
       PALETTE.get(0, 200, 500, 533),
       PALETTE.get(0, 100, 0, 0),
-      () => this.world.player?.health ?? 0
+      () => this.world.player?.health ?? 0,
+      this.uiRoot
     );
-    this.uiElements.push(healthMeter);
 
-    const staminaMeter = new ProgressMeterUIElement(
+    // Stamina Meter
+    new ProgressMeterUIElement(
       0,
       this.height - 8,
       10,
@@ -120,14 +120,20 @@ export default class GameplayScene extends Scene {
       this.tileset,
       PALETTE.get(0, 220, 550, 553),
       PALETTE.get(0, 110, 0, 0),
-      () => this.world.player?.stamina ?? 0
+      () => this.world.player?.stamina ?? 0,
+      this.uiRoot
     );
-    this.uiElements.push(staminaMeter);
+
+    new ItemFrame(
+      this.tileset,
+      () => this.world.player?.activeItem,
+      this.uiRoot
+    );
   }
 
   update(time: GameTime) {
     super.update(time);
-    if (!this.modal) {
+    if (!UIElement.KEYBOARD_FOCUS) {
       this.world.update(time);
       if (this.world.player) {
         this.camera.follow(
@@ -154,7 +160,7 @@ export default class GameplayScene extends Scene {
 
     // TODO: GetInputAxis --> Direction --> Vector.
 
-    if (this.world.player) {
+    if (!UIElement.KEYBOARD_FOCUS && this.world.player) {
       switch (e.key) {
         case Keys.ArrowUp:
           this.world.player.currentSpeed = new Point(
@@ -184,16 +190,7 @@ export default class GameplayScene extends Scene {
           this.world.player.tryAttack(this.world.currentLevel);
           break;
         case Keys.Tab:
-          if (this.modal) {
-            const index = this.uiElements.indexOf(this.modal);
-            this.uiElements.splice(index, 1);
-            this.modal.loseKeyboardFocus();
-            this.modal = undefined;
-          } else {
-            this.modal = new InventoryMenu(this.world.player, this.tileset);
-            this.modal.acquireKeyboardFocus();
-            this.uiElements.push(this.modal);
-          }
+          new InventoryMenu(this.world.player, this.tileset, this.uiRoot);
           break;
         default:
           console.log('You pressed: ', e.key);

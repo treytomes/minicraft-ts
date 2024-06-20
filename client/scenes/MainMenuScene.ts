@@ -1,7 +1,6 @@
 import LevelGeneratorScene from './LevelGeneratorScene';
 import LevelRendererScene from './LevelRendererScene';
 import PixelsTestScene from './PixelsTestScene';
-import SpriteTestScene from './SpriteTestScene';
 import Game from '../system/Game';
 import Scene from '../system/Scene';
 import {Keys} from '../system/input';
@@ -20,12 +19,12 @@ export default class MainMenuScene extends Scene {
       this.font,
       'NEW GAME',
       10,
-      (y += 10)
+      (y += 10),
+      this.uiRoot
     );
     newGameButton.onClick = () => {
       this.enterScene(new GameplayScene(game));
     };
-    this.uiElements.push(newGameButton);
 
     // const spritesButton = new ButtonUIElement(
     //   this.tileset,
@@ -44,60 +43,60 @@ export default class MainMenuScene extends Scene {
       this.font,
       'PIXELS',
       10,
-      (y += 10)
+      (y += 10),
+      this.uiRoot
     );
     pixelsButton.onClick = () => {
       this.enterScene(new PixelsTestScene(game));
     };
-    this.uiElements.push(pixelsButton);
 
     const levelGenButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'LEVELGEN',
       10,
-      (y += 10)
+      (y += 10),
+      this.uiRoot
     );
     levelGenButton.onClick = () => {
       this.enterScene(new LevelGeneratorScene(game));
     };
-    this.uiElements.push(levelGenButton);
 
     const levelRendererButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'LEVEL',
       10,
-      (y += 10)
+      (y += 10),
+      this.uiRoot
     );
     levelRendererButton.onClick = () => {
       this.enterScene(new LevelRendererScene(game));
     };
-    this.uiElements.push(levelRendererButton);
 
     const sfxTestButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'SFX',
       10,
-      (y += 10)
+      (y += 10),
+      this.uiRoot
     );
     sfxTestButton.onClick = () => {
       this.enterScene(new SoundEffectTestScene(game));
     };
-    this.uiElements.push(sfxTestButton);
 
     const exitButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'EXIT',
       10,
-      (y += 10)
+      (y += 10),
+      this.uiRoot
     );
     exitButton.onClick = () => {
       this.exitScene();
     };
-    this.uiElements.push(exitButton);
   }
 
   onKeyDown(e: KeyboardEvent) {

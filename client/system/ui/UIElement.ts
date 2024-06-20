@@ -60,6 +60,17 @@ export default class UIElement {
   constructor(bounds: Rectangle, parent?: UIElement) {
     this.bounds = bounds;
     this.parent = parent;
+
+    parent?.children.push(this);
+  }
+
+  close() {
+    if (!this.parent) return;
+    this.loseKeyboardFocus();
+    this.loseMouseFocus();
+    this.loseMouseHover();
+    const index = this.parent.children.indexOf(this);
+    this.parent.children.splice(index, 1);
   }
 
   moveTo(pnt: Point) {
@@ -76,6 +87,26 @@ export default class UIElement {
     }
   }
 
+  acquireMouseFocus() {
+    UIElement.MOUSE_FOCUS = this;
+  }
+
+  loseMouseFocus() {
+    if (UIElement.MOUSE_FOCUS === this) {
+      UIElement.MOUSE_FOCUS = undefined;
+    }
+  }
+
+  acquireMouseHover() {
+    UIElement.MOUSE_HOVER = this;
+  }
+
+  loseMouseHover() {
+    if (UIElement.MOUSE_HOVER === this) {
+      UIElement.MOUSE_HOVER = undefined;
+    }
+  }
+
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onKeyDown(e: KeyboardEvent) {}
 
@@ -87,7 +118,6 @@ export default class UIElement {
     UIElement.MOUSE_HOVER = this;
     for (let n = 0; n < this.children.length; n++) {
       const uiElement = this.children[n];
-      // console.log(uiElement.bounds, e.clientX, e.clientY);
       if (uiElement.absoluteBounds.contains(e.clientX, e.clientY)) {
         uiElement.onMouseMove(e);
         break;

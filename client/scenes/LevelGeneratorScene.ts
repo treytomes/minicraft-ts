@@ -23,55 +23,59 @@ export default class LevelGeneratorScene extends Scene {
       this.font,
       'REGEN',
       x,
-      (y += 10)
+      (y += 10),
+      this.uiRoot
     );
     regenButton.onClick = () => {
       this.level = LevelGen.createAndValidateMap(this.depth);
     };
-    this.uiElements.push(regenButton);
 
     const upButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'UP',
       x,
-      (y += 10)
+      (y += 10),
+      this.uiRoot
     );
     upButton.onClick = () => {
       this.depth += 1;
       if (this.depth > 1) this.depth = 1;
       this.level = LevelGen.createAndValidateMap(this.depth);
     };
-    this.uiElements.push(upButton);
 
     const downButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'DOWN',
       x,
-      (y += 10)
+      (y += 10),
+      this.uiRoot
     );
     downButton.onClick = () => {
       this.depth -= 1;
       if (this.depth < -3) this.depth = -3;
       this.level = LevelGen.createAndValidateMap(this.depth);
     };
-    this.uiElements.push(downButton);
 
     const backButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'BACK',
       x,
-      (y += 10)
+      (y += 10),
+      this.uiRoot
     );
     backButton.onClick = () => {
       this.exitScene();
     };
-    this.uiElements.push(backButton);
 
-    this.uiElements.push(
-      new LabelUIElement(this.font, () => `DEPTH:${this.depth}`, 0, 0)
+    new LabelUIElement(
+      this.font,
+      () => `DEPTH:${this.depth}`,
+      0,
+      0,
+      this.uiRoot
     );
   }
 

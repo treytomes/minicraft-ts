@@ -3,11 +3,13 @@ import {GameTime} from './GameTime';
 import {Font, Sprite, TileSet} from './display';
 import {MouseEventProxy} from './input';
 import {UIElement} from './ui';
+import RootElement from './ui/RootElement';
 
 export default class Scene {
   private game: Game;
   public readonly sprites: Sprite[] = [];
-  public readonly uiElements: UIElement[] = [];
+  // public readonly uiElements: UIElement[] = [];
+  public readonly uiRoot = new RootElement();
 
   protected get tileset(): TileSet {
     return this.game.tileset;
@@ -35,10 +37,12 @@ export default class Scene {
       sprite.update(time);
     }
 
-    for (let n = 0; n < this.uiElements.length; n++) {
-      const uiElement = this.uiElements[n];
-      uiElement.update(time);
-    }
+    // for (let n = 0; n < this.uiElements.length; n++) {
+    //   const uiElement = this.uiElements[n];
+    //   uiElement.update(time);
+    // }
+
+    this.uiRoot.update(time);
   }
 
   render(time: GameTime) {
@@ -47,50 +51,32 @@ export default class Scene {
       sprite.render(time);
     }
 
-    for (let n = 0; n < this.uiElements.length; n++) {
-      const uiElement = this.uiElements[n];
-      uiElement.render(time);
-    }
+    // for (let n = 0; n < this.uiElements.length; n++) {
+    //   const uiElement = this.uiElements[n];
+    //   uiElement.render(time);
+    // }
+
+    this.uiRoot.render(time);
   }
 
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onKeyDown(e: KeyboardEvent) {
-    UIElement.KEYBOARD_FOCUS?.onKeyDown(e);
+    this.uiRoot.onKeyDown(e);
   }
 
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onKeyUp(e: KeyboardEvent) {
-    UIElement.KEYBOARD_FOCUS?.onKeyUp(e);
+    this.uiRoot.onKeyUp(e);
   }
 
   onMouseMove(e: MouseEventProxy) {
-    UIElement.MOUSE_HOVER = undefined;
-    for (let n = 0; n < this.uiElements.length; n++) {
-      const uiElement = this.uiElements[n];
-      // console.log(uiElement.bounds, e.clientX, e.clientY);
-      if (uiElement.absoluteBounds.contains(e.clientX, e.clientY)) {
-        uiElement.onMouseMove(e);
-        break;
-      }
-    }
+    this.uiRoot.onMouseMove(e);
   }
 
   onMouseDown(e: MouseEventProxy) {
-    // Is the left mouse button pressed?
-    if (e.button === 0) {
-      UIElement.MOUSE_FOCUS = undefined;
-      if (UIElement.MOUSE_HOVER) {
-        UIElement.MOUSE_HOVER.onMouseDown(e);
-      }
-    }
+    this.uiRoot.onMouseDown(e);
   }
 
   onMouseUp(e: MouseEventProxy) {
-    if (e.button === 0) {
-      if (UIElement.MOUSE_FOCUS) {
-        UIElement.MOUSE_FOCUS.onMouseUp(e);
-      }
-    }
+    this.uiRoot.onMouseUp(e);
   }
 
   enterScene(scene: Scene) {
