@@ -29,6 +29,11 @@ export default class Inventory {
     }
   }
 
+  remove(item: Item) {
+    const index = this.items.indexOf(item);
+    if (index >= 0) this.items.splice(index, 1);
+  }
+
   findResource(resource: Resource): ResourceItem | undefined {
     for (let i = 0; i < this.items.length; i++) {
       if (this.items[i] instanceof ResourceItem) {

@@ -1,4 +1,3 @@
-import {GameTime} from '../system/GameTime';
 import {TileSet} from '../system/display';
 import {Keys} from '../system/input';
 import {Rectangle} from '../system/math';
@@ -8,8 +7,12 @@ import ListItem from './ListItem';
 import WindowFrame from './WindowFrame';
 
 export default class Menu extends WindowFrame {
-  private readonly items: IListableItem[];
+  private readonly items: IListableItem[] = [];
   public selectedIndex = 0;
+
+  get selectedItem(): IListableItem {
+    return this.items[this.selectedIndex];
+  }
 
   constructor(
     items: IListableItem[],
@@ -19,26 +22,31 @@ export default class Menu extends WindowFrame {
     parent?: UIElement
   ) {
     super(tileset, title, bounds, parent);
-    this.items = items;
 
-    for (let n = 0; n < this.items.length; n++) {
-      const listItem = new ListItem(
-        n,
-        this.items[n],
-        this.tileset,
-        this.tileset.tileWidth,
-        (n + 1) * this.tileset.tileHeight,
-        this
-      );
-      this.children.push(listItem);
+    for (let n = 0; n < items.length; n++) {
+      this.addItem(items[n]);
     }
     this.selectedIndex = 0;
+
+    UIElement.KEYBOARD_FOCUS = this;
+  }
+
+  protected addItem(item: IListableItem) {
+    this.items.push(item);
+    const listItem = new ListItem(
+      this.items.length - 1,
+      item,
+      this.tileset,
+      this.tileset.tileWidth,
+      this.items.length * this.tileset.tileHeight,
+      this
+    );
+    this.children.push(listItem);
   }
 
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onKeyDown(e: KeyboardEvent) {}
 
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onKeyUp(e: KeyboardEvent) {
     switch (e.key) {
       case Keys.ArrowUp:

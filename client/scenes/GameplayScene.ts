@@ -13,6 +13,7 @@ import {
   UIElement,
 } from '../system/ui';
 import {Tile} from '../tiles';
+import InventoryMenu from '../ui/InventoryMenu';
 import Menu from '../ui/Menu';
 
 export default class GameplayScene extends Scene {
@@ -189,12 +190,7 @@ export default class GameplayScene extends Scene {
             this.modal.loseKeyboardFocus();
             this.modal = undefined;
           } else {
-            this.modal = new Menu(
-              this.world.player.inventory.items,
-              this.tileset,
-              'INVENTORY',
-              new Rectangle(1 * 8, 1 * 8, 16 * 8, 24 * 8)
-            );
+            this.modal = new InventoryMenu(this.world.player, this.tileset);
             this.modal.acquireKeyboardFocus();
             this.uiElements.push(this.modal);
           }
