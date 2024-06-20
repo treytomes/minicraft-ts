@@ -1,3 +1,4 @@
+import InputHandler from '../../InputHandler';
 import {GameTime} from '../GameTime';
 import {MouseEventProxy} from '../input';
 import {Point} from '../math';
@@ -17,6 +18,10 @@ export default class UIElement {
   parent?: UIElement;
   bounds: Rectangle;
   children: UIElement[] = [];
+
+  get input(): InputHandler {
+    return this.parent!.input;
+  }
 
   private get absoluteX(): number {
     if (!this.parent) {
@@ -79,10 +84,12 @@ export default class UIElement {
 
   acquireKeyboardFocus() {
     UIElement.KEYBOARD_FOCUS = this;
+    this.input.releaseAll();
   }
 
   loseKeyboardFocus() {
     if (UIElement.KEYBOARD_FOCUS === this) {
+      this.input.releaseAll();
       UIElement.KEYBOARD_FOCUS = undefined;
     }
   }

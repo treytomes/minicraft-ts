@@ -1,11 +1,19 @@
+import InputHandler from '../../InputHandler';
 import {getHeight, getWidth} from '../display';
 import {MouseEventProxy} from '../input';
 import {Rectangle} from '../math';
 import UIElement from './UIElement';
 
 export default class RootElement extends UIElement {
-  constructor() {
+  _input: InputHandler;
+
+  get input(): InputHandler {
+    return this._input;
+  }
+
+  constructor(input: InputHandler) {
     super(new Rectangle(0, 0, getWidth(), getHeight()));
+    this._input = input;
   }
 
   onKeyDown(e: KeyboardEvent) {

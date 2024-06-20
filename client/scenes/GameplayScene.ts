@@ -83,7 +83,8 @@ export default class GameplayScene extends Scene {
       this.font,
       'SAVE',
       x,
-      (y += 10)
+      (y += 10),
+      this.uiRoot
     );
     saveButton.onClick = async () => {
       const savePath = await window.api.file.save(this.world.serialize());
@@ -132,8 +133,9 @@ export default class GameplayScene extends Scene {
   }
 
   update(time: GameTime) {
-    super.update(time);
     if (!UIElement.KEYBOARD_FOCUS) {
+      this.checkInputActions();
+
       this.world.update(time);
       if (this.world.player) {
         this.camera.follow(
@@ -145,6 +147,28 @@ export default class GameplayScene extends Scene {
       }
       Tile.updateTicks(time);
     }
+
+    super.update(time);
+  }
+
+  checkInputActions() {
+    if (this.input.exit.clicked) this.exitScene();
+    if (!this.world.player) return;
+
+    let deltaX = 0;
+    let deltaY = 0;
+    if (this.input.up.down) deltaY = -this.world.player.maxSpeed;
+    if (this.input.down.down) deltaY = this.world.player.maxSpeed;
+    if (this.input.left.down) deltaX = -this.world.player.maxSpeed;
+    if (this.input.right.down) deltaX = this.world.player.maxSpeed;
+    this.world.player.currentSpeed = new Point(deltaX, deltaY);
+
+    if (this.input.attack.clicked) {
+      this.world.player.tryAttack(this.world.currentLevel);
+    }
+    if (this.input.menu.clicked) {
+      new InventoryMenu(this.world.player, this.tileset, this.uiRoot);
+    }
   }
 
   render(time: GameTime) {
@@ -153,81 +177,5 @@ export default class GameplayScene extends Scene {
     this.world.render(this.tileset, this.camera);
 
     super.render(time);
-  }
-
-  onKeyDown(e: KeyboardEvent) {
-    super.onKeyDown(e);
-
-    // TODO: GetInputAxis --> Direction --> Vector.
-    // TODO: Need a better way to handle keyboard clicks.
-    // TODO: Gamepad support.
-
-    if (!UIElement.KEYBOARD_FOCUS && this.world.player) {
-      switch (e.key) {
-        case Keys.ArrowUp:
-          this.world.player.currentSpeed = new Point(
-            this.world.player.currentSpeed.x,
-            -this.world.player.maxSpeed
-          );
-          break;
-        case Keys.ArrowDown:
-          this.world.player.currentSpeed = new Point(
-            this.world.player.currentSpeed.x,
-            this.world.player.maxSpeed
-          );
-          break;
-        case Keys.ArrowLeft:
-          this.world.player.currentSpeed = new Point(
-            -this.world.player.maxSpeed,
-            this.world.player.currentSpeed.y
-          );
-          break;
-        case Keys.ArrowRight:
-          this.world.player.currentSpeed = new Point(
-            this.world.player.maxSpeed,
-            this.world.player.currentSpeed.y
-          );
-          break;
-        case Keys.Space:
-          this.world.player.tryAttack(this.world.currentLevel);
-          break;
-        case Keys.Tab:
-          new InventoryMenu(this.world.player, this.tileset, this.uiRoot);
-          break;
-        default:
-          console.log('You pressed: ', e.key);
-      }
-    }
-    switch (e.key) {
-      case Keys.Escape:
-        this.exitScene();
-        break;
-    }
-  }
-
-  onKeyUp(e: KeyboardEvent) {
-    super.onKeyUp(e);
-
-    if (!this.world.player) return;
-
-    switch (e.key) {
-      case Keys.ArrowUp:
-      case Keys.ArrowDown:
-        // 0 the y-axis
-        this.world.player.currentSpeed = new Point(
-          this.world.player.currentSpeed.x,
-          0
-        );
-
-        break;
-      case Keys.ArrowLeft:
-      case Keys.ArrowRight:
-        // 0 the x-axis
-        this.world.player.currentSpeed = new Point(
-          0,
-          this.world.player.currentSpeed.y
-        );
-        break;
-    }
   }
 }

@@ -22,7 +22,7 @@ export default class ProgressMeterUIElement extends UIElement {
     onColor: Color[],
     offColor: Color[],
     currentValue: number | (() => number) | undefined = undefined,
-    parent?: UIElement
+    parent: UIElement
   ) {
     super(
       new Rectangle(x, y, tileset.tileWidth * maxValue, tileset.tileHeight),

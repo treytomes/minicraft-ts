@@ -1,3 +1,4 @@
+import {GameTime} from '../system/GameTime';
 import {TileSet} from '../system/display';
 import {Keys} from '../system/input';
 import {Rectangle} from '../system/math';
@@ -46,23 +47,20 @@ export default class Menu extends WindowFrame {
     this.children.push(listItem);
   }
 
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  onKeyDown(e: KeyboardEvent) {}
+  update(time: GameTime): void {
+    super.update(time);
 
-  onKeyUp(e: KeyboardEvent) {
-    switch (e.key) {
-      case Keys.ArrowUp:
-        this.selectedIndex--;
-        if (this.selectedIndex < 0) {
-          this.selectedIndex = this.items.length - 1;
-        }
-        break;
-      case Keys.ArrowDown:
-        this.selectedIndex++;
-        if (this.selectedIndex >= this.items.length) {
-          this.selectedIndex = 0;
-        }
-        break;
+    if (this.input.up.clicked) {
+      this.selectedIndex--;
+      if (this.selectedIndex < 0) {
+        this.selectedIndex = this.items.length - 1;
+      }
+    }
+    if (this.input.down.clicked) {
+      this.selectedIndex++;
+      if (this.selectedIndex >= this.items.length) {
+        this.selectedIndex = 0;
+      }
     }
   }
 

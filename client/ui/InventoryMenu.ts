@@ -1,7 +1,7 @@
 import Player from '../entities/Player';
 import Item from '../items/Item';
+import {GameTime} from '../system/GameTime';
 import {TileSet} from '../system/display';
-import {Keys} from '../system/input';
 import {Rectangle} from '../system/math';
 import {UIElement} from '../system/ui';
 import Menu from './Menu';
@@ -35,16 +35,14 @@ export default class InventoryMenu extends Menu {
     this.close();
   }
 
-  onKeyUp(e: KeyboardEvent) {
-    switch (e.key) {
-      case Keys.Enter:
-        this.onChooseItem();
-        break;
-      case Keys.Tab:
-        this.close();
-        break;
-    }
+  update(time: GameTime): void {
+    super.update(time);
 
-    super.onKeyUp(e);
+    if (this.input.attack.clicked) {
+      this.onChooseItem();
+    }
+    if (this.input.menu.clicked) {
+      this.close();
+    }
   }
 }

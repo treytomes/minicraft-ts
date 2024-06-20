@@ -4,6 +4,7 @@ import {GameTime} from './GameTime';
 import {MouseEventProxy} from './input';
 import Scene from './Scene';
 import * as img from 'image-js';
+import InputHandler from '../InputHandler';
 
 export default class Game {
   private _width: number;
@@ -12,6 +13,7 @@ export default class Game {
   private _font: Font | undefined;
   private _mouseCursor: Sprite | undefined;
   public readonly scenes: Scene[] = [];
+  public readonly input = new InputHandler();
 
   get tileset(): TileSet {
     if (!this._tileset) throw new Error('Content is not loaded.');
@@ -69,6 +71,7 @@ export default class Game {
 
   update(time: GameTime) {
     if (this.currentScene === null) window.api.system.exit(0);
+    this.input.update(time);
     this.currentScene?.update(time);
     this.mouseCursor.update(time);
   }
@@ -79,13 +82,16 @@ export default class Game {
   }
 
   onKeyDown(e: KeyboardEvent) {
+    this.input.onKeyDown(e);
     this.currentScene?.onKeyDown(e);
   }
 
   onKeyUp(e: KeyboardEvent) {
+    this.input.onKeyUp(e);
     this.currentScene?.onKeyUp(e);
   }
 
+  // TODO: onMouseMove can move to an InputHandles.axis?
   onMouseMove(e: MouseEventProxy) {
     this.mouseCursor.moveTo(e.clientX, e.clientY);
     this.currentScene?.onMouseMove(e);

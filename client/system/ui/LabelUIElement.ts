@@ -22,7 +22,7 @@ export default class LabelUIElement extends UIElement {
     text: string | number | (() => string),
     x: number,
     y: number,
-    parent?: UIElement
+    parent: UIElement
   ) {
     const len = (typeof text === 'function' ? text() : text.toString()).length;
     super(new Rectangle(x, y, font.width * len, font.height), parent);
