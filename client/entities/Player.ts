@@ -212,7 +212,7 @@ export default class Player extends Mob {
     // Display furniture being carried.
     if (this.activeItem instanceof FurnitureItem) {
       const furniture = (this.activeItem as FurnitureItem).furniture;
-      furniture.moveTo(this.position.x, yo);
+      furniture.moveTo(this.position.x, this.position.y - 11);
       furniture.render(tileset, camera);
     }
   }
