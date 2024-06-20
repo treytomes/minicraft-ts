@@ -1,5 +1,6 @@
 import {GameTime} from '../system/GameTime';
 import {Font, PALETTE, TileSet} from '../system/display';
+import {MouseEventProxy} from '../system/input';
 import {Rectangle} from '../system/math';
 import {UIElement} from '../system/ui';
 import IListableItem from './IListableItem';
@@ -12,6 +13,10 @@ export default class ListItem extends UIElement {
 
   get isSelected(): boolean {
     return (this.parent as Menu).selectedIndex === this.index;
+  }
+
+  set isSelected(value: boolean) {
+    (this.parent as Menu).selectedIndex = this.index;
   }
 
   constructor(
@@ -36,10 +41,15 @@ export default class ListItem extends UIElement {
     this.tileset = tileset;
   }
 
+  onMouseUp(e: MouseEventProxy) {
+    super.onMouseUp(e);
+    (this.parent as Menu).onChooseItem();
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(time: GameTime) {
     if (this.hasMouseHover) {
-      (this.parent as Menu).selectedIndex = this.index;
+      this.isSelected = true;
     }
   }
 

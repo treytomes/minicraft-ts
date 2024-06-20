@@ -31,6 +31,8 @@ export default class Menu extends WindowFrame {
     UIElement.KEYBOARD_FOCUS = this;
   }
 
+  onChooseItem() {}
+
   protected addItem(item: IListableItem) {
     this.items.push(item);
     const listItem = new ListItem(

@@ -159,6 +159,8 @@ export default class GameplayScene extends Scene {
     super.onKeyDown(e);
 
     // TODO: GetInputAxis --> Direction --> Vector.
+    // TODO: Need a better way to handle keyboard clicks.
+    // TODO: Gamepad support.
 
     if (!UIElement.KEYBOARD_FOCUS && this.world.player) {
       switch (e.key) {

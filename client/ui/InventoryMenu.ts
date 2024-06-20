@@ -29,12 +29,16 @@ export default class InventoryMenu extends Menu {
     this.acquireKeyboardFocus();
   }
 
+  onChooseItem() {
+    this.player.activeItem = this.selectedItem as Item;
+    this.player.inventory.remove(this.player.activeItem);
+    this.close();
+  }
+
   onKeyUp(e: KeyboardEvent) {
     switch (e.key) {
       case Keys.Enter:
-        this.player.activeItem = this.selectedItem as Item;
-        this.player.inventory.remove(this.player.activeItem);
-        this.close();
+        this.onChooseItem();
         break;
       case Keys.Tab:
         this.close();

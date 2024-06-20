@@ -118,7 +118,7 @@ export default class Player extends Mob {
     }
     let col = PALETTE.get(-1, 100, 220, 532);
     if (this.hurtTime > 0) {
-      // Flash white when hurt?
+      // Flash white when hurt and invulnerable.
       col = PALETTE.get(-1, 555, 555, 555);
     }
 
@@ -573,20 +573,20 @@ export default class Player extends Mob {
 
     if (this.staminaRechargeDelay > 0) {
       // console.log('staminaRechargeDelay', this.staminaRechargeDelay);
-      this.staminaRechargeDelay -= time.deltaTime * staminaFactor * 6;
+      this.staminaRechargeDelay -= time.deltaTime * staminaFactor * 12;
     } else {
       // console.log('staminaRechargeDelay is done.', this.staminaRechargeDelay);
     }
 
     if (this.staminaRechargeDelay <= 0) {
-      this.staminaRecharge += time.deltaTime * staminaFactor * 10;
+      this.staminaRecharge += time.deltaTime * staminaFactor * 16;
       if (this.isSwimming) {
         this.staminaRecharge = 0;
       }
       while (this.staminaRecharge > 10) {
         this.staminaRecharge -= 10;
         if (this.stamina < this.maxStamina)
-          this.stamina += time.deltaTime * staminaFactor * 10;
+          this.stamina += time.deltaTime * staminaFactor * 16;
       }
       // console.log('staminaRecharge', this.staminaRecharge);
       // console.log('stamina', this.stamina);
