@@ -81,7 +81,7 @@ export default class ItemEntity extends Entity {
   }
 
   render(tileset: TileSet, camera: Camera) {
-    if (this.time >= this.lifeTime / 3) {
+    if (this.time >= (this.lifeTime * 2) / 3) {
       // Blink the item as it near death.
       if ((this.time >> 3) % 2 === 0) return;
     }

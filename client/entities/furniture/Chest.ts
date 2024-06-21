@@ -13,9 +13,9 @@ export default class Chest extends Furniture {
     this.icon = 1;
   }
 
-  // TODO: Implement Chest.use.
+  // TODO: Implement Chest.onUsed.
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  use(player: Player, attackDir: Direction): boolean {
+  onUsed(player: Player, attackDir: Direction): boolean {
     // player.game.setMenu(new ContainerMenu(player, 'Chest', inventory));
     return true;
   }

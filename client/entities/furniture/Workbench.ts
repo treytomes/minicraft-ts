@@ -1,8 +1,21 @@
 import {Direction} from '../../Direction';
+import GlobalResources from '../../GlobalResources';
+import ToolType from '../../ToolType';
+import FurnitureRecipe from '../../crafting/FurnitureRecipe';
+import Recipe from '../../crafting/Recipe';
+import ToolRecipe from '../../crafting/ToolRecipe';
+import {Resources} from '../../resources/Resource';
 import {PALETTE} from '../../system/display';
 import {Point} from '../../system/math';
+import {UIElement} from '../../system/ui';
+import CraftingMenu from '../../ui/CraftingMenu';
 import Player from '../Player';
+import Anvil from './Anvil';
+import Chest from './Chest';
+import Furnace from './Furnace';
 import Furniture from './Furniture';
+import Lantern from './Lantern';
+import Oven from './Oven';
 
 export default class Workbench extends Furniture {
   constructor() {
@@ -12,10 +25,64 @@ export default class Workbench extends Furniture {
     this.size = new Point(6, 4);
   }
 
-  // TODO: Implement Workbench.use.
+  getRecipes(): Recipe[] {
+    const recipes: Recipe[] = [];
+
+    recipes.push(
+      new FurnitureRecipe(Lantern)
+        .addCost(Resources.wood, 5)
+        .addCost(Resources.slime, 10)
+        .addCost(Resources.glass, 4)
+    );
+
+    recipes.push(new FurnitureRecipe(Oven).addCost(Resources.stone, 15));
+    recipes.push(new FurnitureRecipe(Furnace).addCost(Resources.stone, 20));
+    recipes.push(new FurnitureRecipe(Workbench).addCost(Resources.wood, 20));
+    recipes.push(new FurnitureRecipe(Chest).addCost(Resources.wood, 20));
+    recipes.push(new FurnitureRecipe(Anvil).addCost(Resources.ironIngot, 5));
+
+    recipes.push(new ToolRecipe(ToolType.sword, 0).addCost(Resources.wood, 5));
+    recipes.push(new ToolRecipe(ToolType.axe, 0).addCost(Resources.wood, 5));
+    recipes.push(new ToolRecipe(ToolType.hoe, 0).addCost(Resources.wood, 5));
+    recipes.push(
+      new ToolRecipe(ToolType.pickaxe, 0).addCost(Resources.wood, 5)
+    );
+    recipes.push(new ToolRecipe(ToolType.shovel, 0).addCost(Resources.wood, 5));
+    recipes.push(
+      new ToolRecipe(ToolType.sword, 1)
+        .addCost(Resources.wood, 5)
+        .addCost(Resources.stone, 5)
+    );
+    recipes.push(
+      new ToolRecipe(ToolType.axe, 1)
+        .addCost(Resources.wood, 5)
+        .addCost(Resources.stone, 5)
+    );
+    recipes.push(
+      new ToolRecipe(ToolType.hoe, 1)
+        .addCost(Resources.wood, 5)
+        .addCost(Resources.stone, 5)
+    );
+    recipes.push(
+      new ToolRecipe(ToolType.pickaxe, 1)
+        .addCost(Resources.wood, 5)
+        .addCost(Resources.stone, 5)
+    );
+    recipes.push(
+      new ToolRecipe(ToolType.shovel, 1)
+        .addCost(Resources.wood, 5)
+        .addCost(Resources.stone, 5)
+    );
+
+    return recipes;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  use(player: Player, attackDir: Direction): boolean {
+  onUsed(player: Player, attackDir: Direction): boolean {
     // player.game.setMenu(new CraftingMenu(Crafting.workbenchRecipes, player));
+    console.log("I'm using a workbench!");
+    // new CraftingMenu(GlobalResources.tileset, this.getRecipes(), player);
+    // console.log(UIElement.ROOT.children);
     return true;
   }
 }

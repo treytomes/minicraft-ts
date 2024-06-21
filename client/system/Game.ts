@@ -5,6 +5,9 @@ import {MouseEventProxy} from './input';
 import Scene from './Scene';
 import * as img from 'image-js';
 import InputHandler from '../InputHandler';
+import {UIElement} from './ui';
+import RootElement from './ui/RootElement';
+import GlobalResources from '../GlobalResources';
 
 export default class Game {
   private _width: number;
@@ -12,7 +15,7 @@ export default class Game {
   private _tileset: TileSet | undefined;
   private _font: Font | undefined;
   private _mouseCursor: Sprite | undefined;
-  public readonly scenes: Scene[] = [];
+  private readonly scenes: Scene[] = [];
   public readonly input = new InputHandler();
 
   get tileset(): TileSet {
@@ -54,6 +57,8 @@ export default class Game {
   async loadContent() {
     await createContext(this._width, this._height);
 
+    UIElement.ROOT = new RootElement(this.input);
+
     const ICONS_PATH = 'assets/icons.png';
     const imgData = await img.Image.load(ICONS_PATH);
     const image = new Image({
@@ -64,9 +69,24 @@ export default class Game {
     });
     // const image = new Image(await window.api.gfx.getTiles());
 
+    // TODO: Use _tileset from GlobalResources.
     this._tileset = new TileSet(image, 8, 8);
     this._font = new Font(this._tileset);
     this._mouseCursor = new Sprite(this.tileset, 0, 29, [-1, 1, 112, 445], 1);
+
+    await GlobalResources.initialize();
+  }
+
+  enterScene(scene: Scene) {
+    this.currentScene?.unloadContent();
+    this.scenes.push(scene);
+    this.currentScene?.loadContent();
+  }
+
+  exitScene() {
+    this.currentScene?.unloadContent();
+    this.scenes.pop();
+    this.currentScene?.loadContent();
   }
 
   update(time: GameTime) {

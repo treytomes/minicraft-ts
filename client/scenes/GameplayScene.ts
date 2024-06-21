@@ -4,7 +4,6 @@ import Game from '../system/Game';
 import {GameTime} from '../system/GameTime';
 import Scene from '../system/Scene';
 import {PALETTE, clear} from '../system/display';
-import {Keys} from '../system/input';
 import {Point, Rectangle} from '../system/math';
 import {
   ButtonUIElement,
@@ -20,7 +19,15 @@ export default class GameplayScene extends Scene {
   private world: World;
   private camera: Camera;
   private cameraOffset: Point;
-  private modal?: UIElement;
+
+  private upButton!: ButtonUIElement;
+  private downButton!: ButtonUIElement;
+  private backButton!: ButtonUIElement;
+  private saveButton!: ButtonUIElement;
+  private depthLabel!: LabelUIElement;
+  private healthMeter!: ProgressMeterUIElement;
+  private staminaMeter!: ProgressMeterUIElement;
+  private itemFrame!: ItemFrame;
 
   constructor(game: Game) {
     super(game);
@@ -38,69 +45,70 @@ export default class GameplayScene extends Scene {
       )
     );
     this.camera.moveTo(this.world.player!.position.subtract(this.cameraOffset));
+  }
 
-    let y = -10;
+  loadContent() {
     const x = this.width - 7 * 8;
+    let y = -10;
 
-    const upButton = new ButtonUIElement(
+    this.upButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'UP',
       x,
       (y += 10),
-      this.uiRoot
+      UIElement.ROOT
     );
-    upButton.onClick = () => {
+    this.upButton.onClick = () => {
       this.world.currentDepth++;
     };
 
-    const downButton = new ButtonUIElement(
+    this.downButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'DOWN',
       x,
       (y += 10),
-      this.uiRoot
+      UIElement.ROOT
     );
-    downButton.onClick = () => {
+    this.downButton.onClick = () => {
       this.world.currentDepth--;
     };
 
-    const backButton = new ButtonUIElement(
+    this.backButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'BACK',
       x,
       (y += 10),
-      this.uiRoot
+      UIElement.ROOT
     );
-    backButton.onClick = () => {
+    this.backButton.onClick = () => {
       this.exitScene();
     };
 
-    const saveButton = new ButtonUIElement(
+    this.saveButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'SAVE',
       x,
       (y += 10),
-      this.uiRoot
+      UIElement.ROOT
     );
-    saveButton.onClick = async () => {
+    this.saveButton.onClick = async () => {
       const savePath = await window.api.file.save(this.world.serialize());
       console.log(`Saved to ${JSON.stringify(savePath)}`);
     };
 
-    new LabelUIElement(
+    this.depthLabel = new LabelUIElement(
       this.font,
       () => `DEPTH:${this.world.currentDepth}`,
       0,
       0,
-      this.uiRoot
+      UIElement.ROOT
     );
 
-    // Health Meter
-    new ProgressMeterUIElement(
+    this.healthMeter = new ProgressMeterUIElement(
       0,
       this.height - 16,
       10,
@@ -109,11 +117,10 @@ export default class GameplayScene extends Scene {
       PALETTE.get(0, 200, 500, 533),
       PALETTE.get(0, 100, 0, 0),
       () => this.world.player?.health ?? 0,
-      this.uiRoot
+      UIElement.ROOT
     );
 
-    // Stamina Meter
-    new ProgressMeterUIElement(
+    this.staminaMeter = new ProgressMeterUIElement(
       0,
       this.height - 8,
       10,
@@ -122,14 +129,25 @@ export default class GameplayScene extends Scene {
       PALETTE.get(0, 220, 550, 553),
       PALETTE.get(0, 110, 0, 0),
       () => this.world.player?.stamina ?? 0,
-      this.uiRoot
+      UIElement.ROOT
     );
 
-    new ItemFrame(
+    this.itemFrame = new ItemFrame(
       this.tileset,
       () => this.world.player?.activeItem,
-      this.uiRoot
+      UIElement.ROOT
     );
+  }
+
+  unloadContent(): void {
+    this.upButton.close();
+    this.downButton.close();
+    this.backButton.close();
+    this.saveButton.close();
+    this.depthLabel.close();
+    this.healthMeter.close();
+    this.staminaMeter.close();
+    this.itemFrame.close();
   }
 
   update(time: GameTime) {
@@ -167,7 +185,9 @@ export default class GameplayScene extends Scene {
       this.world.player.tryAttack(this.world.currentLevel);
     }
     if (this.input.menu.clicked) {
-      new InventoryMenu(this.world.player, this.tileset, this.uiRoot);
+      if (!this.world.player.tryUse(this.world.currentLevel)) {
+        new InventoryMenu(this.world.player, this.tileset, UIElement.ROOT);
+      }
     }
   }
 

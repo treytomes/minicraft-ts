@@ -1,12 +1,5 @@
 import ToolType from '../ToolType';
-import Anvil from '../entities/furniture/Anvil';
-import Chest from '../entities/furniture/Chest';
-import Furnace from '../entities/furniture/Furnace';
-import Lantern from '../entities/furniture/Lantern';
-import Oven from '../entities/furniture/Oven';
-import Workbench from '../entities/furniture/Workbench';
 import {Resources} from '../resources/Resource';
-import FurnitureRecipe from './FurnitureRecipe';
 import Recipe from './Recipe';
 import ResourceRecipe from './ResourceRecipe';
 import ToolRecipe from './ToolRecipe';
@@ -14,69 +7,10 @@ import ToolRecipe from './ToolRecipe';
 export const anvilRecipes: Recipe[] = [];
 export const ovenRecipes: Recipe[] = [];
 export const furnaceRecipes: Recipe[] = [];
-export const workbenchRecipes: Recipe[] = [];
 
 // TODO: I think I would rather load all of this from a data file.
 
-workbenchRecipes.push(
-  new FurnitureRecipe(Lantern)
-    .addCost(Resources.wood, 5)
-    .addCost(Resources.slime, 10)
-    .addCost(Resources.glass, 4)
-);
-
-workbenchRecipes.push(new FurnitureRecipe(Oven).addCost(Resources.stone, 15));
-workbenchRecipes.push(
-  new FurnitureRecipe(Furnace).addCost(Resources.stone, 20)
-);
-workbenchRecipes.push(
-  new FurnitureRecipe(Workbench).addCost(Resources.wood, 20)
-);
-workbenchRecipes.push(new FurnitureRecipe(Chest).addCost(Resources.wood, 20));
-workbenchRecipes.push(
-  new FurnitureRecipe(Anvil).addCost(Resources.ironIngot, 5)
-);
-
-workbenchRecipes.push(
-  new ToolRecipe(ToolType.sword, 0).addCost(Resources.wood, 5)
-);
-workbenchRecipes.push(
-  new ToolRecipe(ToolType.axe, 0).addCost(Resources.wood, 5)
-);
-workbenchRecipes.push(
-  new ToolRecipe(ToolType.hoe, 0).addCost(Resources.wood, 5)
-);
-workbenchRecipes.push(
-  new ToolRecipe(ToolType.pickaxe, 0).addCost(Resources.wood, 5)
-);
-workbenchRecipes.push(
-  new ToolRecipe(ToolType.shovel, 0).addCost(Resources.wood, 5)
-);
-workbenchRecipes.push(
-  new ToolRecipe(ToolType.sword, 1)
-    .addCost(Resources.wood, 5)
-    .addCost(Resources.stone, 5)
-);
-workbenchRecipes.push(
-  new ToolRecipe(ToolType.axe, 1)
-    .addCost(Resources.wood, 5)
-    .addCost(Resources.stone, 5)
-);
-workbenchRecipes.push(
-  new ToolRecipe(ToolType.hoe, 1)
-    .addCost(Resources.wood, 5)
-    .addCost(Resources.stone, 5)
-);
-workbenchRecipes.push(
-  new ToolRecipe(ToolType.pickaxe, 1)
-    .addCost(Resources.wood, 5)
-    .addCost(Resources.stone, 5)
-);
-workbenchRecipes.push(
-  new ToolRecipe(ToolType.shovel, 1)
-    .addCost(Resources.wood, 5)
-    .addCost(Resources.stone, 5)
-);
+// TODO: Moved workbench recipes to the Workbench class.
 
 anvilRecipes.push(
   new ToolRecipe(ToolType.sword, 2)

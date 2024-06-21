@@ -16,8 +16,7 @@ export default class MinicraftGame extends Game {
   async loadContent() {
     await super.loadContent();
 
-    // this.scenes.push(new SpriteTestScene(this));
-    this.scenes.push(new MainMenuScene(this));
+    this.enterScene(new MainMenuScene(this));
   }
 
   render(time: GameTime) {

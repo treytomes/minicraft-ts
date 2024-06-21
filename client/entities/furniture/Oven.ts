@@ -12,9 +12,9 @@ export default class Oven extends Furniture {
     this.size = new Point(6, 4);
   }
 
-  // TODO: Implement Oven.use.
+  // TODO: Implement Oven.onUsed.
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  use(player: Player, attackDir: Direction): boolean {
+  onUsed(player: Player, attackDir: Direction): boolean {
     // player.game.setMenu(new CraftingMenu(Crafting.ovenRecipes, player));
     return true;
   }

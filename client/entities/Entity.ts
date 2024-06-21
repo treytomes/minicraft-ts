@@ -70,11 +70,6 @@ export default class Entity {
     return false;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onUsed(player: Player, attackDir: Direction): boolean {
-    return false;
-  }
-
   interact(player: Player, item: Item, attackDir: Direction): boolean {
     return item.interact(player, this, attackDir);
   }
@@ -86,7 +81,7 @@ export default class Entity {
   touchItem(itemEntity: ItemEntity) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  use(player: Player, attackDir: Direction): boolean {
+  onUsed(player: Player, attackDir: Direction): boolean {
     return false;
   }
 

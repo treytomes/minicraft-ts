@@ -3,12 +3,11 @@ import Game from './Game';
 import {GameTime} from './GameTime';
 import {Font, Sprite, TileSet} from './display';
 import {MouseEventProxy} from './input';
-import RootElement from './ui/RootElement';
+import {UIElement} from './ui';
 
 export default class Scene {
-  private game: Game;
+  protected readonly game: Game;
   public readonly sprites: Sprite[] = [];
-  public readonly uiRoot: RootElement;
 
   protected get input(): InputHandler {
     return this.game.input;
@@ -32,8 +31,11 @@ export default class Scene {
 
   constructor(game: Game) {
     this.game = game;
-    this.uiRoot = new RootElement(this.input);
   }
+
+  loadContent() {}
+
+  unloadContent() {}
 
   update(time: GameTime) {
     for (let n = 0; n < this.sprites.length; n++) {
@@ -41,7 +43,7 @@ export default class Scene {
       sprite.update(time);
     }
 
-    this.uiRoot.update(time);
+    UIElement.ROOT.update(time);
   }
 
   render(time: GameTime) {
@@ -50,34 +52,34 @@ export default class Scene {
       sprite.render(time);
     }
 
-    this.uiRoot.render(time);
+    UIElement.ROOT.render(time);
   }
 
   onKeyDown(e: KeyboardEvent) {
-    this.uiRoot.onKeyDown(e);
+    UIElement.ROOT.onKeyDown(e);
   }
 
   onKeyUp(e: KeyboardEvent) {
-    this.uiRoot.onKeyUp(e);
+    UIElement.ROOT.onKeyUp(e);
   }
 
   onMouseMove(e: MouseEventProxy) {
-    this.uiRoot.onMouseMove(e);
+    UIElement.ROOT.onMouseMove(e);
   }
 
   onMouseDown(e: MouseEventProxy) {
-    this.uiRoot.onMouseDown(e);
+    UIElement.ROOT.onMouseDown(e);
   }
 
   onMouseUp(e: MouseEventProxy) {
-    this.uiRoot.onMouseUp(e);
+    UIElement.ROOT.onMouseUp(e);
   }
 
   enterScene(scene: Scene) {
-    this.game.scenes.push(scene);
+    this.game.enterScene(scene);
   }
 
   exitScene() {
-    this.game.scenes.pop();
+    this.game.exitScene();
   }
 }

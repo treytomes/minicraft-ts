@@ -1,6 +1,5 @@
 import {GameTime} from '../system/GameTime';
 import {TileSet} from '../system/display';
-import {Keys} from '../system/input';
 import {Rectangle} from '../system/math';
 import {UIElement} from '../system/ui';
 import IListableItem from './IListableItem';
@@ -8,7 +7,7 @@ import ListItem from './ListItem';
 import WindowFrame from './WindowFrame';
 
 export default class Menu extends WindowFrame {
-  private readonly items: IListableItem[] = [];
+  protected readonly items: IListableItem[] = [];
   public selectedIndex = 0;
 
   get selectedItem(): IListableItem {

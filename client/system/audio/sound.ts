@@ -9,6 +9,7 @@ const settings = {
 export class Sound {
   private static readonly audioContext = new AudioContext();
 
+  // TODO: Get these out of the system folder!
   static bossdeath = new Sound('bossdeath');
   static craft = new Sound('craft');
   static death = new Sound('death');

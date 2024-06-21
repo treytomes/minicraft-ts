@@ -188,6 +188,7 @@ export default class RockTile extends Tile {
     }
   }
 
+  // TODO: Rename Tile.tick to Tile.update.
   tick(time: GameTime, level: Level, xt: number, yt: number) {
     const damage = level.getData(xt, yt);
     if (damage > 0) level.setData(xt, yt, damage - time.deltaTime / 32);

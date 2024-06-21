@@ -11,6 +11,7 @@ import Rectangle from '../math/Rectangle';
  * @property {number} height
  */
 export default class UIElement {
+  static ROOT: UIElement = new UIElement(new Rectangle(0, 0, 0, 0));
   static MOUSE_HOVER?: UIElement;
   static MOUSE_FOCUS?: UIElement;
   static KEYBOARD_FOCUS?: UIElement;

@@ -11,6 +11,7 @@ import {
   ButtonUIElement,
   LabelUIElement,
   ProgressMeterUIElement,
+  UIElement,
 } from '../system/ui';
 
 export default class SpriteTestScene extends Scene {
@@ -19,58 +20,66 @@ export default class SpriteTestScene extends Scene {
   private dragStart?: Point = undefined;
   private camera = new Camera(new Rectangle(0, 0, 0, 0));
 
+  private positionLabel!: LabelUIElement;
+  private counterLabel!: LabelUIElement;
+  private upButton!: ButtonUIElement;
+  private downButton!: ButtonUIElement;
+  private healthMeter!: ProgressMeterUIElement;
+  private staminaMeter!: ProgressMeterUIElement;
+
   constructor(game: Game) {
     super(game);
 
     this.player = new Player();
     this.player.moveTo(50, 50);
+  }
 
-    new LabelUIElement(
+  loadContent() {
+    this.positionLabel = new LabelUIElement(
       this.font,
       () =>
         `X:${Math.floor(this.player.position.x)},Y:${Math.floor(this.player.position.y)}`,
       0,
       0,
-      this.uiRoot
+      UIElement.ROOT
     );
-    new LabelUIElement(
+    this.counterLabel = new LabelUIElement(
       this.font,
       () => `Counter:${this.getCounterValue()}`,
       20,
       20,
-      this.uiRoot
+      UIElement.ROOT
     );
 
-    const upButton = new ButtonUIElement(
+    this.upButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'Up',
       10,
       10,
-      this.uiRoot
+      UIElement.ROOT
     );
-    upButton.onClick = () => {
+    this.upButton.onClick = () => {
       let counter = this.getCounterValue();
       counter++;
       localStorage.setItem('counter', counter.toString());
     };
 
-    const downButton = new ButtonUIElement(
+    this.downButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'Down',
       40,
       10,
-      this.uiRoot
+      UIElement.ROOT
     );
-    downButton.onClick = () => {
+    this.downButton.onClick = () => {
       let counter = this.getCounterValue();
       counter--;
       localStorage.setItem('counter', counter.toString());
     };
 
-    // health
-    new ProgressMeterUIElement(
+    this.healthMeter = new ProgressMeterUIElement(
       0,
       this.height - 16,
       10,
@@ -79,11 +88,10 @@ export default class SpriteTestScene extends Scene {
       PALETTE.get(0, 200, 500, 533),
       PALETTE.get(0, 100, 0, 0),
       this.getCounterValue,
-      this.uiRoot
+      UIElement.ROOT
     );
 
-    // stamina
-    new ProgressMeterUIElement(
+    this.staminaMeter = new ProgressMeterUIElement(
       0,
       this.height - 8,
       10,
@@ -92,8 +100,17 @@ export default class SpriteTestScene extends Scene {
       PALETTE.get(0, 220, 550, 553),
       PALETTE.get(0, 110, 0, 0),
       this.getCounterValue,
-      this.uiRoot
+      UIElement.ROOT
     );
+  }
+
+  unloadContent() {
+    this.positionLabel.close();
+    this.counterLabel.close();
+    this.upButton.close();
+    this.downButton.close();
+    this.healthMeter.close();
+    this.staminaMeter.close();
   }
 
   getCounterValue(): number {

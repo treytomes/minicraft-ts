@@ -236,6 +236,7 @@ export default class Player extends Mob {
     y1: number
   ): boolean {
     const entities = level.getEntities(x0, y0, x1, y1);
+    // console.log('entities:', entities);
     for (let i = 0; i < entities.length; i++) {
       const e = entities[i];
       if (e !== this) if (e.onUsed(this, this.attackDir)) return true;
@@ -615,7 +616,7 @@ export default class Player extends Mob {
       // this.moveBy(this.xa, this.ya);
     }
 
-    if (this.attackTime > 0) this.attackTime--; // -= time.deltaTime;
+    if (this.attackTime > 0) this.attackTime -= time.deltaTime / 32;
 
     super.update(time, level);
   }
@@ -632,9 +633,6 @@ export default class Player extends Mob {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   tryUse(level: Level) {
-    // TODO: Implement this when it's time to implement the UI windows.
-    if (!this.onUse(level)) {
-      //   game.setMenu(new InventoryMenu(this));
-    }
+    return this.onUse(level);
   }
 }
