@@ -9,18 +9,92 @@ import {UIElement} from '../system/ui';
 import Menu from './Menu';
 import WindowFrame from './WindowFrame';
 
+class HaveWindowFrame extends WindowFrame {
+  constructor(tileset: TileSet, parent: CraftingMenu) {
+    super(tileset, 'Have', new Rectangle(15 * 8, 1 * 8, 9 * 8, 3 * 8), parent);
+  }
+
+  render(time: GameTime): void {
+    super.render(time);
+
+    const recipe = (this.parent as CraftingMenu).selectedItem as Recipe;
+    const hasResultItems = (this.parent as CraftingMenu).player.inventory.count(
+      recipe.resultTemplate
+    );
+
+    const xo = 17 * 8;
+    const yo = 3 * 8;
+
+    this.tileset.render({
+      x: xo,
+      y: yo,
+      tileIndex: recipe.resultTemplate.icon,
+      colors: recipe.resultTemplate.color,
+      bits: 0,
+    });
+
+    const font = new Font(this.tileset);
+    font.render(
+      '' + hasResultItems,
+      xo + 8,
+      yo,
+      PALETTE.get(-1, 555, 555, 555)
+    );
+  }
+}
+
+class CostWindowFrame extends WindowFrame {
+  constructor(tileset: TileSet, parent: CraftingMenu) {
+    super(tileset, 'Cost', new Rectangle(15 * 8, 5 * 8, 9 * 8, 7 * 8), parent);
+  }
+
+  render(time: GameTime): void {
+    super.render(time);
+
+    const font = new Font(this.tileset);
+    const costs = ((this.parent as CraftingMenu).selectedItem as Recipe).costs;
+    for (let i = 0; i < costs.length; i++) {
+      const item = costs[i];
+      const xo = 17 * 8;
+      const yo = (7 + i) * 8;
+      this.tileset.render({
+        x: xo,
+        y: yo,
+        tileIndex: item.icon,
+        colors: item.color,
+      });
+      let requiredAmt = 1;
+      if (item instanceof ResourceItem) {
+        requiredAmt = (item as ResourceItem).count;
+      }
+      let has = (this.parent as CraftingMenu).player.inventory.count(item);
+      let color = PALETTE.get(-1, 555, 555, 555);
+      if (has < requiredAmt) {
+        color = PALETTE.get(-1, 222, 222, 222);
+      }
+      if (has > 99) has = 99;
+      font.render('' + requiredAmt + '/' + has, xo + 8, yo, color);
+    }
+  }
+}
+
 export default class CraftingMenu extends Menu {
-  private player: Player;
+  public player: Player;
   private haveFrame: WindowFrame;
   private costFrame: WindowFrame;
 
-  constructor(tileset: TileSet, recipes: Recipe[], player: Player) {
+  constructor(
+    tileset: TileSet,
+    recipes: Recipe[],
+    player: Player,
+    parent?: UIElement
+  ) {
     super(
       recipes,
       tileset,
       'Crafting',
       new Rectangle(1 * 8, 1 * 8, 16 * 8, 24 * 8),
-      UIElement.ROOT
+      parent
     );
     this.player = player;
 
@@ -35,18 +109,10 @@ export default class CraftingMenu extends Menu {
     // 	}
     // });
 
-    this.haveFrame = new WindowFrame(
-      this.tileset,
-      'Have',
-      new Rectangle(12 * 8, 1 * 8, 19 * 8, 3 * 8),
-      this
-    );
-    this.costFrame = new WindowFrame(
-      this.tileset,
-      'Cost',
-      new Rectangle(12 * 8, 4 * 8, 19 * 8, 11 * 8),
-      this
-    );
+    this.haveFrame = new HaveWindowFrame(tileset, this);
+    this.costFrame = new CostWindowFrame(tileset, this);
+
+    this.acquireKeyboardFocus();
   }
 
   private refreshRecipes() {
@@ -71,60 +137,5 @@ export default class CraftingMenu extends Menu {
       }
       this.refreshRecipes();
     }
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  render(time: GameTime) {
-    console.log('I am here');
-    const font = new Font(this.tileset);
-
-    // Font.renderFrame(screen, "Have", 12, 1, 19, 3);
-    // Font.renderFrame(screen, "Cost", 12, 4, 19, 11);
-    // Font.renderFrame(screen, "Crafting", 0, 1, 11, 11);
-    // renderItemList(screen, 0, 1, 11, 11, recipes, selected);
-
-    if (this.items.length > 0) {
-      const recipe = this.selectedItem as Recipe;
-      const hasResultItems = this.player.inventory.count(recipe.resultTemplate);
-      const xo = 13 * 8;
-      this.tileset.render({
-        x: xo,
-        y: 2 * 8,
-        tileIndex: recipe.resultTemplate.icon,
-        colors: recipe.resultTemplate.color,
-        bits: 0,
-      });
-      font.render(
-        '' + hasResultItems,
-        xo + 8,
-        2 * 8,
-        PALETTE.get(-1, 555, 555, 555)
-      );
-
-      const costs = recipe.costs;
-      for (let i = 0; i < costs.length; i++) {
-        const item = costs[i];
-        const yo = (5 + i) * 8;
-        this.tileset.render({
-          x: xo,
-          y: yo,
-          tileIndex: item.icon,
-          colors: item.color,
-        });
-        let requiredAmt = 1;
-        if (item instanceof ResourceItem) {
-          requiredAmt = (item as ResourceItem).count;
-        }
-        let has = this.player.inventory.count(item);
-        let color = PALETTE.get(-1, 555, 555, 555);
-        if (has < requiredAmt) {
-          color = PALETTE.get(-1, 222, 222, 222);
-        }
-        if (has > 99) has = 99;
-        font.render('' + requiredAmt + '/' + has, xo + 8, yo, color);
-      }
-    }
-
-    super.render(time);
   }
 }

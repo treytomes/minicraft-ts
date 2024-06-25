@@ -66,6 +66,7 @@ export default class Item implements IListableItem {
 
   public matches(item: Item): boolean {
     // TODO: Test this one explicitly.
-    return typeof item === typeof this;
+    // return typeof item === typeof this;
+    return item.name === this.name;
   }
 }

@@ -1,5 +1,4 @@
 import {Direction} from '../../Direction';
-import GlobalResources from '../../GlobalResources';
 import ToolType from '../../ToolType';
 import FurnitureRecipe from '../../crafting/FurnitureRecipe';
 import Recipe from '../../crafting/Recipe';
@@ -7,8 +6,6 @@ import ToolRecipe from '../../crafting/ToolRecipe';
 import {Resources} from '../../resources/Resource';
 import {PALETTE} from '../../system/display';
 import {Point} from '../../system/math';
-import {UIElement} from '../../system/ui';
-import CraftingMenu from '../../ui/CraftingMenu';
 import Player from '../Player';
 import Anvil from './Anvil';
 import Chest from './Chest';
@@ -16,6 +13,7 @@ import Furnace from './Furnace';
 import Furniture from './Furniture';
 import Lantern from './Lantern';
 import Oven from './Oven';
+import * as events from '../../events';
 
 export default class Workbench extends Furniture {
   constructor() {
@@ -79,10 +77,7 @@ export default class Workbench extends Furniture {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onUsed(player: Player, attackDir: Direction): boolean {
-    // player.game.setMenu(new CraftingMenu(Crafting.workbenchRecipes, player));
-    console.log("I'm using a workbench!");
-    // new CraftingMenu(GlobalResources.tileset, this.getRecipes(), player);
-    // console.log(UIElement.ROOT.children);
+    window.eventBus.dispatch(events.beginCrafting, this.getRecipes());
     return true;
   }
 }

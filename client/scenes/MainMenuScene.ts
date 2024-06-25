@@ -92,7 +92,6 @@ export default class MainMenuScene extends Scene {
   }
 
   unloadContent() {
-    console.log('Closing all the things.');
     this.newGameButton.close();
     this.pixelsButton.close();
     this.levelGenButton.close();

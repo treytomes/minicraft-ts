@@ -14,6 +14,10 @@ import {
 import {Tile} from '../tiles';
 import InventoryMenu from '../ui/InventoryMenu';
 import ItemFrame from '../ui/ItemFrame';
+import * as events from '../events';
+import Recipe from '../crafting/Recipe';
+import CraftingMenu from '../ui/CraftingMenu';
+import GlobalResources from '../GlobalResources';
 
 export default class GameplayScene extends Scene {
   private world: World;
@@ -28,6 +32,8 @@ export default class GameplayScene extends Scene {
   private healthMeter!: ProgressMeterUIElement;
   private staminaMeter!: ProgressMeterUIElement;
   private itemFrame!: ItemFrame;
+
+  private beginCraftingRegistry!: events.Registry;
 
   constructor(game: Game) {
     super(game);
@@ -137,9 +143,27 @@ export default class GameplayScene extends Scene {
       () => this.world.player?.activeItem,
       UIElement.ROOT
     );
+
+    this.beginCraftingRegistry = window.eventBus.register(
+      events.beginCrafting,
+      (e: Recipe[]) => {
+        // player.game.setMenu(new CraftingMenu(Crafting.workbenchRecipes, player));
+        // console.log("I'm using a workbench!");
+        // console.log(e);
+        new CraftingMenu(
+          GlobalResources.tileset,
+          e,
+          this.world.player!,
+          UIElement.ROOT
+        );
+        // console.log(UIElement.ROOT.children);
+      }
+    );
   }
 
   unloadContent(): void {
+    this.beginCraftingRegistry.unregister();
+
     this.upButton.close();
     this.downButton.close();
     this.backButton.close();

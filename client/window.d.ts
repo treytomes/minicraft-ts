@@ -1,4 +1,5 @@
 import {type TileInfo} from '../server/api/gfx';
+import {type EventBus} from './event_bus';
 
 export {};
 
@@ -22,6 +23,8 @@ declare global {
         exit: (exitCode: number) => void;
       };
     };
+
+    eventBus: EventBus;
 
     versions: {
       node: () => string;
