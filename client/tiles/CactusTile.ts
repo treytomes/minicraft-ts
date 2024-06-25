@@ -1,4 +1,5 @@
 import {Camera} from '../Camera';
+import {Direction} from '../Direction';
 import Level from '../Level';
 import Entity from '../entities/Entity';
 import ItemEntity from '../entities/ItemEntity';
@@ -51,7 +52,7 @@ export default class CactusTile extends Tile {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     dmg: number,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    attackDir: number
+    attackDir: Direction
   ) {
     const damage = level.getData(x, y) + dmg;
     level.add(new SmashParticle(x * 16 + 8, y * 16 + 8));

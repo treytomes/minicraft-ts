@@ -4,6 +4,7 @@ import Player from '../entities/Player';
 import {Color, Font, PALETTE, TileSet} from '../system/display';
 import {Tile} from '../tiles';
 import Item from './Item';
+import {Direction} from '../Direction';
 
 export default class FurnitureItem extends Item {
   furniture: Furniture;
@@ -49,7 +50,7 @@ export default class FurnitureItem extends Item {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     player: Player,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    attackDir: number
+    attackDir: Direction
   ): boolean {
     if (tile.mayPass(level, xt, yt, this.furniture)) {
       this.furniture.moveTo(xt * 16 + 8, yt * 16 + 8);

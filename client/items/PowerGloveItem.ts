@@ -1,3 +1,4 @@
+import {Direction} from '../Direction';
 import Entity from '../entities/Entity';
 import Furniture from '../entities/furniture/Furniture';
 import Player from '../entities/Player';
@@ -28,7 +29,7 @@ export default class PowerGloveItem extends Item {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interact(player: Player, entity: Entity, attackDir: number): boolean {
+  interact(player: Player, entity: Entity, attackDir: Direction): boolean {
     if (entity instanceof Furniture) {
       const f = entity as Furniture;
       f.take(player);

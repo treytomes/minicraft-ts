@@ -13,6 +13,7 @@ import ItemEntity from '../entities/ItemEntity';
 import ResourceItem from '../items/ResourceItem';
 import {Resources} from '../resources/Resource';
 import {GameTime} from '../system/GameTime';
+import {Direction} from '../Direction';
 
 export default class RockTile extends Tile {
   constructor() {
@@ -135,7 +136,7 @@ export default class RockTile extends Tile {
     player: Player,
     item: Item,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    attackDir: number
+    attackDir: Direction
   ): boolean {
     if (item instanceof ToolItem) {
       const tool = item as ToolItem;

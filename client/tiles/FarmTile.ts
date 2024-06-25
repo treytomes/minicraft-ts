@@ -9,6 +9,7 @@ import ToolItem from '../items/ToolItem';
 import {PALETTE, TileSet} from '../system/display';
 import {Tile, Tiles} from './Tile';
 import {GameTime} from '../system/GameTime';
+import {Direction} from '../Direction';
 
 export default class FarmTile extends Tile {
   constructor() {
@@ -44,7 +45,7 @@ export default class FarmTile extends Tile {
     player: Player,
     item: Item,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    attackDir: number
+    attackDir: Direction
   ): boolean {
     if (item instanceof ToolItem) {
       const tool = item as ToolItem;

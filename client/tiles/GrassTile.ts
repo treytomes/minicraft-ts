@@ -12,6 +12,7 @@ import ItemEntity from '../entities/ItemEntity';
 import ResourceItem from '../items/ResourceItem';
 import {Resources} from '../resources/Resource';
 import {GameTime} from '../system/GameTime';
+import {Direction} from '../Direction';
 
 export default class GrassTile extends Tile {
   constructor(mapColor?: Color) {
@@ -119,7 +120,7 @@ export default class GrassTile extends Tile {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     item: Item,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    attackDir: number
+    attackDir: Direction
   ) {
     if (item instanceof ToolItem) {
       const tool = item as ToolItem;

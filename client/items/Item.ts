@@ -5,6 +5,7 @@ import Player from '../entities/Player';
 import {Color, PALETTE, TileSet} from '../system/display';
 import {Tile} from '../tiles/Tile';
 import IListableItem from '../ui/IListableItem';
+import {Direction} from '../Direction';
 
 export default class Item implements IListableItem {
   get color(): Color[] {
@@ -33,9 +34,8 @@ export default class Item implements IListableItem {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   renderInventory(tileset: TileSet, x: number, y: number) {}
 
-  // TODO: Should attackDir be an enum?
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interact(player: Player, entity: Entity, attackDir: number): boolean {
+  interact(player: Player, entity: Entity, attackDir: Direction): boolean {
     return false;
   }
 
@@ -54,7 +54,7 @@ export default class Item implements IListableItem {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     player: Player,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    attackDir: number
+    attackDir: Direction
   ): boolean {
     return false;
   }

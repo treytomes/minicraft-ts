@@ -1,4 +1,5 @@
 import {Camera} from '../Camera';
+import {Direction} from '../Direction';
 import Level from '../Level';
 import ToolType from '../ToolType';
 import Entity from '../entities/Entity';
@@ -60,7 +61,7 @@ export default class OreTile extends Tile {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     item: Item,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    attackDir: number
+    attackDir: Direction
   ): boolean {
     if (item instanceof ToolItem) {
       const tool = item as ToolItem;

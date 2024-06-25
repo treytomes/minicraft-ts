@@ -1,3 +1,4 @@
+import {Direction} from '../Direction';
 import Level from '../Level';
 import Player from '../entities/Player';
 import {Resource} from '../resources';
@@ -62,7 +63,7 @@ export default class ResourceItem extends Item {
     xt: number,
     yt: number,
     player: Player,
-    attackDir: number
+    attackDir: Direction
   ): boolean {
     if (this.resource.interactOn(tile, level, xt, yt, player, attackDir)) {
       this.count--;

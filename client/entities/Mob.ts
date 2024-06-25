@@ -37,7 +37,7 @@ export default class Mob extends Entity {
     }
   }
 
-  hurt(mob: Mob, dmg: number, attackDir: number): void;
+  hurt(mob: Mob, dmg: number, attackDir: Direction): void;
   hurt(tile: Tile, x: number, y: number, dmg: number): void;
   hurt(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

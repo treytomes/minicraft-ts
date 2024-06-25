@@ -1,3 +1,4 @@
+import {Direction} from '../Direction';
 import Level from '../Level';
 import Player from '../entities/Player';
 import {Color} from '../system/display';
@@ -28,7 +29,7 @@ export default class PlantableResource extends Resource {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     player: Player,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    attackDir: number
+    attackDir: Direction
   ): boolean {
     if (this.sourceTiles.includes(tile)) {
       level.setTile(xt, yt, this.targetTile, 0);
