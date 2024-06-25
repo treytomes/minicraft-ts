@@ -1,6 +1,5 @@
 import {Camera} from '../../Camera';
 import {Direction} from '../../Direction';
-import Level from '../../Level';
 import FurnitureItem from '../../items/FurnitureItem';
 import PowerGloveItem from '../../items/PowerGloveItem';
 import {GameTime} from '../../system/GameTime';
@@ -27,7 +26,7 @@ export default class Furniture extends Entity {
     this.icon = 0;
   }
 
-  update(time: GameTime, level: Level) {
+  update(time: GameTime) {
     if (this.shouldTake !== undefined) {
       if (this.shouldTake.activeItem instanceof PowerGloveItem) {
         this.remove();
@@ -39,10 +38,11 @@ export default class Furniture extends Entity {
 
     const pushDelta = time.deltaTime / 32;
 
-    if (this.pushDir === Direction.South) this.moveBy(level, 0, pushDelta);
-    if (this.pushDir === Direction.North) this.moveBy(level, 0, -pushDelta);
-    if (this.pushDir === Direction.West) this.moveBy(level, -pushDelta, 0);
-    if (this.pushDir === Direction.East) this.moveBy(level, pushDelta, 0);
+    // TODO: Test furniture pushing.
+    if (this.pushDir === Direction.South) this.moveBy(0, pushDelta);
+    if (this.pushDir === Direction.North) this.moveBy(0, -pushDelta);
+    if (this.pushDir === Direction.West) this.moveBy(-pushDelta, 0);
+    if (this.pushDir === Direction.East) this.moveBy(pushDelta, 0);
     this.pushDir = Direction.Undefined;
     if (this.pushTime > 0) this.pushTime -= time.deltaTime / 32;
   }

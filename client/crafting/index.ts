@@ -9,8 +9,7 @@ export const ovenRecipes: Recipe[] = [];
 export const furnaceRecipes: Recipe[] = [];
 
 // TODO: I think I would rather load all of this from a data file.
-
-// TODO: Moved workbench recipes to the Workbench class.
+// TODO: I moved workbench recipes to the Workbench class.
 
 anvilRecipes.push(
   new ToolRecipe(ToolType.sword, 2)

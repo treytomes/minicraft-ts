@@ -206,10 +206,10 @@ export default class GameplayScene extends Scene {
     this.world.player.currentSpeed = new Point(deltaX, deltaY);
 
     if (this.input.attack.clicked) {
-      this.world.player.tryAttack(this.world.currentLevel);
+      this.world.player.tryAttack();
     }
     if (this.input.menu.clicked) {
-      if (!this.world.player.tryUse(this.world.currentLevel)) {
+      if (!this.world.player.tryUse()) {
         new InventoryMenu(this.world.player, this.tileset, UIElement.ROOT);
       }
     }

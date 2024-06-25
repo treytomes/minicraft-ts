@@ -1,4 +1,3 @@
-import Level from '../../Level';
 import {GameTime} from '../../system/GameTime';
 import Entity from '../Entity';
 
@@ -12,8 +11,8 @@ export default class Particle extends Entity {
     this.lifeSpan = 0;
   }
 
-  update(time: GameTime, level: Level) {
-    super.update(time, level);
+  update(time: GameTime) {
+    super.update(time);
 
     this.time += time.deltaTime;
 

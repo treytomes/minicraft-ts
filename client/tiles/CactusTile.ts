@@ -82,7 +82,7 @@ export default class CactusTile extends Tile {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   bumpedInto(level: Level, x: number, y: number, entity: Entity) {
-    entity.hurt(level, this, x, y, 1);
+    entity.hurt(this, x, y, 1);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

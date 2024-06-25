@@ -1,5 +1,4 @@
 import {Camera} from '../Camera';
-import Level from '../Level';
 import Item from '../items/Item';
 import {GameTime} from '../system/GameTime';
 import {Sound} from '../system/audio/sound';
@@ -42,7 +41,7 @@ export default class ItemEntity extends Entity {
     this.lifeTime = 3000 + Random.nextInt(3000);
   }
 
-  update(time: GameTime, level: Level) {
+  update(time: GameTime) {
     this.time += time.deltaTime;
     if (this.time >= this.lifeTime) {
       this.remove();
@@ -66,7 +65,7 @@ export default class ItemEntity extends Entity {
     const ny = Math.floor(this.yy);
     const expectedX = nx - this.position.x;
     const expectedY = ny - this.position.y;
-    this.moveBy(level, nx - this.position.x, ny - this.position.y);
+    this.moveBy(nx - this.position.x, ny - this.position.y);
     const gotX = this.position.x - ox;
     const gotY = this.position.y - oy;
     this.xx += gotX - expectedX;

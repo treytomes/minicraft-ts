@@ -115,12 +115,14 @@ export default class Level {
 
     e.removed = false;
     this.entities.push(e);
+    e.level = this;
     this.insertEntity(e.position.x / Tile.width, e.position.y / Tile.height, e);
   }
 
   remove(e: Entity) {
     if (e instanceof Player) this.player = undefined;
 
+    e.level = undefined;
     const index = this.entities.indexOf(e);
     if (index < 0) return;
     this.entities.splice(index, 1);
@@ -171,7 +173,7 @@ export default class Level {
 
     // Tick a random number of tiles.
     for (let i = 0; i < (this.width * this.height) / 50; i++) {
-      // TODO: I think I might rather tick every time every frame, but I'm not sure.
+      // TODO: I think I might rather tick every tile every frame, but I'm not sure.
       const xt = Random.nextInt(this.width);
       const yt = Random.nextInt(this.height);
       this.getTile(xt, yt).tick(time, this, xt, yt);
@@ -182,7 +184,7 @@ export default class Level {
       const xto = e.position.x >> 4;
       const yto = e.position.y >> 4;
 
-      e.update(time, this);
+      e.update(time);
 
       if (e.removed) {
         this.entities.splice(i, 1);

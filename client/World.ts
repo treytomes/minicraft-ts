@@ -5,13 +5,12 @@ import Player from './entities/Player';
 import EntityFactory from './entities/EntityFactory';
 import {Camera} from './Camera';
 import {TileSet} from './system/display';
-import {Tile} from './tiles';
 import {GameTime} from './system/GameTime';
 
 export default class World {
   private levels: Record<number, Level> = {};
   private _currentDepth = 0;
-  public player: Player | undefined;
+  public player?: Player;
 
   get width() {
     return this.levels[0].width;

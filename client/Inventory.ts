@@ -10,8 +10,6 @@ export default class Inventory {
       const toTake = item as ResourceItem;
       const has = this.findResource(toTake.resource);
       if (!has) {
-        // Insert `toTake` into `this.items` as index `slot`.
-        // TODO: Make sure this works.
         if (slot) {
           this.items.splice(slot, 0, toTake);
         } else {
@@ -56,7 +54,6 @@ export default class Inventory {
     if (ri.count < count) return false;
     ri.count -= count;
     if (ri.count <= 0) {
-      // TODO: Make sure resources are removed.
       const index = this.items.indexOf(ri);
       this.items.splice(index, 1);
     }

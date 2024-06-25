@@ -23,24 +23,23 @@ export default class Mob extends Entity {
     if (this.hurtTime > 0) return;
 
     // TODO: Finish this after fully implementing particles.
-    // level.add(
-    //   new TextParticle(
-    //     '' + heal,
-    //     this.position.x,
-    //     this.position.y,
-    //     PALETTE.get(-1, 50, 50, 50)[0]
-    //   )
-    // );
+    this.level?.add(
+      new TextParticle(
+        '' + heal,
+        this.position.x,
+        this.position.y,
+        PALETTE.get(-1, 50, 50, 50)
+      )
+    );
     this.health += heal;
     if (this.health > this.maxHealth) {
       this.health = this.maxHealth;
     }
   }
 
-  hurt(level: Level, mob: Mob, dmg: number, attackDir: number): void;
-  hurt(level: Level, tile: Tile, x: number, y: number, dmg: number): void;
+  hurt(mob: Mob, dmg: number, attackDir: number): void;
+  hurt(tile: Tile, x: number, y: number, dmg: number): void;
   hurt(
-    level: Level,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     mobOrTile: Mob | Tile,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -52,24 +51,24 @@ export default class Mob extends Entity {
   ) {
     if (mobOrTile instanceof Mob) {
       const attackDir = this.dir ^ 1;
-      this.doHurt(level, dmgOrX, attackDir);
+      this.doHurt(dmgOrX, attackDir);
     } else {
       const attackDir = this.dir ^ 1;
-      this.doHurt(level, dmg!, attackDir);
+      this.doHurt(dmg!, attackDir);
     }
   }
 
-  protected doHurt(level: Level, damage: number, attackDir: Direction) {
+  protected doHurt(damage: number, attackDir: Direction) {
     if (this.hurtTime > 0) return;
 
-    if (level.player) {
-      const xd = level.player.position.x - this.position.x;
-      const yd = level.player.position.y - this.position.y;
+    if (this.level?.player) {
+      const xd = this.level.player.position.x - this.position.x;
+      const yd = this.level.player.position.y - this.position.y;
       if (xd * xd + yd * yd < 80 * 80) {
         Sound.monsterhurt.play();
       }
     }
-    level.add(
+    this.level?.add(
       new TextParticle(
         '' + damage,
         this.position.x,
@@ -85,34 +84,34 @@ export default class Mob extends Entity {
     this.hurtTime = 10;
   }
 
-  update(time: GameTime, level: Level): void {
+  update(time: GameTime): void {
     const restoreDir = this.xKnockback !== 0 || this.yKnockback !== 0;
     const dir = this.dir;
 
     const knockbackDelta = time.deltaTime / 32;
 
     if (this.xKnockback < 0) {
-      this.moveBy(level, -knockbackDelta, 0);
+      this.moveBy(-knockbackDelta, 0);
       this.xKnockback += knockbackDelta;
       if (this.xKnockback > 0) this.xKnockback = 0;
     }
     if (this.xKnockback > 0) {
-      this.moveBy(level, knockbackDelta, 0);
+      this.moveBy(knockbackDelta, 0);
       this.xKnockback -= knockbackDelta;
       if (this.xKnockback < 0) this.xKnockback = 0;
     }
     if (this.yKnockback < 0) {
-      this.moveBy(level, 0, -knockbackDelta);
+      this.moveBy(0, -knockbackDelta);
       this.yKnockback += knockbackDelta;
       if (this.yKnockback > 0) this.yKnockback = 0;
     }
     if (this.yKnockback > 0) {
-      this.moveBy(level, 0, knockbackDelta);
+      this.moveBy(0, knockbackDelta);
       this.yKnockback -= knockbackDelta;
       if (this.yKnockback < 0) this.yKnockback = 0;
     }
 
-    super.update(time, level);
+    super.update(time);
 
     if (restoreDir) {
       // console.log('restore', dir, this.dir);

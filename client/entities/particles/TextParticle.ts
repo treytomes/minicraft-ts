@@ -29,8 +29,8 @@ export default class TextParticle extends Particle {
     this.za = Random.nextFloat() * 0.7 + 2;
   }
 
-  update(time: GameTime, level: Level) {
-    super.update(time, level);
+  update(time: GameTime) {
+    super.update(time);
 
     this.xx += (this.xa * time.deltaTime) / 8;
     this.yy += (this.ya * time.deltaTime) / 8;

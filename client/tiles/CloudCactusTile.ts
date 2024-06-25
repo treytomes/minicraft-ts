@@ -87,6 +87,6 @@ export default class CloudCactusTile extends Tile {
 
   bumpedInto(level: Level, x: number, y: number, entity: Entity) {
     if (entity instanceof AirWizard) return;
-    entity.hurt(level, this, x, y, 3);
+    entity.hurt(this, x, y, 3);
   }
 }
