@@ -80,8 +80,6 @@ class CostWindowFrame extends WindowFrame {
 
 export default class CraftingMenu extends Menu {
   public player: Player;
-  private haveFrame: WindowFrame;
-  private costFrame: WindowFrame;
 
   constructor(
     tileset: TileSet,
@@ -109,8 +107,8 @@ export default class CraftingMenu extends Menu {
     // 	}
     // });
 
-    this.haveFrame = new HaveWindowFrame(tileset, this);
-    this.costFrame = new CostWindowFrame(tileset, this);
+    new HaveWindowFrame(tileset, this);
+    new CostWindowFrame(tileset, this);
 
     this.acquireKeyboardFocus();
   }

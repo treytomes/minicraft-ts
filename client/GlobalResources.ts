@@ -1,4 +1,5 @@
 import {Font, TileSet} from './system/display';
+import Image from './system/display/Image';
 // import * as img from 'image-js';
 // import Image from './system/display/Image';
 
@@ -26,7 +27,11 @@ export default class GlobalResources {
   public static font: Font;
 
   static async initialize() {
-    this.tileset = await window.resources.load(ICONS_PATH);
+    this.tileset = new TileSet(
+      await window.resources.load<Image>(ICONS_PATH),
+      8,
+      8
+    );
     this.font = new Font(this.tileset);
   }
 }
