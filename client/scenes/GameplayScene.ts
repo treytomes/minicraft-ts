@@ -144,7 +144,7 @@ export default class GameplayScene extends Scene {
       UIElement.ROOT
     );
 
-    this.beginCraftingRegistry = window.eventBus.register(
+    this.beginCraftingRegistry = window.events.register(
       events.beginCrafting,
       (e: Recipe[]) => {
         // player.game.setMenu(new CraftingMenu(Crafting.workbenchRecipes, player));

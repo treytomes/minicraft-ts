@@ -1,5 +1,6 @@
 import {type TileInfo} from '../server/api/gfx';
-import {type EventBus} from './event_bus';
+import {type ResourceManager} from './ResourceManager';
+import {type EventBus} from './system/data/event_bus';
 
 export {};
 
@@ -24,7 +25,8 @@ declare global {
       };
     };
 
-    eventBus: EventBus;
+    events: EventBus;
+    resources: ResourceManager;
 
     versions: {
       node: () => string;

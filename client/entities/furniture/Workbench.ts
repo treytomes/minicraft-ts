@@ -77,7 +77,7 @@ export default class Workbench extends Furniture {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onUsed(player: Player, attackDir: Direction): boolean {
-    window.eventBus.dispatch(events.beginCrafting, this.getRecipes());
+    window.events.dispatch(events.beginCrafting, this.getRecipes());
     return true;
   }
 }

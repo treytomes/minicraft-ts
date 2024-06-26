@@ -1,12 +1,10 @@
-export type BusEvent<DetailType> = string & {
-  __detail: DetailType;
-};
-
-export type Registry = {
-  unregister: () => void;
-};
+import {Registry} from './Registry';
 
 export class EventBus extends EventTarget {
+  static initialize() {
+    window.events = new EventBus();
+  }
+
   register = <DetailType>(
     type: string & {
       __detail: DetailType;
@@ -35,7 +33,3 @@ export class EventBus extends EventTarget {
     this.dispatchEvent(new CustomEvent(type, {detail}));
   };
 }
-
-export const initialize = () => {
-  window.eventBus = new EventBus();
-};

@@ -1,5 +1,5 @@
 import * as system from './system';
-import * as event_bus from './event_bus';
+import * as event_bus from './system/data/event_bus';
 import MinicraftGame from './MinicraftGame';
 
 // Attach event_bus to the window.

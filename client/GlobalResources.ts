@@ -2,6 +2,8 @@ import {Font, TileSet} from './system/display';
 import * as img from 'image-js';
 import Image from './system/display/Image';
 
+// TODO: Need a better resource manager.
+
 const ICONS_PATH = 'assets/icons.png';
 
 const loadImage = async (path: string): Promise<Image> => {
