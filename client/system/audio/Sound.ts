@@ -22,6 +22,10 @@ export class Sound {
       });
   }
 
+  // async loadContent(buffer: ArrayBuffer) {
+  //   this.buffer = await Sound.audioContext.decodeAudioData(buffer);
+  // }
+
   play() {
     // Check if context is in suspended state (autoplay policy)
     if (Sound.audioContext.state === 'suspended') {
