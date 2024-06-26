@@ -1,11 +1,11 @@
 import {Direction} from '../Direction';
-import Level from '../Level';
 import {GameTime} from '../system/GameTime';
-import {Sound} from '../system/audio/sound';
+import {Sound} from '../system/audio/Sound';
 import {PALETTE} from '../system/display';
 import {Tile} from '../tiles';
 import Entity from './Entity';
 import {TextParticle} from './particles';
+import * as sounds from '../sounds';
 
 // TODO: Finish implementing Mob.
 export default class Mob extends Entity {
@@ -65,7 +65,7 @@ export default class Mob extends Entity {
       const xd = this.level.player.position.x - this.position.x;
       const yd = this.level.player.position.y - this.position.y;
       if (xd * xd + yd * yd < 80 * 80) {
-        Sound.monsterhurt.play();
+        sounds.monsterhurt.play();
       }
     }
     this.level?.add(

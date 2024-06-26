@@ -7,12 +7,12 @@ import Item from '../items/Item';
 import Player from '../entities/Player';
 import ToolItem from '../items/ToolItem';
 import ToolType from '../ToolType';
-import {Sound} from '../system/audio/sound';
 import ItemEntity from '../entities/ItemEntity';
 import ResourceItem from '../items/ResourceItem';
 import {Resources} from '../resources/Resource';
 import {GameTime} from '../system/GameTime';
 import {Direction} from '../Direction';
+import * as sounds from '../sounds';
 
 export default class GrassTile extends Tile {
   constructor(mapColor?: Color) {
@@ -127,7 +127,7 @@ export default class GrassTile extends Tile {
       if (tool.type === ToolType.shovel) {
         if (player.payStamina(4 - tool.level)) {
           level.setTile(xt, yt, Tiles.dirt, 0);
-          Sound.monsterhurt.play();
+          sounds.monsterhurt.play();
           if (Random.nextInt(5) === 0) {
             level.add(
               new ItemEntity(
@@ -142,7 +142,7 @@ export default class GrassTile extends Tile {
       }
       if (tool.type === ToolType.hoe) {
         if (player.payStamina(4 - tool.level)) {
-          Sound.monsterhurt.play();
+          sounds.monsterhurt.play();
           if (Random.nextInt(5) === 0) {
             level.add(
               new ItemEntity(

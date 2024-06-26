@@ -1,1 +1,1 @@
-export * as sound from './sound';
+export * as sound from './Sound';

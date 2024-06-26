@@ -1,13 +1,13 @@
 import {Camera} from '../Camera';
 import Item from '../items/Item';
 import {GameTime} from '../system/GameTime';
-import {Sound} from '../system/audio/sound';
 import {PALETTE, TileSet} from '../system/display';
 import {Point} from '../system/math';
 import Random from '../system/math/Random';
 import Entity from './Entity';
 import Mob from './Mob';
 import Player from './Player';
+import * as sounds from '../sounds';
 
 export default class ItemEntity extends Entity {
   private lifeTime: number;
@@ -106,7 +106,7 @@ export default class ItemEntity extends Entity {
   }
 
   take(player: Player) {
-    Sound.pickup.play();
+    sounds.pickup.play();
     player.score++;
     this.item.onTake(this);
     this.remove();

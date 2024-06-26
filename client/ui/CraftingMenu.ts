@@ -2,12 +2,12 @@ import Recipe from '../crafting/Recipe';
 import Player from '../entities/Player';
 import ResourceItem from '../items/ResourceItem';
 import {GameTime} from '../system/GameTime';
-import {Sound} from '../system/audio/sound';
 import {Font, PALETTE, TileSet} from '../system/display';
 import {Rectangle} from '../system/math';
 import {UIElement} from '../system/ui';
 import Menu from './Menu';
 import WindowFrame from './WindowFrame';
+import * as sounds from '../sounds';
 
 class HaveWindowFrame extends WindowFrame {
   constructor(tileset: TileSet, parent: CraftingMenu) {
@@ -133,7 +133,7 @@ export default class CraftingMenu extends Menu {
       if (r.canCraft) {
         r.deductCost(this.player);
         r.craft(this.player);
-        Sound.craft.play();
+        sounds.craft.play();
       }
       this.refreshRecipes();
     }

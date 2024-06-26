@@ -3,7 +3,6 @@ import {Font, Sprite, TileSet, createContext} from './display';
 import {GameTime} from './GameTime';
 import {MouseEventProxy} from './input';
 import Scene from './Scene';
-import * as img from 'image-js';
 import InputHandler from '../InputHandler';
 import {UIElement} from './ui';
 import RootElement from './ui/RootElement';
@@ -59,15 +58,8 @@ export default class Game {
 
     UIElement.ROOT = new RootElement(this.input);
 
-    const ICONS_PATH = 'assets/icons.png';
-    const imgData = await img.Image.load(ICONS_PATH);
-    const image = new Image({
-      components: imgData.components,
-      data: Array.from(imgData.data),
-      height: imgData.height,
-      width: imgData.width,
-    });
-    // const image = new Image(await window.api.gfx.getTiles());
+    const ICONS_PATH = 'icons.png';
+    const image = await window.resources.load<Image>(ICONS_PATH);
 
     // TODO: Use _tileset from GlobalResources.
     this._tileset = new TileSet(image, 8, 8);

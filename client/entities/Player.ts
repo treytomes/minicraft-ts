@@ -5,7 +5,6 @@ import FurnitureItem from '../items/FurnitureItem';
 import Item from '../items/Item';
 import PowerGloveItem from '../items/PowerGloveItem';
 import {GameTime} from '../system/GameTime';
-import {Sound} from '../system/audio/sound';
 import {PALETTE, TileSet} from '../system/display';
 import Random from '../system/math/Random';
 import Entity from './Entity';
@@ -13,6 +12,7 @@ import ItemEntity from './ItemEntity';
 import Mob from './Mob';
 import Workbench from './furniture/Workbench';
 import {TextParticle} from './particles';
+import * as sounds from '../sounds';
 
 // TODO: Finish implementing player.
 export default class Player extends Mob {
@@ -281,7 +281,7 @@ export default class Player extends Mob {
   protected doHurt(damage: number, attackDir: Direction) {
     if (this.hurtTime > 0 || this.invulnerableTime > 0) return;
 
-    Sound.playerhurt.play();
+    sounds.playerhurt.play();
     this.level?.add(
       new TextParticle(
         '' + damage,

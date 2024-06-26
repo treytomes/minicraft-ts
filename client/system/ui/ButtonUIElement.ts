@@ -5,8 +5,8 @@ import TileSet from '../display/TileSet';
 import UIElement from './UIElement';
 import {MouseEventProxy} from '../input';
 import {GameTime} from '../GameTime';
-import {Sound} from '../audio/sound';
 import {Rectangle} from '../math';
+import * as sounds from '../../sounds';
 
 export default class ButtonUIElement extends UIElement {
   tileset: TileSet;
@@ -42,7 +42,6 @@ export default class ButtonUIElement extends UIElement {
     this.chromeColors = PALETTE.get(222, -1, -1, -1);
     this.textColors = PALETTE.get(222, -1, -1, 550);
 
-    if (!this.disableClickSound) Sound.test.play();
     this.onClick = () => {};
   }
 

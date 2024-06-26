@@ -1,9 +1,13 @@
 import * as system from './system';
-import * as event_bus from './system/data/event_bus';
+import {EventBus} from './system/data/events';
+import {ResourceManager} from './system/data/resources';
 import MinicraftGame from './MinicraftGame';
+import * as sounds from './sounds';
 
-// Attach event_bus to the window.
-event_bus.initialize();
+const ASSET_ROOT_PATH = 'assets';
+EventBus.initialize();
+ResourceManager.initialize(ASSET_ROOT_PATH);
+await sounds.loadContent();
 
 // const game = new MinicraftGame(160, 120); // Minicraft
 const game = new MinicraftGame(256, 224); // SNES

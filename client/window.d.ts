@@ -1,5 +1,5 @@
 import {type TileInfo} from '../server/api/gfx';
-import {type ResourceManager} from './ResourceManager';
+import {type ResourceManager} from './system/data/resources/ResourceManager';
 import {type EventBus} from './system/data/event_bus';
 
 export {};

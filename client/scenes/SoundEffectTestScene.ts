@@ -1,7 +1,8 @@
-import {Sound} from '../system/audio/sound';
+import {Sound} from '../system/audio/Sound';
 import Scene from '../system/Scene';
 import {Keys} from '../system/input';
 import {ButtonUIElement, UIElement} from '../system/ui';
+import * as sounds from '../sounds';
 
 export default class SoundEffectTestScene extends Scene {
   private sfxButtons: ButtonUIElement[] = [];
@@ -11,13 +12,13 @@ export default class SoundEffectTestScene extends Scene {
     let y = 10;
 
     const sfx: {[index: string]: Sound} = {
-      bossdeath: Sound.bossdeath,
-      craft: Sound.craft,
-      death: Sound.death,
-      monsterhurt: Sound.monsterhurt,
-      pickup: Sound.pickup,
-      playerhurt: Sound.playerhurt,
-      test: Sound.test,
+      bossdeath: sounds.bossdeath,
+      craft: sounds.craft,
+      death: sounds.death,
+      monsterhurt: sounds.monsterhurt,
+      pickup: sounds.pickup,
+      playerhurt: sounds.playerhurt,
+      test: sounds.test,
     };
     for (const key in sfx) {
       const btn = new ButtonUIElement(

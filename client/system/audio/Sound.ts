@@ -9,23 +9,11 @@ const settings = {
 export class Sound {
   private static readonly audioContext = new AudioContext();
 
-  // TODO: Get these out of the system folder!
-  static bossdeath = new Sound('bossdeath');
-  static craft = new Sound('craft');
-  static death = new Sound('death');
-  static monsterhurt = new Sound('monsterhurt');
-  static pickup = new Sound('pickup');
-  static playerhurt = new Sound('playerhurt');
-  static test = new Sound('test');
-
-  name: string;
   private buffer?: AudioBuffer = undefined;
   private bufferSource?: AudioBufferSourceNode = undefined;
 
-  constructor(name: string) {
-    this.name = name;
-
-    fetch(`assets/${name}.wav`)
+  constructor(path: string) {
+    fetch(path)
       .then(response => response.arrayBuffer())
       .then(buffer => {
         Sound.audioContext.decodeAudioData(buffer, decoded => {

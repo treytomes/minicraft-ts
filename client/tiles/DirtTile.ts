@@ -8,10 +8,11 @@ import Item from '../items/Item';
 import ResourceItem from '../items/ResourceItem';
 import ToolItem from '../items/ToolItem';
 import {Resources} from '../resources/Resource';
-import {Sound} from '../system/audio/sound';
+import {Sound} from '../system/audio/Sound';
 import {PALETTE, TileSet} from '../system/display';
 import Random from '../system/math/Random';
 import {Tile, Tiles} from './Tile';
+import * as sounds from '../sounds';
 
 export default class DirtTile extends Tile {
   constructor() {
@@ -61,14 +62,14 @@ export default class DirtTile extends Tile {
               yt * 16 + Random.nextInt(10) + 3
             )
           );
-          Sound.monsterhurt.play();
+          sounds.monsterhurt.play();
           return true;
         }
       }
       if (tool.type === ToolType.hoe) {
         if (player.payStamina(4 - tool.level)) {
           level.setTile(xt, yt, Tiles.farmland, 0);
-          Sound.monsterhurt.play();
+          sounds.monsterhurt.play();
           return true;
         }
       }
