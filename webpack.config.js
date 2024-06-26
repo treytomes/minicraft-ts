@@ -61,7 +61,13 @@ module.exports = [
     },
     plugins: [
       new CopyPlugin({
-        patterns: [{context: './client/assets', from: '*.*', to: './assets'}],
+        patterns: [
+          {from: './client/public/index.html', to: 'index.html'},
+          {from: './client/public/index.css', to: 'index.css'},
+          {from: './client/public/canvas.fs', to: 'canvas.fs'},
+          {from: './client/public/canvas.vs', to: 'canvas.vs'},
+          {context: './client/assets', from: '*.*', to: './assets'},
+        ],
       }),
     ],
   }),
