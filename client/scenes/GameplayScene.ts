@@ -17,7 +17,6 @@ import ItemFrame from '../ui/ItemFrame';
 import * as events from '../events';
 import Recipe from '../crafting/Recipe';
 import CraftingMenu from '../ui/CraftingMenu';
-import GlobalResources from '../GlobalResources';
 
 export default class GameplayScene extends Scene {
   private world: World;
@@ -147,12 +146,7 @@ export default class GameplayScene extends Scene {
     this.beginCraftingRegistry = window.events.register(
       events.beginCrafting,
       (e: Recipe[]) => {
-        new CraftingMenu(
-          GlobalResources.tileset,
-          e,
-          this.world.player!,
-          UIElement.ROOT
-        );
+        new CraftingMenu(this.tileset, e, this.world.player!, UIElement.ROOT);
       }
     );
   }

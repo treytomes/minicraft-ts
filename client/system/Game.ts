@@ -1,4 +1,3 @@
-import Image from './display/Image';
 import {Font, Sprite, TileSet, createContext} from './display';
 import {GameTime} from './GameTime';
 import {MouseEventProxy} from './input';
@@ -6,7 +5,6 @@ import Scene from './Scene';
 import InputHandler from '../InputHandler';
 import {UIElement} from './ui';
 import RootElement from './ui/RootElement';
-import GlobalResources from '../GlobalResources';
 
 export default class Game {
   private _width: number;
@@ -58,12 +56,9 @@ export default class Game {
 
     UIElement.ROOT = new RootElement(this.input);
 
-    // TODO: Use _tileset from GlobalResources.
     this._tileset = await window.resources.load(TileSet, 'tileset.json');
     this._font = await window.resources.load(Font, 'font.json');
     this._mouseCursor = new Sprite(this.tileset, 0, 29, [-1, 1, 112, 445], 1);
-
-    await GlobalResources.initialize();
   }
 
   enterScene(scene: Scene) {
