@@ -10,6 +10,7 @@ export default class ListItem extends UIElement {
   private readonly item: IListableItem;
   private readonly tileset: TileSet;
   private readonly index: number;
+  private font!: Font;
 
   get isSelected(): boolean {
     return (this.parent as Menu).selectedIndex === this.index;
@@ -39,6 +40,8 @@ export default class ListItem extends UIElement {
     this.index = index;
     this.item = item;
     this.tileset = tileset;
+
+    window.resources.load(Font, 'font.json').then(font => (this.font = font));
   }
 
   onMouseUp(e: MouseEventProxy) {
@@ -65,9 +68,8 @@ export default class ListItem extends UIElement {
     );
 
     if (this.isSelected) {
-      const font = new Font(this.tileset);
-      font.render('>', bounds.x, bounds.y, PALETTE.get(5, 555, 555, 555));
-      font.render(
+      this.font?.render('>', bounds.x, bounds.y, PALETTE.get(5, 555, 555, 555));
+      this.font?.render(
         '<',
         (this.parent?.absoluteBounds.width ?? 0) - this.tileset.tileWidth,
         bounds.y,

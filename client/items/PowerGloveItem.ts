@@ -6,6 +6,8 @@ import {Color, Font, PALETTE, TileSet} from '../system/display';
 import Item from './Item';
 
 export default class PowerGloveItem extends Item {
+  private font!: Font;
+
   get color(): Color[] {
     return PALETTE.get(-1, 100, 320, 430);
   }
@@ -18,14 +20,18 @@ export default class PowerGloveItem extends Item {
     return 'Pow glove';
   }
 
+  constructor() {
+    super();
+    window.resources.load(Font, 'font.json').then(font => (this.font = font));
+  }
+
   renderIcon(tileset: TileSet, x: number, y: number) {
     tileset.render({x, y, tileIndex: this.icon, colors: this.color});
   }
 
   renderInventory(tileset: TileSet, x: number, y: number) {
-    const font = new Font(tileset);
     tileset.render({x, y, tileIndex: this.icon, colors: this.color});
-    font.render(this.name, x + 8, y, PALETTE.get(-1, 555, 555, 555));
+    this.font?.render(this.name, x + 8, y, PALETTE.get(-1, 555, 555, 555));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -1,17 +1,22 @@
+import Resource from '../data/resources/Resource';
 import Color from './Color';
 import TileSet from './TileSet';
 
-export default class Font {
+type FontProps = {
+  tilesetPath: string;
+};
+
+export default class Font implements Resource<FontProps> {
   private chars =
     '' +
     'ABCDEFGHIJKLMNOPQRSTUVWXYZ      ' +
     '0123456789.,!?\'"-+=/\\%()<>:;     ' +
     '';
 
-  private tileset: TileSet;
+  private tileset!: TileSet;
 
-  constructor(tileset: TileSet) {
-    this.tileset = tileset;
+  async loadContent(props: FontProps) {
+    this.tileset = await window.resources.load(TileSet, props.tilesetPath);
   }
 
   get width() {

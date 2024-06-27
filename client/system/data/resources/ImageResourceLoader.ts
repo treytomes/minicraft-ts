@@ -7,11 +7,13 @@ export default class ImageResourceLoader implements IResourceLoader<Image> {
 
   async load(path: string): Promise<Image> {
     const imgData = await img.Image.load(path);
-    return new Image({
+    const image = new Image();
+    await image.loadContent({
       components: imgData.components,
       data: Array.from(imgData.data),
       height: imgData.height,
       width: imgData.width,
     });
+    return image;
   }
 }

@@ -9,9 +9,11 @@ export default abstract class Recipe implements IListableItem {
   costs: Item[] = [];
   canCraft = false;
   resultTemplate: Item;
+  private font!: Font;
 
   constructor(resultTemplate: Item) {
     this.resultTemplate = resultTemplate;
+    window.resources.load(Font, 'font.json').then(font => (this.font = font));
   }
 
   addCost(resource: Resource, count: number): Recipe {
@@ -43,8 +45,7 @@ export default abstract class Recipe implements IListableItem {
     const textColor = this.canCraft
       ? PALETTE.get(-1, 555, 555, 555)
       : PALETTE.get(-1, 222, 222, 222);
-    const font = new Font(tileset);
-    font.render(this.resultTemplate.name, x + 8, y, textColor);
+    this.font?.render(this.resultTemplate.name, x + 8, y, textColor);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

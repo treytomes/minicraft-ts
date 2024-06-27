@@ -1,3 +1,5 @@
+import Resource from '../data/resources/Resource';
+
 const settings = {
   detune: 0,
   loop: false,
@@ -6,14 +8,18 @@ const settings = {
   playbackRate: 1,
 };
 
-export class Sound {
+type SoundProps = {
+  path: string;
+};
+
+export class Sound extends Resource<SoundProps> {
   private static readonly audioContext = new AudioContext();
 
   private buffer?: AudioBuffer = undefined;
   private bufferSource?: AudioBufferSourceNode = undefined;
 
-  constructor(path: string) {
-    fetch(path)
+  async loadContent(props: SoundProps) {
+    fetch(props.path)
       .then(response => response.arrayBuffer())
       .then(buffer => {
         Sound.audioContext.decodeAudioData(buffer, decoded => {

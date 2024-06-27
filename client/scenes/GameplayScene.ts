@@ -147,16 +147,12 @@ export default class GameplayScene extends Scene {
     this.beginCraftingRegistry = window.events.register(
       events.beginCrafting,
       (e: Recipe[]) => {
-        // player.game.setMenu(new CraftingMenu(Crafting.workbenchRecipes, player));
-        // console.log("I'm using a workbench!");
-        // console.log(e);
         new CraftingMenu(
           GlobalResources.tileset,
           e,
           this.world.player!,
           UIElement.ROOT
         );
-        // console.log(UIElement.ROOT.children);
       }
     );
   }

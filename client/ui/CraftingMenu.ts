@@ -10,8 +10,11 @@ import WindowFrame from './WindowFrame';
 import * as sounds from '../sounds';
 
 class HaveWindowFrame extends WindowFrame {
+  private font!: Font;
+
   constructor(tileset: TileSet, parent: CraftingMenu) {
     super(tileset, 'Have', new Rectangle(15 * 8, 1 * 8, 9 * 8, 3 * 8), parent);
+    window.resources.load(Font, 'font.json').then(font => (this.font = font));
   }
 
   render(time: GameTime): void {
@@ -33,8 +36,7 @@ class HaveWindowFrame extends WindowFrame {
       bits: 0,
     });
 
-    const font = new Font(this.tileset);
-    font.render(
+    this.font?.render(
       '' + hasResultItems,
       xo + 8,
       yo,
@@ -44,14 +46,16 @@ class HaveWindowFrame extends WindowFrame {
 }
 
 class CostWindowFrame extends WindowFrame {
+  private font!: Font;
+
   constructor(tileset: TileSet, parent: CraftingMenu) {
     super(tileset, 'Cost', new Rectangle(15 * 8, 5 * 8, 9 * 8, 7 * 8), parent);
+    window.resources.load(Font, 'font.json').then(font => (this.font = font));
   }
 
   render(time: GameTime): void {
     super.render(time);
 
-    const font = new Font(this.tileset);
     const costs = ((this.parent as CraftingMenu).selectedItem as Recipe).costs;
     for (let i = 0; i < costs.length; i++) {
       const item = costs[i];
@@ -73,7 +77,7 @@ class CostWindowFrame extends WindowFrame {
         color = PALETTE.get(-1, 222, 222, 222);
       }
       if (has > 99) has = 99;
-      font.render('' + requiredAmt + '/' + has, xo + 8, yo, color);
+      this.font?.render('' + requiredAmt + '/' + has, xo + 8, yo, color);
     }
   }
 }

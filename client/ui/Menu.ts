@@ -6,6 +6,7 @@ import IListableItem from './IListableItem';
 import ListItem from './ListItem';
 import WindowFrame from './WindowFrame';
 
+// TODO: <Esc> should close the menu.
 export default class Menu extends WindowFrame {
   protected readonly items: IListableItem[] = [];
   public selectedIndex = 0;

@@ -47,6 +47,7 @@ export default class ButtonUIElement extends UIElement {
 
   onMouseUp(e: MouseEventProxy) {
     super.onMouseUp(e);
+    if (!this.disableClickSound) sounds.test.play();
     this.onClick();
   }
 

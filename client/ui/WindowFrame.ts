@@ -21,7 +21,7 @@ const TEXT_COLORS = PALETTE.get(
 export default class WindowFrame extends UIElement {
   protected readonly tileset: TileSet;
   private readonly title: string;
-  private readonly titleLabel: LabelUIElement;
+  private titleLabel!: LabelUIElement;
 
   constructor(
     tileset: TileSet,
@@ -33,16 +33,17 @@ export default class WindowFrame extends UIElement {
     this.tileset = tileset;
     this.title = title;
 
-    const font = new Font(this.tileset);
-    this.titleLabel = new LabelUIElement(
-      font,
-      this.title,
-      this.tileset.tileWidth,
-      0,
-      this
-    );
-    this.titleLabel.colors = TEXT_COLORS;
-    this.children.push(this.titleLabel);
+    window.resources.load(Font, 'font.json').then(font => {
+      this.titleLabel = new LabelUIElement(
+        font,
+        this.title,
+        this.tileset.tileWidth,
+        0,
+        this
+      );
+      this.titleLabel.colors = TEXT_COLORS;
+      this.children.push(this.titleLabel);
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

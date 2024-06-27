@@ -58,12 +58,9 @@ export default class Game {
 
     UIElement.ROOT = new RootElement(this.input);
 
-    const ICONS_PATH = 'icons.png';
-    const image = await window.resources.load<Image>(ICONS_PATH);
-
     // TODO: Use _tileset from GlobalResources.
-    this._tileset = new TileSet(image, 8, 8);
-    this._font = new Font(this._tileset);
+    this._tileset = await window.resources.load(TileSet, 'tileset.json');
+    this._font = await window.resources.load(Font, 'font.json');
     this._mouseCursor = new Sprite(this.tileset, 0, 29, [-1, 1, 112, 445], 1);
 
     await GlobalResources.initialize();

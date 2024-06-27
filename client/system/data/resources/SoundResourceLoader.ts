@@ -7,7 +7,10 @@ export default class SoundResourceLoader implements IResourceLoader<Sound> {
   async load(path: string): Promise<Sound> {
     // TODO: Why can't I load the array buffer and pass that to the sound object?
     // The program crashes catastrophically every time.
-    const sound = new Sound(path);
+    const sound = new Sound();
+    await sound.loadContent({
+      path,
+    });
     return Promise.resolve(sound);
   }
 

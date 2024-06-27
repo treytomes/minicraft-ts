@@ -2,9 +2,16 @@ import {getHeight, getWidth, setPixel} from './index';
 import Image from './Image';
 import Color from './Color';
 import {Point} from '../math';
+import Resource from '../data/resources/Resource';
 
 export const BIT_MIRROR_X = 0x01;
 export const BIT_MIRROR_Y = 0x02;
+
+type TileSetProps = {
+  imagePath: string;
+  tileWidth: number;
+  tileHeight: number;
+};
 
 type RenderPropsWithXY = {
   tileIndex: number;
@@ -23,34 +30,37 @@ type RenderPropsWithPoint = {
 
 type RenderProps = RenderPropsWithXY | RenderPropsWithPoint;
 
-export default class TileSet {
-  tiles: number[][];
+export default class TileSet extends Resource<TileSetProps> {
+  private props!: TileSetProps;
 
-  tileWidth: number;
-  tileHeight: number;
-  tilesPerRow: number;
+  tiles!: number[][];
+  tilesPerRow!: number;
 
-  /**
-   * @param {Image} image The source image to pull tiles from.
-   * @param {number} tileWidth Tile width.
-   * @param {number} tileHeight Tile height.
-   */
-  constructor(image: Image, tileWidth: number, tileHeight: number) {
-    this.tileWidth = tileWidth;
-    this.tileHeight = tileHeight;
-    this.tilesPerRow = Math.floor(image.width / tileWidth);
+  get tileWidth() {
+    return this.props.tileWidth;
+  }
+
+  get tileHeight() {
+    return this.props.tileHeight;
+  }
+
+  async loadContent(props: TileSetProps) {
+    this.props = props;
+    const image = await window.resources.load(Image, this.props.imagePath);
+
+    this.tilesPerRow = Math.floor(image.width / this.tileWidth);
     this.tiles = [];
 
-    const NUM_COLUMNS = Math.floor(image.width / tileWidth);
-    const NUM_ROWS = Math.floor(image.height / tileHeight);
+    const columns = Math.floor(image.width / this.tileWidth);
+    const rows = Math.floor(image.height / this.tileHeight);
 
-    for (let row = 0; row < NUM_ROWS; row++) {
-      for (let column = 0; column < NUM_COLUMNS; column++) {
-        const x = column * tileWidth;
-        const y = row * tileHeight;
+    for (let row = 0; row < rows; row++) {
+      for (let column = 0; column < columns; column++) {
+        const x = column * this.tileWidth;
+        const y = row * this.tileHeight;
         const tile: number[] = [];
-        for (let yd = 0; yd < tileHeight; yd++) {
-          for (let xd = 0; xd < tileWidth; xd++) {
+        for (let yd = 0; yd < this.tileHeight; yd++) {
+          for (let xd = 0; xd < this.tileWidth; xd++) {
             /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
             const {r, g, b} = image.getPixel(x + xd, y + yd);
             const v = Math.floor(r / 64);
