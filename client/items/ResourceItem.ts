@@ -45,6 +45,7 @@ export default class ResourceItem extends Item {
     });
   }
 
+  // TODO: I don't like renderInventory living in the item definition.
   renderInventory(tileset: TileSet, x: number, y: number) {
     tileset.render({
       x,

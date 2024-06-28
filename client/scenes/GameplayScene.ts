@@ -119,8 +119,8 @@ export default class GameplayScene extends Scene {
       10,
       0 + 12 * 32,
       this.tileset,
-      PALETTE.get(0, 200, 500, 533),
-      PALETTE.get(0, 100, 0, 0),
+      PALETTE.get(-1, 200, 500, 533),
+      PALETTE.get(-1, 100, 0, 0),
       () => this.world.player?.health ?? 0,
       UIElement.ROOT
     );
@@ -131,8 +131,8 @@ export default class GameplayScene extends Scene {
       10,
       1 + 12 * 32,
       this.tileset,
-      PALETTE.get(0, 220, 550, 553),
-      PALETTE.get(0, 110, 0, 0),
+      PALETTE.get(-1, 220, 550, 553),
+      PALETTE.get(-1, 110, 0, 0),
       () => this.world.player?.stamina ?? 0,
       UIElement.ROOT
     );
