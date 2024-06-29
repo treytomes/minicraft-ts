@@ -1,6 +1,5 @@
 import {Direction} from '../Direction';
 import {GameTime} from '../system/GameTime';
-import {Sound} from '../system/audio/Sound';
 import {PALETTE} from '../system/display';
 import {Tile} from '../tiles';
 import Entity from './Entity';
@@ -12,6 +11,8 @@ export default class Mob extends Entity {
   public maxHealth = 10;
   public health = this.maxHealth;
   public hurtTime = 0;
+  public maxSpeed = 0.05;
+
   protected xKnockback = 0;
   protected yKnockback = 0;
 

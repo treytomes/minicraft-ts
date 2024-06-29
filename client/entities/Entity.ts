@@ -24,8 +24,6 @@ export default class Entity {
    */
   position: Point;
 
-  maxSpeed = 0.05;
-
   currentSpeed: Point;
   size: Point;
   dir = Direction.South;

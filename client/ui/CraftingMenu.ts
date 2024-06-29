@@ -127,7 +127,7 @@ export default class CraftingMenu extends Menu {
   update(time: GameTime): void {
     super.update(time);
 
-    if (this.input.menu.clicked) this.close();
+    if (this.input.exit.clicked) this.close();
 
     if (this.input.attack.clicked && this.items.length > 0) {
       const r = this.selectedItem as Recipe;

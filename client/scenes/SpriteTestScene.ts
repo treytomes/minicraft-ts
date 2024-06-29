@@ -1,5 +1,6 @@
 import {Camera} from '../Camera';
 import Entity from '../entities/Entity';
+import Mob from '../entities/Mob';
 import Player from '../entities/Player';
 import Game from '../system/Game';
 import {GameTime} from '../system/GameTime';
@@ -15,7 +16,7 @@ import {
 } from '../system/ui';
 
 export default class SpriteTestScene extends Scene {
-  private readonly player: Entity;
+  private readonly player: Mob;
   private selectedEntity?: Entity = undefined;
   private dragStart?: Point = undefined;
   private camera = new Camera(new Rectangle(0, 0, 0, 0));

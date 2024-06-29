@@ -41,7 +41,7 @@ export default class InventoryMenu extends Menu {
     if (this.input.attack.clicked) {
       this.onChooseItem();
     }
-    if (this.input.menu.clicked) {
+    if (this.input.exit.clicked) {
       this.close();
     }
   }

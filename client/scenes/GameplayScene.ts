@@ -187,21 +187,18 @@ export default class GameplayScene extends Scene {
     if (this.input.exit.clicked) this.exitScene();
     if (!this.world.player) return;
 
-    let deltaX = 0;
-    let deltaY = 0;
-    if (this.input.up.down) deltaY = -this.world.player.maxSpeed;
-    if (this.input.down.down) deltaY = this.world.player.maxSpeed;
-    if (this.input.left.down) deltaX = -this.world.player.maxSpeed;
-    if (this.input.right.down) deltaX = this.world.player.maxSpeed;
-    this.world.player.currentSpeed = new Point(deltaX, deltaY);
+    this.world.player.currentSpeed = this.input.direction.multiply(
+      this.world.player.maxSpeed
+    );
 
     if (this.input.attack.clicked) {
       this.world.player.tryAttack();
     }
-    if (this.input.menu.clicked) {
-      if (!this.world.player.tryUse()) {
-        new InventoryMenu(this.world.player, this.tileset, UIElement.ROOT);
-      }
+    if (this.input.inventory.clicked) {
+      new InventoryMenu(this.world.player, this.tileset, UIElement.ROOT);
+    }
+    if (this.input.examine.clicked) {
+      this.world.player.tryUse();
     }
   }
 
