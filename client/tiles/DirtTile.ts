@@ -8,7 +8,6 @@ import Item from '../items/Item';
 import ResourceItem from '../items/ResourceItem';
 import ToolItem from '../items/ToolItem';
 import {Resources} from '../resources/Resource';
-import {Sound} from '../system/audio/Sound';
 import {PALETTE, TileSet} from '../system/display';
 import Random from '../system/math/Random';
 import {Tile, Tiles} from './Tile';

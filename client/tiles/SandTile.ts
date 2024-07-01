@@ -43,6 +43,7 @@ export default class SandTile extends Tile {
     const l = !level.getTile(tx - 1, ty).connectsToSand;
     const r = !level.getTile(tx + 1, ty).connectsToSand;
 
+    // TODO: Why aren't the footsteps showing up?
     const steppedOn = level.getData(x, y) > 0;
 
     const topLeft = camera.translate(x, y);
@@ -138,7 +139,10 @@ export default class SandTile extends Tile {
 
   tick(time: GameTime, level: Level, xt: number, yt: number) {
     const d = level.getData(xt, yt);
-    if (d > 0) level.setData(xt, yt, d - time.deltaTime / 32);
+    if (d > 0) {
+      level.setData(xt, yt, d - time.deltaTime / 32);
+      console.log('sand data:', d, d - time.deltaTime / 32);
+    }
   }
 
   steppedOn(level: Level, x: number, y: number, entity: Entity) {

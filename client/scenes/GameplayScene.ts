@@ -200,6 +200,9 @@ export default class GameplayScene extends Scene {
     if (this.input.examine.clicked) {
       this.world.player.tryUse();
     }
+
+    // TODO: If the user left-clicks a nearby tile, face and attack that tile.
+    // TODO: If the user right-clicks a nearby tile, face and examine that tile.
   }
 
   render(time: GameTime) {

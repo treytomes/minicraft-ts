@@ -20,6 +20,7 @@ export default class InputHandler {
     this.right,
     this.attack,
     this.inventory,
+    this.examine,
     this.exit,
   ];
 

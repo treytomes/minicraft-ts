@@ -85,7 +85,7 @@ export default class WheatTile extends Tile {
     if (Random.nextInt(2) === 0) return;
 
     const age = level.getData(xt, yt);
-    // TODO: Make sure it doesn't take too long for a tree to grow.
+    // TODO: Make sure it doesn't take too long for to grow.
     if (age < 50) level.setData(xt, yt, age + time.deltaTime / 32);
   }
 
