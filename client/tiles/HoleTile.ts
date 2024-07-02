@@ -62,7 +62,7 @@ export default class HoleTile extends Tile {
       tileset.render({pnt: topRight, tileIndex: 1, colors: col});
     } else {
       tileset.render({
-        pnt: bottomLeft,
+        pnt: topRight,
         tileIndex: (r ? 16 : 15) + (u ? 0 : 1) * 32,
         colors: su || sr ? transitionColor2 : transitionColor1,
       });
