@@ -1,7 +1,6 @@
 import LevelGeneratorScene from './LevelGeneratorScene';
 import LevelRendererScene from './LevelRendererScene';
 import PixelsTestScene from './PixelsTestScene';
-import Game from '../system/Game';
 import Scene from '../system/Scene';
 import {Keys} from '../system/input';
 import {ButtonUIElement, UIElement} from '../system/ui';
@@ -31,7 +30,7 @@ export default class MainMenuScene extends Scene {
       this.enterScene(new GameplayScene(this.game));
     };
 
-    const pixelsButton = new ButtonUIElement(
+    this.pixelsButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'PIXELS',
