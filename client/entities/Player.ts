@@ -1,18 +1,18 @@
 import {Camera} from '../Camera';
 import {Direction} from '../Direction';
 import Inventory from '../Inventory';
-import Level from '../Level';
 import FurnitureItem from '../items/FurnitureItem';
 import Item from '../items/Item';
 import PowerGloveItem from '../items/PowerGloveItem';
 import {GameTime} from '../system/GameTime';
-import {Sound} from '../system/audio/sound';
 import {PALETTE, TileSet} from '../system/display';
 import Random from '../system/math/Random';
 import Entity from './Entity';
 import ItemEntity from './ItemEntity';
 import Mob from './Mob';
+import Workbench from './furniture/Workbench';
 import {TextParticle} from './particles';
+import * as sounds from '../sounds';
 
 // TODO: Finish implementing player.
 export default class Player extends Mob {
@@ -38,7 +38,7 @@ export default class Player extends Mob {
   constructor() {
     super();
 
-    // this.inventory.add(new FurnitureItem(new Workbench()));
+    this.inventory.add(new FurnitureItem(new Workbench()));
     this.inventory.add(new PowerGloveItem());
     // this.activeItem = new PowerGloveItem();
   }
@@ -117,7 +117,7 @@ export default class Player extends Mob {
     }
     let col = PALETTE.get(-1, 100, 220, 532);
     if (this.hurtTime > 0) {
-      // Flash white when hurt?
+      // Flash white when hurt and invulnerable.
       col = PALETTE.get(-1, 555, 555, 555);
     }
 
@@ -211,7 +211,7 @@ export default class Player extends Mob {
     // Display furniture being carried.
     if (this.activeItem instanceof FurnitureItem) {
       const furniture = (this.activeItem as FurnitureItem).furniture;
-      furniture.moveTo(this.position.x, yo);
+      furniture.moveTo(this.position.x, this.position.y - 11);
       furniture.render(tileset, camera);
     }
   }
@@ -227,14 +227,9 @@ export default class Player extends Mob {
     }
   }
 
-  private useRegion(
-    level: Level,
-    x0: number,
-    y0: number,
-    x1: number,
-    y1: number
-  ): boolean {
-    const entities = level.getEntities(x0, y0, x1, y1);
+  private useRegion(x0: number, y0: number, x1: number, y1: number): boolean {
+    if (!this.level) return false;
+    const entities = this.level.getEntities(x0, y0, x1, y1);
     for (let i = 0; i < entities.length; i++) {
       const e = entities[i];
       if (e !== this) if (e.onUsed(this, this.attackDir)) return true;
@@ -243,7 +238,6 @@ export default class Player extends Mob {
   }
 
   private interactRegion(
-    level: Level,
     x0: number,
     y0: number,
     x1: number,
@@ -251,8 +245,9 @@ export default class Player extends Mob {
   ): boolean {
     // TODO: What if I wanted to interact with a region without an item?
     if (!this.activeItem) return false;
+    if (!this.level) return false;
 
-    const entities = level.getEntities(x0, y0, x1, y1);
+    const entities = this.level.getEntities(x0, y0, x1, y1);
     for (let i = 0; i < entities.length; i++) {
       const e = entities[i];
       if (e !== this) {
@@ -264,18 +259,13 @@ export default class Player extends Mob {
     return false;
   }
 
-  private hurtRegion(
-    level: Level,
-    x0: number,
-    y0: number,
-    x1: number,
-    y1: number
-  ): boolean {
-    const entities = level.getEntities(x0, y0, x1, y1);
+  private hurtRegion(x0: number, y0: number, x1: number, y1: number): boolean {
+    if (!this.level) return false;
+    const entities = this.level.getEntities(x0, y0, x1, y1);
     for (let i = 0; i < entities.length; i++) {
       const e = entities[i];
       if (e !== this) {
-        e.hurt(level, this, this.getAttackDamage(e), this.attackDir);
+        e.hurt(this, this.getAttackDamage(e), this.attackDir);
         return true;
       }
     }
@@ -288,11 +278,11 @@ export default class Player extends Mob {
     );
   }
 
-  protected doHurt(level: Level, damage: number, attackDir: Direction) {
+  protected doHurt(damage: number, attackDir: Direction) {
     if (this.hurtTime > 0 || this.invulnerableTime > 0) return;
 
-    Sound.playerhurt.play();
-    level.add(
+    sounds.playerhurt.play();
+    this.level?.add(
       new TextParticle(
         '' + damage,
         this.position.x,
@@ -312,7 +302,8 @@ export default class Player extends Mob {
   }
 
   // TODO: I feel like this function could be simplified.
-  attack(level: Level) {
+  attack() {
+    if (!this.level) return;
     this.walkDist += 8;
     this.attackDir = this.dir;
     this.attackItem = this.activeItem;
@@ -325,7 +316,6 @@ export default class Player extends Mob {
       if (
         this.dir === Direction.South &&
         this.interactRegion(
-          level,
           this.position.x - 8,
           this.position.y + 4 + yo,
           this.position.x + 8,
@@ -337,7 +327,6 @@ export default class Player extends Mob {
       if (
         this.dir === Direction.North &&
         this.interactRegion(
-          level,
           this.position.x - 8,
           this.position.y - range + yo,
           this.position.x + 8,
@@ -349,7 +338,6 @@ export default class Player extends Mob {
       if (
         this.dir === Direction.East &&
         this.interactRegion(
-          level,
           this.position.x + 4,
           this.position.y - 8 + yo,
           this.position.x + range,
@@ -361,7 +349,6 @@ export default class Player extends Mob {
       if (
         this.dir === Direction.West &&
         this.interactRegion(
-          level,
           this.position.x - range,
           this.position.y - 8 + yo,
           this.position.x - 4,
@@ -388,11 +375,16 @@ export default class Player extends Mob {
         xt = (this.position.x + r) >> 4;
       }
 
-      if (xt >= 0 && yt >= 0 && xt < level.width && yt < level.height) {
+      if (
+        xt >= 0 &&
+        yt >= 0 &&
+        xt < this.level.width &&
+        yt < this.level.height
+      ) {
         if (
           this.activeItem.interactOn(
-            level.getTile(xt, yt),
-            level,
+            this.level.getTile(xt, yt),
+            this.level,
             xt,
             yt,
             this,
@@ -402,9 +394,16 @@ export default class Player extends Mob {
           done = true;
         } else {
           if (
-            level
+            this.level
               .getTile(xt, yt)
-              .interact(level, xt, yt, this, this.activeItem, this.attackDir)
+              .interact(
+                this.level,
+                xt,
+                yt,
+                this,
+                this.activeItem,
+                this.attackDir
+              )
           ) {
             done = true;
           }
@@ -423,7 +422,6 @@ export default class Player extends Mob {
       const range = 20;
       if (this.dir === Direction.South)
         this.hurtRegion(
-          level,
           this.position.x - 8,
           this.position.y + 4 + yo,
           this.position.x + 8,
@@ -431,7 +429,6 @@ export default class Player extends Mob {
         );
       if (this.dir === Direction.North)
         this.hurtRegion(
-          level,
           this.position.x - 8,
           this.position.y - range + yo,
           this.position.x + 8,
@@ -439,7 +436,6 @@ export default class Player extends Mob {
         );
       if (this.dir === Direction.East)
         this.hurtRegion(
-          level,
           this.position.x + 4,
           this.position.y - 8 + yo,
           this.position.x + range,
@@ -447,7 +443,6 @@ export default class Player extends Mob {
         );
       if (this.dir === Direction.West)
         this.hurtRegion(
-          level,
           this.position.x - range,
           this.position.y - 8 + yo,
           this.position.x - 4,
@@ -469,20 +464,32 @@ export default class Player extends Mob {
       if (this.attackDir === Direction.East) {
         xt = (this.position.x + r) >> 4;
       }
-      if (xt >= 0 && yt >= 0 && xt < level.width && yt < level.height) {
-        level
+      if (
+        xt >= 0 &&
+        yt >= 0 &&
+        xt < this.level.width &&
+        yt < this.level.height
+      ) {
+        this.level
           .getTile(xt, yt)
-          .hurt(level, xt, yt, this, Random.nextInt(3) + 1, this.attackDir);
+          .hurt(
+            this.level,
+            xt,
+            yt,
+            this,
+            Random.nextInt(3) + 1,
+            this.attackDir
+          );
       }
     }
   }
 
-  use(level: Level): boolean {
+  onUse(): boolean {
+    if (!this.level) return false;
     const yo = -2;
     if (
       this.dir === Direction.South &&
       this.useRegion(
-        level,
         this.position.x - 8,
         this.position.y + 4 + yo,
         this.position.x + 8,
@@ -493,7 +500,6 @@ export default class Player extends Mob {
     if (
       this.dir === Direction.North &&
       this.useRegion(
-        level,
         this.position.x - 8,
         this.position.y - 12 + yo,
         this.position.x + 8,
@@ -504,7 +510,6 @@ export default class Player extends Mob {
     if (
       this.dir === Direction.East &&
       this.useRegion(
-        level,
         this.position.x + 4,
         this.position.y - 8 + yo,
         this.position.x + 12,
@@ -515,7 +520,6 @@ export default class Player extends Mob {
     if (
       this.dir === Direction.West &&
       this.useRegion(
-        level,
         this.position.x - 12,
         this.position.y - 8 + yo,
         this.position.x - 4,
@@ -534,15 +538,17 @@ export default class Player extends Mob {
     if (this.attackDir === Direction.West) xt = (this.position.x - r) >> 4;
     if (this.attackDir === Direction.East) xt = (this.position.x + r) >> 4;
 
-    if (xt >= 0 && yt >= 0 && xt < level.width && yt < level.height) {
-      if (level.getTile(xt, yt).use(level, xt, yt, this, this.attackDir))
+    if (xt >= 0 && yt >= 0 && xt < this.level.width && yt < this.level.height) {
+      if (
+        this.level.getTile(xt, yt).use(this.level, xt, yt, this, this.attackDir)
+      )
         return true;
     }
 
     return false;
   }
 
-  update(time: GameTime, level: Level) {
+  update(time: GameTime) {
     // TODO: Is the invulnerability timer depleting fast enough?
     if (this.invulnerableTime > 0) this.invulnerableTime -= time.deltaTime;
 
@@ -572,20 +578,20 @@ export default class Player extends Mob {
 
     if (this.staminaRechargeDelay > 0) {
       // console.log('staminaRechargeDelay', this.staminaRechargeDelay);
-      this.staminaRechargeDelay -= time.deltaTime * staminaFactor * 6;
+      this.staminaRechargeDelay -= time.deltaTime * staminaFactor * 12;
     } else {
       // console.log('staminaRechargeDelay is done.', this.staminaRechargeDelay);
     }
 
     if (this.staminaRechargeDelay <= 0) {
-      this.staminaRecharge += time.deltaTime * staminaFactor * 10;
+      this.staminaRecharge += time.deltaTime * staminaFactor * 16;
       if (this.isSwimming) {
         this.staminaRecharge = 0;
       }
       while (this.staminaRecharge > 10) {
         this.staminaRecharge -= 10;
         if (this.stamina < this.maxStamina)
-          this.stamina += time.deltaTime * staminaFactor * 10;
+          this.stamina += time.deltaTime * staminaFactor * 16;
       }
       // console.log('staminaRecharge', this.staminaRecharge);
       // console.log('stamina', this.stamina);
@@ -602,7 +608,7 @@ export default class Player extends Mob {
       if (this.stamina > 0) {
         this.stamina -= time.deltaTime * staminaFactor;
       } else {
-        this.hurt(level, this, 1, this.dir ^ 1);
+        this.hurt(this, 1, this.dir ^ 1);
       }
     }
 
@@ -614,26 +620,23 @@ export default class Player extends Mob {
       // this.moveBy(this.xa, this.ya);
     }
 
-    if (this.attackTime > 0) this.attackTime--; // -= time.deltaTime;
+    if (this.attackTime > 0) this.attackTime -= time.deltaTime / 32;
 
-    super.update(time, level);
+    super.update(time);
   }
 
-  tryAttack(level: Level): boolean {
+  tryAttack(): boolean {
     if (this.stamina > 0) {
       this.stamina--;
       this.staminaRecharge = 0;
-      this.attack(level);
+      this.attack();
       return true;
     }
     return false;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  tryUse(level: Level) {
-    // TODO: Implement this when it's time to implement the UI windows.
-    // if (!this.use(level)) {
-    //   game.setMenu(new InventoryMenu(this));
-    // }
+  tryUse() {
+    return this.onUse();
   }
 }

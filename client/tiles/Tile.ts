@@ -78,7 +78,7 @@ export class Tile {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     item: Item,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    attackDir: number
+    attackDir: Direction
   ): boolean {
     return false;
   }
@@ -89,7 +89,7 @@ export class Tile {
     y: number,
     source: Mob,
     dmg: number,
-    attackDir: number
+    attackDir: Direction
   ): void;
   hurt(level: Level, x: number, y: number, dmg: number): void;
   hurt(
@@ -117,7 +117,7 @@ export class Tile {
     source: Mob,
     dmg: number,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    attackDir: number
+    attackDir: Direction
   ) {
     this.hurtTile(level, x, y, dmg);
   }

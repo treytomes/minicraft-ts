@@ -10,7 +10,7 @@ import {GameTime} from './system/GameTime';
 export default class World {
   private levels: Record<number, Level> = {};
   private _currentDepth = 0;
-  public player: Player | undefined;
+  public player?: Player;
 
   get width() {
     return this.levels[0].width;

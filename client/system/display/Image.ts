@@ -1,16 +1,23 @@
-import {TileInfo} from '../../../shared/models/tile-info';
+import Resource from '../data/resources/Resource';
 
-export default class Image {
+type ImageProps = {
   components: number;
   data: number[];
   height: number;
   width: number;
+};
 
-  constructor(data: TileInfo) {
-    this.components = data.components;
-    this.data = data.data;
-    this.height = data.height;
-    this.width = data.width;
+export default class Image extends Resource<ImageProps> {
+  components!: number;
+  data!: number[];
+  height!: number;
+  width!: number;
+
+  async loadContent(props: ImageProps) {
+    this.components = props.components;
+    this.data = props.data;
+    this.height = props.height;
+    this.width = props.width;
   }
 
   getPixel(x: number, y: number): {r: number; g: number; b: number} {

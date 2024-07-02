@@ -1,14 +1,13 @@
 import {Camera} from '../Camera';
-import Level from '../Level';
 import Item from '../items/Item';
 import {GameTime} from '../system/GameTime';
-import {Sound} from '../system/audio/sound';
 import {PALETTE, TileSet} from '../system/display';
 import {Point} from '../system/math';
 import Random from '../system/math/Random';
 import Entity from './Entity';
 import Mob from './Mob';
 import Player from './Player';
+import * as sounds from '../sounds';
 
 export default class ItemEntity extends Entity {
   private lifeTime: number;
@@ -42,7 +41,7 @@ export default class ItemEntity extends Entity {
     this.lifeTime = 3000 + Random.nextInt(3000);
   }
 
-  update(time: GameTime, level: Level) {
+  update(time: GameTime) {
     this.time += time.deltaTime;
     if (this.time >= this.lifeTime) {
       this.remove();
@@ -66,7 +65,7 @@ export default class ItemEntity extends Entity {
     const ny = Math.floor(this.yy);
     const expectedX = nx - this.position.x;
     const expectedY = ny - this.position.y;
-    this.moveBy(level, nx - this.position.x, ny - this.position.y);
+    this.moveBy(nx - this.position.x, ny - this.position.y);
     const gotX = this.position.x - ox;
     const gotY = this.position.y - oy;
     this.xx += gotX - expectedX;
@@ -81,7 +80,7 @@ export default class ItemEntity extends Entity {
   }
 
   render(tileset: TileSet, camera: Camera) {
-    if (this.time >= this.lifeTime / 3) {
+    if (this.time >= (this.lifeTime * 2) / 3) {
       // Blink the item as it near death.
       if ((this.time >> 3) % 2 === 0) return;
     }
@@ -107,7 +106,7 @@ export default class ItemEntity extends Entity {
   }
 
   take(player: Player) {
-    Sound.pickup.play();
+    sounds.pickup.play();
     player.score++;
     this.item.onTake(this);
     this.remove();

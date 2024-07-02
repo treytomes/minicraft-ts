@@ -12,10 +12,9 @@ import Player from './Player';
 
 // TODO: Finish implementing Entity.
 export default class Entity {
-  // level: Level | undefined;
+  level?: Level;
   removed = false;
 
-  // TODO: This should get toggled when the entity bumps into a liquid tile.
   isSwimming = false;
 
   tickTime = 0;
@@ -24,8 +23,6 @@ export default class Entity {
    * The entity is rendered centered on this position.
    */
   position: Point;
-
-  maxSpeed = 0.05;
 
   currentSpeed: Point;
   size: Point;
@@ -49,10 +46,13 @@ export default class Entity {
     return false;
   }
 
+  get lightRadius() {
+    return 0;
+  }
+
   constructor() {
     this.position = Point.zero;
 
-    // TODO: I changed this from 16 to 12.  Make sure it doesn't break stuff.
     this.size = new Point(12, 12);
     this.currentSpeed = Point.zero;
   }
@@ -66,11 +66,6 @@ export default class Entity {
     return false;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onUsed(player: Player, attackDir: Direction): boolean {
-    return false;
-  }
-
   interact(player: Player, item: Item, attackDir: Direction): boolean {
     return item.interact(player, this, attackDir);
   }
@@ -80,6 +75,11 @@ export default class Entity {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   touchItem(itemEntity: ItemEntity) {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onUsed(player: Player, attackDir: Direction): boolean {
+    return false;
+  }
 
   moveTo(point: Point): void;
   moveTo(x: number, y: number): void;
@@ -91,11 +91,12 @@ export default class Entity {
     this.position = new Point(xOrPoint, y!);
   }
 
-  moveBy(level: Level, point: Point): void;
-  moveBy(level: Level, x: number, y: number): void;
-  moveBy(level: Level, xOrPoint: number | Point, y?: number) {
+  moveBy(point: Point): void;
+  moveBy(x: number, y: number): void;
+  moveBy(xOrPoint: number | Point, y?: number) {
+    if (!this.level) return;
     if (!(xOrPoint instanceof Point)) {
-      this.moveBy(level, new Point(xOrPoint, y!));
+      this.moveBy(new Point(xOrPoint, y!));
       return;
     }
     const delta = xOrPoint;
@@ -125,8 +126,8 @@ export default class Entity {
     for (let yt = yt0; yt <= yt1; yt++) {
       for (let xt = xt0; xt <= xt1; xt++) {
         if (xt >= xto0 && xt <= xto1 && yt >= yto0 && yt <= yto1) continue;
-        level.getTile(xt, yt).bumpedInto(level, xt, yt, this);
-        if (!level.getTile(xt, yt).mayPass(level, xt, yt, this)) {
+        this.level.getTile(xt, yt).bumpedInto(this.level, xt, yt, this);
+        if (!this.level.getTile(xt, yt).mayPass(this.level, xt, yt, this)) {
           isBlocked = true;
           break;
         }
@@ -134,13 +135,13 @@ export default class Entity {
       if (isBlocked) break;
     }
 
-    const wasInside = level.getEntities(
+    const wasInside = this.level.getEntities(
       this.bounds.left,
       this.bounds.top,
       this.bounds.right,
       this.bounds.bottom
     );
-    const isInside = level.getEntities(
+    const isInside = this.level.getEntities(
       this.bounds.left + delta.x,
       this.bounds.top + delta.y,
       this.bounds.right + delta.x,
@@ -163,16 +164,14 @@ export default class Entity {
     if (!isBlocked) {
       const xt = Math.floor(this.position.x / Tile.width);
       const yt = Math.floor(this.position.y / Tile.height);
-      level.getTile(xt, yt).steppedOn(level, xt, yt, this);
+      this.level.getTile(xt, yt).steppedOn(this.level, xt, yt, this);
       this.moveTo(this.position.add(delta));
     }
   }
 
-  hurt(level: Level, mob: Mob, dmg: number, attackDir: number): void;
-  hurt(level: Level, tile: Tile, x: number, y: number, dmg: number): void;
+  hurt(mob: Mob, dmg: number, attackDir: Direction): void;
+  hurt(tile: Tile, x: number, y: number, dmg: number): void;
   hurt(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    level: Level,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     mobOrTile: Mob | Tile,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -184,11 +183,11 @@ export default class Entity {
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  update(time: GameTime, level: Level) {
+  update(time: GameTime) {
     this.tickTime += time.deltaTime;
     const delta = this.currentSpeed.multiply(time.deltaTime);
-    this.moveBy(level, delta.x, 0);
-    this.moveBy(level, 0, delta.y);
+    this.moveBy(delta.x, 0);
+    this.moveBy(0, delta.y);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

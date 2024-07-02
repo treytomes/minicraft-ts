@@ -1,4 +1,4 @@
-import {isInRange} from './index';
+import {Point, isInRange} from './index';
 
 export default class Rectangle {
   readonly x: number;
@@ -79,5 +79,9 @@ export default class Rectangle {
 
   resize(w: number, h: number): Rectangle {
     return new Rectangle(this.x, this.y, w, h);
+  }
+
+  moveTo(pnt: Point): Rectangle {
+    return new Rectangle(pnt.x, pnt.y, this.width, this.height);
   }
 }

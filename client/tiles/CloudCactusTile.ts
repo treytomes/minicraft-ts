@@ -1,4 +1,5 @@
 import {Camera} from '../Camera';
+import {Direction} from '../Direction';
 import Level from '../Level';
 import ToolType from '../ToolType';
 import AirWizard from '../entities/AirWizard';
@@ -50,7 +51,7 @@ export default class CloudCactusTile extends Tile {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     item: Item,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    attackDir: number
+    attackDir: Direction
   ): boolean {
     if (item instanceof ToolItem) {
       const tool = item as ToolItem;
@@ -87,6 +88,6 @@ export default class CloudCactusTile extends Tile {
 
   bumpedInto(level: Level, x: number, y: number, entity: Entity) {
     if (entity instanceof AirWizard) return;
-    entity.hurt(level, this, x, y, 3);
+    entity.hurt(this, x, y, 3);
   }
 }

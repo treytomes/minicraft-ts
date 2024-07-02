@@ -1,13 +1,13 @@
 import {Camera} from '../../Camera';
-import {Sound} from '../../system/audio/sound';
 import {PALETTE, TileSet} from '../../system/display';
 import Particle from './Particle';
+import * as sounds from '../../sounds';
 
 export default class SmashParticle extends Particle {
   constructor(x: number, y: number) {
     super(x, y);
     this.lifeSpan = 10;
-    Sound.monsterhurt.play();
+    sounds.monsterhurt.play();
   }
 
   render(tileset: TileSet, camera: Camera) {

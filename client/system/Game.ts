@@ -1,9 +1,10 @@
-import Image from './display/Image';
 import {Font, Sprite, TileSet, createContext} from './display';
 import {GameTime} from './GameTime';
 import {MouseEventProxy} from './input';
 import Scene from './Scene';
-import * as img from 'image-js';
+import InputHandler from '../InputHandler';
+import {UIElement} from './ui';
+import RootElement from './ui/RootElement';
 
 export default class Game {
   private _width: number;
@@ -11,7 +12,8 @@ export default class Game {
   private _tileset: TileSet | undefined;
   private _font: Font | undefined;
   private _mouseCursor: Sprite | undefined;
-  public readonly scenes: Scene[] = [];
+  private readonly scenes: Scene[] = [];
+  public readonly input = new InputHandler();
 
   get tileset(): TileSet {
     if (!this._tileset) throw new Error('Content is not loaded.');
@@ -52,23 +54,28 @@ export default class Game {
   async loadContent() {
     await createContext(this._width, this._height);
 
-    const ICONS_PATH = 'assets/icons.png';
-    const imgData = await img.Image.load(ICONS_PATH);
-    const image = new Image({
-      components: imgData.components,
-      data: Array.from(imgData.data),
-      height: imgData.height,
-      width: imgData.width,
-    });
-    // const image = new Image(await window.api.gfx.getTiles());
+    UIElement.ROOT = new RootElement(this.input);
 
-    this._tileset = new TileSet(image, 8, 8);
-    this._font = new Font(this._tileset);
+    this._tileset = await window.resources.load(TileSet, 'tileset.json');
+    this._font = await window.resources.load(Font, 'font.json');
     this._mouseCursor = new Sprite(this.tileset, 0, 29, [-1, 1, 112, 445], 1);
+  }
+
+  enterScene(scene: Scene) {
+    this.currentScene?.unloadContent();
+    this.scenes.push(scene);
+    this.currentScene?.loadContent();
+  }
+
+  exitScene() {
+    this.currentScene?.unloadContent();
+    this.scenes.pop();
+    this.currentScene?.loadContent();
   }
 
   update(time: GameTime) {
     if (this.currentScene === null) window.api.system.exit(0);
+    this.input.update(time);
     this.currentScene?.update(time);
     this.mouseCursor.update(time);
   }
@@ -79,13 +86,16 @@ export default class Game {
   }
 
   onKeyDown(e: KeyboardEvent) {
+    this.input.onKeyDown(e);
     this.currentScene?.onKeyDown(e);
   }
 
   onKeyUp(e: KeyboardEvent) {
+    this.input.onKeyUp(e);
     this.currentScene?.onKeyUp(e);
   }
 
+  // TODO: onMouseMove can move to an InputHandles.axis?
   onMouseMove(e: MouseEventProxy) {
     this.mouseCursor.moveTo(e.clientX, e.clientY);
     this.currentScene?.onMouseMove(e);

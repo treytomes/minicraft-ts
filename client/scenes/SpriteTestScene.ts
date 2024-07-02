@@ -1,5 +1,6 @@
 import {Camera} from '../Camera';
 import Entity from '../entities/Entity';
+import Mob from '../entities/Mob';
 import Player from '../entities/Player';
 import Game from '../system/Game';
 import {GameTime} from '../system/GameTime';
@@ -11,61 +12,75 @@ import {
   ButtonUIElement,
   LabelUIElement,
   ProgressMeterUIElement,
+  UIElement,
 } from '../system/ui';
 
 export default class SpriteTestScene extends Scene {
-  private readonly player: Entity;
+  private readonly player: Mob;
   private selectedEntity?: Entity = undefined;
   private dragStart?: Point = undefined;
   private camera = new Camera(new Rectangle(0, 0, 0, 0));
+
+  private positionLabel!: LabelUIElement;
+  private counterLabel!: LabelUIElement;
+  private upButton!: ButtonUIElement;
+  private downButton!: ButtonUIElement;
+  private healthMeter!: ProgressMeterUIElement;
+  private staminaMeter!: ProgressMeterUIElement;
 
   constructor(game: Game) {
     super(game);
 
     this.player = new Player();
     this.player.moveTo(50, 50);
+  }
 
-    this.uiElements.push(
-      new LabelUIElement(
-        this.font,
-        () =>
-          `X:${Math.floor(this.player.position.x)},Y:${Math.floor(this.player.position.y)}`,
-        0,
-        0
-      )
+  loadContent() {
+    this.positionLabel = new LabelUIElement(
+      this.font,
+      () =>
+        `X:${Math.floor(this.player.position.x)},Y:${Math.floor(this.player.position.y)}`,
+      0,
+      0,
+      UIElement.ROOT
     );
-    this.uiElements.push(
-      new LabelUIElement(
-        this.font,
-        () => `Counter:${this.getCounterValue()}`,
-        20,
-        20
-      )
+    this.counterLabel = new LabelUIElement(
+      this.font,
+      () => `Counter:${this.getCounterValue()}`,
+      20,
+      20,
+      UIElement.ROOT
     );
 
-    const upButton = new ButtonUIElement(this.tileset, this.font, 'Up', 10, 10);
-    upButton.onClick = () => {
+    this.upButton = new ButtonUIElement(
+      this.tileset,
+      this.font,
+      'Up',
+      10,
+      10,
+      UIElement.ROOT
+    );
+    this.upButton.onClick = () => {
       let counter = this.getCounterValue();
       counter++;
       localStorage.setItem('counter', counter.toString());
     };
-    this.uiElements.push(upButton);
 
-    const downButton = new ButtonUIElement(
+    this.downButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'Down',
       40,
-      10
+      10,
+      UIElement.ROOT
     );
-    downButton.onClick = () => {
+    this.downButton.onClick = () => {
       let counter = this.getCounterValue();
       counter--;
       localStorage.setItem('counter', counter.toString());
     };
-    this.uiElements.push(downButton);
 
-    const healthMeter = new ProgressMeterUIElement(
+    this.healthMeter = new ProgressMeterUIElement(
       0,
       this.height - 16,
       10,
@@ -73,11 +88,11 @@ export default class SpriteTestScene extends Scene {
       this.tileset,
       PALETTE.get(0, 200, 500, 533),
       PALETTE.get(0, 100, 0, 0),
-      this.getCounterValue
+      this.getCounterValue,
+      UIElement.ROOT
     );
-    this.uiElements.push(healthMeter);
 
-    const staminaMeter = new ProgressMeterUIElement(
+    this.staminaMeter = new ProgressMeterUIElement(
       0,
       this.height - 8,
       10,
@@ -85,9 +100,18 @@ export default class SpriteTestScene extends Scene {
       this.tileset,
       PALETTE.get(0, 220, 550, 553),
       PALETTE.get(0, 110, 0, 0),
-      this.getCounterValue
+      this.getCounterValue,
+      UIElement.ROOT
     );
-    this.uiElements.push(staminaMeter);
+  }
+
+  unloadContent() {
+    this.positionLabel.close();
+    this.counterLabel.close();
+    this.upButton.close();
+    this.downButton.close();
+    this.healthMeter.close();
+    this.staminaMeter.close();
   }
 
   getCounterValue(): number {

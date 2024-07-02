@@ -1,3 +1,4 @@
+import InputHandler from '../InputHandler';
 import Game from './Game';
 import {GameTime} from './GameTime';
 import {Font, Sprite, TileSet} from './display';
@@ -5,9 +6,12 @@ import {MouseEventProxy} from './input';
 import {UIElement} from './ui';
 
 export default class Scene {
-  private game: Game;
+  protected readonly game: Game;
   public readonly sprites: Sprite[] = [];
-  public readonly uiElements: UIElement[] = [];
+
+  protected get input(): InputHandler {
+    return this.game.input;
+  }
 
   protected get tileset(): TileSet {
     return this.game.tileset;
@@ -29,16 +33,17 @@ export default class Scene {
     this.game = game;
   }
 
+  loadContent() {}
+
+  unloadContent() {}
+
   update(time: GameTime) {
     for (let n = 0; n < this.sprites.length; n++) {
       const sprite = this.sprites[n];
       sprite.update(time);
     }
 
-    for (let n = 0; n < this.uiElements.length; n++) {
-      const uiElement = this.uiElements[n];
-      uiElement.update(time);
-    }
+    UIElement.ROOT.update(time);
   }
 
   render(time: GameTime) {
@@ -47,53 +52,34 @@ export default class Scene {
       sprite.render(time);
     }
 
-    for (let n = 0; n < this.uiElements.length; n++) {
-      const uiElement = this.uiElements[n];
-      uiElement.render(time);
-    }
+    UIElement.ROOT.render(time);
   }
 
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  onKeyDown(e: KeyboardEvent) {}
+  onKeyDown(e: KeyboardEvent) {
+    UIElement.ROOT.onKeyDown(e);
+  }
 
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  onKeyUp(e: KeyboardEvent) {}
+  onKeyUp(e: KeyboardEvent) {
+    UIElement.ROOT.onKeyUp(e);
+  }
 
   onMouseMove(e: MouseEventProxy) {
-    UIElement.MOUSE_HOVER = undefined;
-    for (let n = 0; n < this.uiElements.length; n++) {
-      const uiElement = this.uiElements[n];
-      // console.log(uiElement.bounds, e.clientX, e.clientY);
-      if (uiElement.bounds.contains(e.clientX, e.clientY)) {
-        uiElement.onMouseMove(e);
-        break;
-      }
-    }
+    UIElement.ROOT.onMouseMove(e);
   }
 
   onMouseDown(e: MouseEventProxy) {
-    // Is the left mouse button pressed?
-    if (e.button === 0) {
-      UIElement.MOUSE_FOCUS = undefined;
-      if (UIElement.MOUSE_HOVER) {
-        UIElement.MOUSE_HOVER.onMouseDown(e);
-      }
-    }
+    UIElement.ROOT.onMouseDown(e);
   }
 
   onMouseUp(e: MouseEventProxy) {
-    if (e.button === 0) {
-      if (UIElement.MOUSE_FOCUS) {
-        UIElement.MOUSE_FOCUS.onMouseUp(e);
-      }
-    }
+    UIElement.ROOT.onMouseUp(e);
   }
 
   enterScene(scene: Scene) {
-    this.game.scenes.push(scene);
+    this.game.enterScene(scene);
   }
 
   exitScene() {
-    this.game.scenes.pop();
+    this.game.exitScene();
   }
 }

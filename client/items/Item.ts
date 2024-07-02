@@ -2,10 +2,12 @@ import Entity from '../entities/Entity';
 import ItemEntity from '../entities/ItemEntity';
 import Level from '../Level';
 import Player from '../entities/Player';
-import {Color, Font, PALETTE, TileSet} from '../system/display';
+import {Color, PALETTE, TileSet} from '../system/display';
 import {Tile} from '../tiles/Tile';
+import IListableItem from '../ui/IListableItem';
+import {Direction} from '../Direction';
 
-export default class Item {
+export default class Item implements IListableItem {
   get color(): Color[] {
     return PALETTE.get(0, 0, 0, 0);
   }
@@ -30,11 +32,10 @@ export default class Item {
   onTake(itemEntity: ItemEntity) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  renderInventory(tileset: TileSet, font: Font, x: number, y: number) {}
+  renderInventory(tileset: TileSet, x: number, y: number) {}
 
-  // TODO: Should attackDir be an enum?
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interact(player: Player, entity: Entity, attackDir: number): boolean {
+  interact(player: Player, entity: Entity, attackDir: Direction): boolean {
     return false;
   }
 
@@ -53,7 +54,7 @@ export default class Item {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     player: Player,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    attackDir: number
+    attackDir: Direction
   ): boolean {
     return false;
   }
@@ -65,6 +66,7 @@ export default class Item {
 
   public matches(item: Item): boolean {
     // TODO: Test this one explicitly.
-    return typeof item === typeof this;
+    // return typeof item === typeof this;
+    return item.name === this.name;
   }
 }

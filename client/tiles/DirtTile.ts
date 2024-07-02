@@ -1,4 +1,5 @@
 import {Camera} from '../Camera';
+import {Direction} from '../Direction';
 import Level from '../Level';
 import ToolType from '../ToolType';
 import ItemEntity from '../entities/ItemEntity';
@@ -7,10 +8,10 @@ import Item from '../items/Item';
 import ResourceItem from '../items/ResourceItem';
 import ToolItem from '../items/ToolItem';
 import {Resources} from '../resources/Resource';
-import {Sound} from '../system/audio/sound';
 import {PALETTE, TileSet} from '../system/display';
 import Random from '../system/math/Random';
 import {Tile, Tiles} from './Tile';
+import * as sounds from '../sounds';
 
 export default class DirtTile extends Tile {
   constructor() {
@@ -46,7 +47,7 @@ export default class DirtTile extends Tile {
     player: Player,
     item: Item,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    attackDir: number
+    attackDir: Direction
   ): boolean {
     if (item instanceof ToolItem) {
       const tool = item as ToolItem;
@@ -60,14 +61,14 @@ export default class DirtTile extends Tile {
               yt * 16 + Random.nextInt(10) + 3
             )
           );
-          Sound.monsterhurt.play();
+          sounds.monsterhurt.play();
           return true;
         }
       }
       if (tool.type === ToolType.hoe) {
         if (player.payStamina(4 - tool.level)) {
           level.setTile(xt, yt, Tiles.farmland, 0);
-          Sound.monsterhurt.play();
+          sounds.monsterhurt.play();
           return true;
         }
       }

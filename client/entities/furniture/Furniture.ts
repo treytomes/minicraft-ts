@@ -1,13 +1,12 @@
-import {Camera} from '../Camera';
-import {Direction} from '../Direction';
-import Level from '../Level';
-import FurnitureItem from '../items/FurnitureItem';
-import PowerGloveItem from '../items/PowerGloveItem';
-import {GameTime} from '../system/GameTime';
-import {Color, PALETTE, TileSet} from '../system/display';
-import {Point} from '../system/math';
-import Entity from './Entity';
-import Player from './Player';
+import {Camera} from '../../Camera';
+import {Direction} from '../../Direction';
+import FurnitureItem from '../../items/FurnitureItem';
+import PowerGloveItem from '../../items/PowerGloveItem';
+import {GameTime} from '../../system/GameTime';
+import {Color, PALETTE, TileSet} from '../../system/display';
+import {Point} from '../../system/math';
+import Entity from '../Entity';
+import Player from '../Player';
 
 export default class Furniture extends Entity {
   private pushTime = 0;
@@ -27,7 +26,7 @@ export default class Furniture extends Entity {
     this.icon = 0;
   }
 
-  update(time: GameTime, level: Level) {
+  update(time: GameTime) {
     if (this.shouldTake !== undefined) {
       if (this.shouldTake.activeItem instanceof PowerGloveItem) {
         this.remove();
@@ -36,12 +35,16 @@ export default class Furniture extends Entity {
       }
       this.shouldTake = undefined;
     }
-    if (this.pushDir === Direction.South) this.moveBy(level, 0, 1);
-    if (this.pushDir === Direction.North) this.moveBy(level, 0, -1);
-    if (this.pushDir === Direction.West) this.moveBy(level, -1, 0);
-    if (this.pushDir === Direction.East) this.moveBy(level, 1, 0);
+
+    const pushDelta = time.deltaTime / 32;
+
+    // TODO: Test furniture pushing.
+    if (this.pushDir === Direction.South) this.moveBy(0, pushDelta);
+    if (this.pushDir === Direction.North) this.moveBy(0, -pushDelta);
+    if (this.pushDir === Direction.West) this.moveBy(-pushDelta, 0);
+    if (this.pushDir === Direction.East) this.moveBy(pushDelta, 0);
     this.pushDir = Direction.Undefined;
-    if (this.pushTime > 0) this.pushTime--;
+    if (this.pushTime > 0) this.pushTime -= time.deltaTime / 32;
   }
 
   render(tileset: TileSet, camera: Camera) {

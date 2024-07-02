@@ -27,6 +27,7 @@ export default class HoleTile extends Tile {
       level.sandColor
     );
 
+    // TODO: top-right icon is wrong.
     const tx = Math.floor(x / Tile.width);
     const ty = Math.floor(y / Tile.height);
 

@@ -1,4 +1,5 @@
 import {Camera} from '../Camera';
+import {Direction} from '../Direction';
 import Level from '../Level';
 import ToolType from '../ToolType';
 import ItemEntity from '../entities/ItemEntity';
@@ -69,7 +70,7 @@ export default class FlowerTile extends GrassTile {
     player: Player,
     item: Item,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    attackDir: number
+    attackDir: Direction
   ): boolean {
     if (item instanceof ToolItem) {
       const tool = item as ToolItem;

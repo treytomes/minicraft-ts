@@ -1,3 +1,5 @@
+import Resource from '../data/resources/Resource';
+
 const settings = {
   detune: 0,
   loop: false,
@@ -6,25 +8,18 @@ const settings = {
   playbackRate: 1,
 };
 
-export class Sound {
+type SoundProps = {
+  path: string;
+};
+
+export class Sound extends Resource<SoundProps> {
   private static readonly audioContext = new AudioContext();
 
-  static bossdeath = new Sound('bossdeath');
-  static craft = new Sound('craft');
-  static death = new Sound('death');
-  static monsterhurt = new Sound('monsterhurt');
-  static pickup = new Sound('pickup');
-  static playerhurt = new Sound('playerhurt');
-  static test = new Sound('test');
-
-  name: string;
   private buffer?: AudioBuffer = undefined;
   private bufferSource?: AudioBufferSourceNode = undefined;
 
-  constructor(name: string) {
-    this.name = name;
-
-    fetch(`assets/${name}.wav`)
+  async loadContent(props: SoundProps) {
+    fetch(props.path)
       .then(response => response.arrayBuffer())
       .then(buffer => {
         Sound.audioContext.decodeAudioData(buffer, decoded => {
@@ -32,6 +27,10 @@ export class Sound {
         });
       });
   }
+
+  // async loadContent(buffer: ArrayBuffer) {
+  //   this.buffer = await Sound.audioContext.decodeAudioData(buffer);
+  // }
 
   play() {
     // Check if context is in suspended state (autoplay policy)

@@ -1,90 +1,103 @@
 import LevelGeneratorScene from './LevelGeneratorScene';
 import LevelRendererScene from './LevelRendererScene';
 import PixelsTestScene from './PixelsTestScene';
-import Game from '../system/Game';
 import Scene from '../system/Scene';
 import {Keys} from '../system/input';
-import {ButtonUIElement} from '../system/ui';
+import {ButtonUIElement, UIElement} from '../system/ui';
 import SoundEffectTestScene from './SoundEffectTestScene';
 import GameplayScene from './GameplayScene';
 
 export default class MainMenuScene extends Scene {
-  constructor(game: Game) {
-    super(game);
+  private newGameButton!: ButtonUIElement;
+  private pixelsButton!: ButtonUIElement;
+  private levelGenButton!: ButtonUIElement;
+  private levelRendererButton!: ButtonUIElement;
+  private sfxTestButton!: ButtonUIElement;
+  private exitButton!: ButtonUIElement;
 
+  loadContent() {
     let y = 10;
 
-    const newGameButton = new ButtonUIElement(
+    this.newGameButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'NEW GAME',
       10,
-      (y += 10)
+      (y += 10),
+      UIElement.ROOT
     );
-    newGameButton.onClick = () => {
-      this.enterScene(new GameplayScene(game));
+    this.newGameButton.onClick = () => {
+      this.enterScene(new GameplayScene(this.game));
     };
-    this.uiElements.push(newGameButton);
 
-    const pixelsButton = new ButtonUIElement(
+    this.pixelsButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'PIXELS',
       10,
-      (y += 10)
+      (y += 10),
+      UIElement.ROOT
     );
-    pixelsButton.onClick = () => {
-      this.enterScene(new PixelsTestScene(game));
+    this.pixelsButton.onClick = () => {
+      this.enterScene(new PixelsTestScene(this.game));
     };
-    this.uiElements.push(pixelsButton);
 
-    const levelGenButton = new ButtonUIElement(
+    this.levelGenButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'LEVELGEN',
       10,
-      (y += 10)
+      (y += 10),
+      UIElement.ROOT
     );
-    levelGenButton.onClick = () => {
-      this.enterScene(new LevelGeneratorScene(game));
+    this.levelGenButton.onClick = () => {
+      this.enterScene(new LevelGeneratorScene(this.game));
     };
-    this.uiElements.push(levelGenButton);
 
-    const levelRendererButton = new ButtonUIElement(
+    this.levelRendererButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'LEVEL',
       10,
-      (y += 10)
+      (y += 10),
+      UIElement.ROOT
     );
-    levelRendererButton.onClick = () => {
-      this.enterScene(new LevelRendererScene(game));
+    this.levelRendererButton.onClick = () => {
+      this.enterScene(new LevelRendererScene(this.game));
     };
-    this.uiElements.push(levelRendererButton);
 
-    const sfxTestButton = new ButtonUIElement(
+    this.sfxTestButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'SFX',
       10,
-      (y += 10)
+      (y += 10),
+      UIElement.ROOT
     );
-    sfxTestButton.onClick = () => {
-      this.enterScene(new SoundEffectTestScene(game));
+    this.sfxTestButton.onClick = () => {
+      this.enterScene(new SoundEffectTestScene(this.game));
     };
-    this.uiElements.push(sfxTestButton);
 
-    const exitButton = new ButtonUIElement(
+    this.exitButton = new ButtonUIElement(
       this.tileset,
       this.font,
       'EXIT',
       10,
-      (y += 10)
+      (y += 10),
+      UIElement.ROOT
     );
-    exitButton.onClick = () => {
+    this.exitButton.onClick = () => {
       this.exitScene();
     };
-    this.uiElements.push(exitButton);
+  }
+
+  unloadContent() {
+    this.newGameButton.close();
+    this.pixelsButton.close();
+    this.levelGenButton.close();
+    this.levelRendererButton.close();
+    this.sfxTestButton.close();
+    this.exitButton.close();
   }
 
   onKeyDown(e: KeyboardEvent) {

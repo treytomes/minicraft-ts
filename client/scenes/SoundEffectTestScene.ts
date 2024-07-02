@@ -1,53 +1,62 @@
-import {Sound} from '../system/audio/sound';
-import Game from '../system/Game';
+import {Sound} from '../system/audio/Sound';
 import Scene from '../system/Scene';
 import {Keys} from '../system/input';
-import {ButtonUIElement} from '../system/ui';
+import {ButtonUIElement, UIElement} from '../system/ui';
+import * as sounds from '../sounds';
 
 export default class SoundEffectTestScene extends Scene {
-  constructor(game: Game) {
-    super(game);
+  private sfxButtons: ButtonUIElement[] = [];
+  private backButton!: ButtonUIElement;
 
+  loadContent() {
     let y = 10;
 
     const sfx: {[index: string]: Sound} = {
-      bossdeath: Sound.bossdeath,
-      craft: Sound.craft,
-      death: Sound.death,
-      monsterhurt: Sound.monsterhurt,
-      pickup: Sound.pickup,
-      playerhurt: Sound.playerhurt,
-      test: Sound.test,
+      bossdeath: sounds.bossdeath,
+      craft: sounds.craft,
+      death: sounds.death,
+      monsterhurt: sounds.monsterhurt,
+      pickup: sounds.pickup,
+      playerhurt: sounds.playerhurt,
+      test: sounds.test,
     };
-
     for (const key in sfx) {
       const btn = new ButtonUIElement(
         this.tileset,
         this.font,
         key.toUpperCase(),
         10,
-        (y += 10)
+        (y += 10),
+        UIElement.ROOT
       );
       btn.disableClickSound = true;
       btn.onClick = () => {
         sfx[key].play();
       };
-      this.uiElements.push(btn);
+      this.sfxButtons.push(btn);
     }
 
     y += 10;
 
-    const backButton = new ButtonUIElement(
+    this.backButton = new ButtonUIElement(
       this.tileset,
       this.font,
       '< BACK',
       10,
-      (y += 10)
+      (y += 10),
+      UIElement.ROOT
     );
-    backButton.onClick = () => {
+    this.backButton.onClick = () => {
       this.exitScene();
     };
-    this.uiElements.push(backButton);
+  }
+
+  unloadContent() {
+    for (let n = 0; n < this.sfxButtons.length; n++) {
+      this.sfxButtons[n].close();
+    }
+    this.sfxButtons = [];
+    this.backButton.close();
   }
 
   onKeyDown(e: KeyboardEvent) {

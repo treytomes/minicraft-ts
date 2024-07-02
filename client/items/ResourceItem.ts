@@ -1,3 +1,4 @@
+import {Direction} from '../Direction';
 import Level from '../Level';
 import Player from '../entities/Player';
 import {Resource} from '../resources';
@@ -8,6 +9,7 @@ import Item from './Item';
 export default class ResourceItem extends Item {
   resource: Resource;
   count = 1;
+  font!: Font;
 
   get color(): Color[] {
     return this.resource.color;
@@ -29,6 +31,8 @@ export default class ResourceItem extends Item {
     super();
     this.resource = resource;
     this.count = count;
+
+    window.resources.load(Font, 'font.json').then(font => (this.font = font));
   }
 
   renderIcon(tileset: TileSet, x: number, y: number) {
@@ -41,7 +45,8 @@ export default class ResourceItem extends Item {
     });
   }
 
-  renderInventory(tileset: TileSet, font: Font, x: number, y: number) {
+  // TODO: I don't like renderInventory living in the item definition.
+  renderInventory(tileset: TileSet, x: number, y: number) {
     tileset.render({
       x,
       y,
@@ -49,10 +54,15 @@ export default class ResourceItem extends Item {
       colors: this.resource.color,
       bits: 0,
     });
-    font.render(this.resource.name, x + 32, y, PALETTE.get(-1, 555, 555, 555));
+    this.font?.render(
+      this.resource.name,
+      x + 32,
+      y,
+      PALETTE.get(-1, 555, 555, 555)
+    );
     let cc = this.count;
     if (cc > 999) cc = 999;
-    font.render(cc.toString(), x + 8, y, PALETTE.get(-1, 444, 444, 444));
+    this.font?.render(cc.toString(), x + 8, y, PALETTE.get(-1, 444, 444, 444));
   }
 
   interactOn(
@@ -61,7 +71,7 @@ export default class ResourceItem extends Item {
     xt: number,
     yt: number,
     player: Player,
-    attackDir: number
+    attackDir: Direction
   ): boolean {
     if (this.resource.interactOn(tile, level, xt, yt, player, attackDir)) {
       this.count--;

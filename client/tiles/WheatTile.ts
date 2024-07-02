@@ -1,5 +1,6 @@
 import {Tile} from '.';
 import {Camera} from '../Camera';
+import {Direction} from '../Direction';
 import Level from '../Level';
 import ToolType from '../ToolType';
 import Entity from '../entities/Entity';
@@ -84,7 +85,7 @@ export default class WheatTile extends Tile {
     if (Random.nextInt(2) === 0) return;
 
     const age = level.getData(xt, yt);
-    // TODO: Make sure it doesn't take too long for a tree to grow.
+    // TODO: Make sure it doesn't take too long for to grow.
     if (age < 50) level.setData(xt, yt, age + time.deltaTime / 32);
   }
 
@@ -95,7 +96,7 @@ export default class WheatTile extends Tile {
     player: Player,
     item: Item,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    attackDir: number
+    attackDir: Direction
   ): boolean {
     if (item instanceof ToolItem) {
       const tool = item as ToolItem;

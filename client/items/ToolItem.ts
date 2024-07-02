@@ -18,11 +18,13 @@ export default class ToolItem extends Item {
 
   type: ToolType;
   level = 0;
+  private font!: Font;
 
   constructor(type: ToolType, level: number) {
     super();
     this.type = type;
     this.level = level;
+    window.resources.load(Font, 'font.json').then(font => (this.font = font));
   }
 
   get color() {
@@ -45,9 +47,9 @@ export default class ToolItem extends Item {
     tileset.render({tileIndex: this.icon, x, y, colors: this.color});
   }
 
-  renderInventory(tileset: TileSet, font: Font, x: number, y: number) {
+  renderInventory(tileset: TileSet, x: number, y: number) {
     tileset.render({tileIndex: this.icon, x, y, colors: this.color});
-    font.render(this.name, x + 8, y, PALETTE.get(-1, 555, 555, 555));
+    this.font?.render(this.name, x + 8, y, PALETTE.get(-1, 555, 555, 555));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

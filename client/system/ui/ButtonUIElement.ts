@@ -5,7 +5,8 @@ import TileSet from '../display/TileSet';
 import UIElement from './UIElement';
 import {MouseEventProxy} from '../input';
 import {GameTime} from '../GameTime';
-import {Sound} from '../audio/sound';
+import {Rectangle} from '../math';
+import * as sounds from '../../sounds';
 
 export default class ButtonUIElement extends UIElement {
   tileset: TileSet;
@@ -21,10 +22,19 @@ export default class ButtonUIElement extends UIElement {
     font: Font,
     text: string | number | (() => string),
     x: number,
-    y: number
+    y: number,
+    parent: UIElement
   ) {
     const len = (typeof text === 'function' ? text() : text.toString()).length;
-    super(x, y, font.width * len + tileset.tileWidth * 2, font.height);
+    super(
+      new Rectangle(
+        x,
+        y,
+        font.width * len + tileset.tileWidth * 2,
+        font.height
+      ),
+      parent
+    );
 
     this.tileset = tileset;
     this.font = font;
@@ -32,12 +42,12 @@ export default class ButtonUIElement extends UIElement {
     this.chromeColors = PALETTE.get(222, -1, -1, -1);
     this.textColors = PALETTE.get(222, -1, -1, 550);
 
-    if (!this.disableClickSound) Sound.test.play();
     this.onClick = () => {};
   }
 
   onMouseUp(e: MouseEventProxy) {
     super.onMouseUp(e);
+    if (!this.disableClickSound) sounds.test.play();
     this.onClick();
   }
 
@@ -69,16 +79,16 @@ export default class ButtonUIElement extends UIElement {
     // Left side of button.
     this.tileset.render({
       tileIndex: 1 + 29 * 32,
-      x: this.bounds.x,
-      y: this.bounds.y,
+      x: this.absoluteBounds.x,
+      y: this.absoluteBounds.y,
       colors: this.chromeColors,
     });
 
     // Button text.
     this.font.render(
       text,
-      this.bounds.x + this.tileset.tileWidth,
-      this.bounds.y,
+      this.absoluteBounds.x + this.tileset.tileWidth,
+      this.absoluteBounds.y,
       this.textColors
     );
 
@@ -86,10 +96,10 @@ export default class ButtonUIElement extends UIElement {
     this.tileset.render({
       tileIndex: 1 + 29 * 32,
       x:
-        this.bounds.x +
+        this.absoluteBounds.x +
         this.tileset.tileWidth +
         text.length * this.tileset.tileWidth,
-      y: this.bounds.y,
+      y: this.absoluteBounds.y,
       colors: this.chromeColors,
       bits: BIT_MIRROR_X,
     });
