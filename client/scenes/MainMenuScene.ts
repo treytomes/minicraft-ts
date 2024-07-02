@@ -1,7 +1,6 @@
 import LevelGeneratorScene from './LevelGeneratorScene';
 import LevelRendererScene from './LevelRendererScene';
 import PixelsTestScene from './PixelsTestScene';
-import SpriteTestScene from './SpriteTestScene';
 import Game from '../system/Game';
 import Scene from '../system/Scene';
 import {Keys} from '../system/input';
@@ -26,18 +25,6 @@ export default class MainMenuScene extends Scene {
       this.enterScene(new GameplayScene(game));
     };
     this.uiElements.push(newGameButton);
-
-    // const spritesButton = new ButtonUIElement(
-    //   this.tileset,
-    //   this.font,
-    //   'SPRITES',
-    //   10,
-    //   (y += 10)
-    // );
-    // spritesButton.onClick = () => {
-    //   this.enterScene(new SpriteTestScene(game));
-    // };
-    // this.uiElements.push(spritesButton);
 
     const pixelsButton = new ButtonUIElement(
       this.tileset,

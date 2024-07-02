@@ -5,7 +5,6 @@ import Player from './entities/Player';
 import EntityFactory from './entities/EntityFactory';
 import {Camera} from './Camera';
 import {TileSet} from './system/display';
-import {Tile} from './tiles';
 import {GameTime} from './system/GameTime';
 
 export default class World {
